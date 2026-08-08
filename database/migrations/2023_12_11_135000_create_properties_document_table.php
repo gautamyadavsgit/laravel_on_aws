@@ -4,7 +4,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
      */
@@ -14,7 +15,8 @@ return new class extends Migration {
             $table->id();
             $table->string('document_key', 255);
             $table->string('document_value', 255);
-            $table->foreignId('property_id')->constrained('properties')->cascadeOnDelete();
+            $table->unsignedBigInteger('property_id')->index();
+            $table->foreign('property_id')->references('id')->on('properties');
             $table->timestamps();
         });
     }

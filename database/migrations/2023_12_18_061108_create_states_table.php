@@ -12,7 +12,8 @@ return new class extends Migration {
     {
         Schema::create('states', function (Blueprint $table) {
             $table->id();
-            $table->string('state_name', 255)->unique();
+            $table->string('state_name', 255)->index();
+            // $table->timestamps();
         });
     }
 
