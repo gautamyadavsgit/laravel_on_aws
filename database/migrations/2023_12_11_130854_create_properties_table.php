@@ -12,14 +12,12 @@ return new class extends Migration {
     {
         Schema::create('properties', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('admin_id');
-            $table->foreign('admin_id')->references('id')->on('admins');
-            $table->string('name', 255);
-            $table->string('availability', 255);
+            $table->foreignId('admin_id')->constrained('admins')->cascadeOnDelete();
+            $table->string('name', 255)->index();
+            $table->string('availability', 20)->default('Available')->index();
             $table->longText('description');
             $table->string('management_company', 255);
             $table->softDeletes();
-
             $table->timestamps();
         });
     }

@@ -3,22 +3,14 @@
 namespace Database\Seeders;
 
 use App\Models\Admins;
-use App\Models\CalcPreset;
-use App\Models\MarketDetails;
-use App\Models\PropertyAacf;
 use App\Models\PropertyAddress;
 use App\Models\PropertyAmenity;
 use App\Models\PropertyDetails;
 use App\Models\PropertyDocumentModel;
-use App\Models\PropertyExtraDetails;
-use App\Models\PropertyFinancialDetail;
 use App\Models\PropertyFloorplan;
 use App\Models\PropertyImageModel;
 use App\Models\PropertyModel;
 use App\Models\PropertyOffering;
-use App\Models\PropertyShare;
-use App\Models\PropertyTaxModel;
-use App\Models\PropertyUrl;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -38,7 +30,7 @@ class PropertySeeder extends Seeder
         $curatedProperties = [
             [
                 'name' => 'Smoky Mountain Luxury Cabin',
-                'availability' => '90% Funded',
+                'availability' => 'Available',
                 'description' => 'Located in the high-demand vacation corridor of Gatlinburg, TN, this luxury short-term rental property features custom timber architecture, panoramic Great Smoky Mountain vistas, private hot tub deck, and dedicated entertainment suites. Managed by Gautam Asset Management with a historical 88.5% annual occupancy rate and prime placement across top luxury booking platforms.',
                 'management_company' => 'Gautam Asset Management LLC',
                 'address' => [
@@ -86,7 +78,7 @@ class PropertySeeder extends Seeder
             ],
             [
                 'name' => 'Blue Ridge Mountain Retreat',
-                'availability' => '100% Fully Funded',
+                'availability' => 'Not Available',
                 'description' => 'Architecturally distinct mountain estate nestled in the rolling Blue Ridge Mountains of Asheville, NC. Features vaulted cedar ceilings, heated outdoor living rooms, chef kitchen, and private walking trails with direct access to national parklands.',
                 'management_company' => 'Gautam Asset Management LLC',
                 'address' => [
@@ -134,7 +126,7 @@ class PropertySeeder extends Seeder
             ],
             [
                 'name' => 'Gulf Coast Waterfront Villa',
-                'availability' => '70% Funded',
+                'availability' => 'Available',
                 'description' => 'Direct beach-access Gulf Coast villa in Destin, FL. Boasts a heated private pool, wrap-around sunset terrace, private boat slip, and high rental velocity with recurring seasonal travelers.',
                 'management_company' => 'Gautam Asset Management LLC',
                 'address' => [
@@ -182,7 +174,7 @@ class PropertySeeder extends Seeder
             ],
             [
                 'name' => 'Aspen Alpine Ski Chalet',
-                'availability' => 'Active Capital Raise',
+                'availability' => 'Available',
                 'description' => 'Ski-in / ski-out luxury timber alpine chalet in Aspen, CO. Equipped with an indoor heated spa, radiant heated driveway, commercial ski equipment locker room, and floor-to-ceiling glass framing snow-capped peaks.',
                 'management_company' => 'Gautam Asset Management LLC',
                 'address' => [
@@ -230,7 +222,7 @@ class PropertySeeder extends Seeder
             ],
             [
                 'name' => 'Napa Valley Vineyard Estate',
-                'availability' => 'Active Capital Raise',
+                'availability' => 'Available',
                 'description' => 'Scenic wine country sanctuary featuring private olive groves, private infinity pool, commercial chef tasting kitchen, and year-round high-ticket corporate and wedding hospitality bookings.',
                 'management_company' => 'Gautam Asset Management LLC',
                 'address' => [
@@ -278,7 +270,7 @@ class PropertySeeder extends Seeder
             ],
             [
                 'name' => 'Scottsdale Desert Oasis',
-                'availability' => 'Active Capital Raise',
+                'availability' => 'Available',
                 'description' => 'Southwestern architectural showcase with a private resort-style lagoon pool, putting green, outdoor fire lounges, and prime location adjacent to TPC Scottsdale championship golf corridors.',
                 'management_company' => 'Gautam Asset Management LLC',
                 'address' => [
@@ -339,21 +331,13 @@ class PropertySeeder extends Seeder
 
             $propId = $property->id;
 
-            // 1. Taxes (3 tiers)
-            for ($t = 1; $t <= 3; $t++) {
-                PropertyTaxModel::updateOrCreate(
-                    ['property_id' => $propId, 'tax_key' => 'tax_' . $t],
-                    ['tax_value' => (string) (2400 + $t * 800)]
-                );
-            }
-
-            // 2. Address
+            // 1. Address
             PropertyAddress::updateOrCreate(
                 ['property_id' => $propId],
                 $propData['address']
             );
 
-            // 3. Images (3 images per property)
+            // 2. Images (3 images per property)
             PropertyImageModel::where('property_id', $propId)->delete();
             foreach ($propData['images'] as $imgUrl) {
                 PropertyImageModel::create([
@@ -363,7 +347,7 @@ class PropertySeeder extends Seeder
                 ]);
             }
 
-            // 4. Amenities
+            // 3. Amenities
             PropertyAmenity::updateOrCreate(
                 ['property_id' => $propId],
                 [
@@ -371,24 +355,13 @@ class PropertySeeder extends Seeder
                 ]
             );
 
-            // 5. Details
+            // 4. Details
             PropertyDetails::updateOrCreate(
                 ['property_id' => $propId],
                 $propData['details']
             );
 
-            // 6. Market Details
-            $marketNum = ($index % 6) + 1;
-            MarketDetails::updateOrCreate(
-                ['property_id' => $propId],
-                [
-                    'market_title' => $propData['name'] . ' Regional Tourism Corridor',
-                    'market_image' => 'market_image/market_' . $marketNum . '.png',
-                    'market_description' => 'Target vacation market benefits from robust seasonal demand, growing airline routes, high ADR (Average Daily Rate), and strong capital appreciation trends.',
-                ]
-            );
-
-            // 7. Floorplans (2 levels)
+            // 5. Floorplans (2 levels)
             PropertyFloorplan::where('property_id', $propId)->delete();
             for ($f = 1; $f <= 2; $f++) {
                 $planNum = (($index + $f - 1) % 6) + 1;
@@ -399,44 +372,8 @@ class PropertySeeder extends Seeder
                 ]);
             }
 
-            // 8. Extra Details
-            PropertyExtraDetails::updateOrCreate(
-                ['property_id' => $propId],
-                [
-                    'deed_fraction_1' => '1/' . $propData['shares']['total_share_deeds'] . ' Fractional Equity Deed',
-                    'deed_fraction_2' => 'Series 2024-REI-' . ($index + 1),
-                    'leveraged' => '0',
-                    'leverage_amount' => 0,
-                    'leverage_percent' => 0,
-                    'rent_rate' => $propData['aacf']['annual_rent_amount'],
-                    'market_rent_rate' => $propData['aacf']['annual_rent_amount'] + 6000,
-                    'occupancy_rate' => 88,
-                    'occupancy_status' => 'Occupied',
-                ]
-            );
-
-            // 9. AACF
-            PropertyAacf::updateOrCreate(
-                ['property_id' => $propId],
-                $propData['aacf']
-            );
-
-            // 10. URLs
-            PropertyUrl::updateOrCreate(
-                ['property_id' => $propId],
-                [
-                    'google_map' => 'https://maps.google.com/?q=' . urlencode($propData['address']['city'] . ', ' . $propData['address']['state']),
-                    'zillow' => 'https://www.zillow.com/homedetails/' . urlencode(strtolower(str_replace(' ', '-', $propData['name']))),
-                    'airbnb' => 'https://www.airbnb.com/rooms/' . (10000000 + $propId),
-                    'vrbo' => 'https://www.vrbo.com/' . (2000000 + $propId),
-                    'alt_listing_1' => 'https://booking.com/hotel/us/' . urlencode(strtolower(str_replace(' ', '-', $propData['name']))),
-                    'alt_listing_2' => 'https://expedia.com/vacation-rental/' . urlencode(strtolower(str_replace(' ', '-', $propData['name']))),
-                    'alt_listing_3' => 'https://tripadvisor.com/VacationRentals-' . urlencode(strtolower(str_replace(' ', '-', $propData['name']))),
-                ]
-            );
-
-            // 11. Offering Breakdown
-            $purchase = (int) ($propData['shares']['equity_raise'] * 0.84);
+            // 6. Offering Breakdown
+            $purchase = (int) ($propData['details']['value'] * 0.84);
             PropertyOffering::updateOrCreate(
                 ['property_id' => $propId],
                 [
@@ -448,21 +385,7 @@ class PropertySeeder extends Seeder
                 ]
             );
 
-            // 12. Shares
-            PropertyShare::updateOrCreate(
-                ['property_id' => $propId],
-                $propData['shares']
-            );
-
-            // 13. Calculator Multiplier Presets (1 to 6)
-            for ($k = 1; $k <= 6; $k++) {
-                CalcPreset::updateOrCreate(
-                    ['property_id' => $propId, 'key' => 'calc_preset_' . $k],
-                    ['value' => (string) ($k * 10)]
-                );
-            }
-
-            // 14. Legal Documents (6 PDF files)
+            // 9. Legal Documents (6 PDF files)
             PropertyDocumentModel::where('property_id', $propId)->delete();
             $docList = [
                 'Documents_Master_Deed' => 'property_documents/master_deed_1.pdf',
@@ -480,21 +403,6 @@ class PropertySeeder extends Seeder
                     'document_value' => $docFile,
                 ]);
             }
-
-            // 15. Financial Details
-            PropertyFinancialDetail::updateOrCreate(
-                ['property_id' => $propId],
-                [
-                    'management_fee' => 10,
-                    'cash_reserve' => 20000,
-                    'hold_period' => 5,
-                    'annual_appreciation' => '5.50',
-                    'aum_fee_1' => '1500',
-                    'aum_fee_2' => '2500',
-                    'aum_fee_3' => '3500',
-                    'average_time_to_rent' => '14',
-                ]
-            );
         }
     }
 }

@@ -19,7 +19,7 @@
 </div>
 
 <!-- Stat Grid -->
-<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
     <div class="card-tw flex items-center gap-4">
         <div class="w-12 h-12 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 flex items-center justify-center text-xl shrink-0">
             <i class="bi bi-building-check"></i>
@@ -34,24 +34,13 @@
     </div>
 
     <div class="card-tw flex items-center gap-4">
-        <div class="w-12 h-12 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-xl shrink-0">
-            <i class="bi bi-cash-stack"></i>
-        </div>
-        <div>
-            <div class="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">Target Funding</div>
-            <div class="text-xl font-bold text-slate-900 dark:text-white">100%</div>
-            <div class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Fractional Investment</div>
-        </div>
-    </div>
-
-    <div class="card-tw flex items-center gap-4">
         <div class="w-12 h-12 rounded-xl bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 flex items-center justify-center text-xl shrink-0">
-            <i class="bi bi-people"></i>
+            <i class="bi bi-houses"></i>
         </div>
         <div>
-            <div class="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">Investor Pool</div>
-            <div class="text-xl font-bold text-slate-900 dark:text-white">Active</div>
-            <div class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Global Investors</div>
+            <div class="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">Total Properties</div>
+            <div class="text-xl font-bold text-slate-900 dark:text-white">{{ \App\Models\PropertyModel::count() }}</div>
+            <div class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Listed on Platform</div>
         </div>
     </div>
 

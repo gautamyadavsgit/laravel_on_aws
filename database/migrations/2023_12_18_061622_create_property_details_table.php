@@ -12,21 +12,20 @@ return new class extends Migration {
     {
         Schema::create('property_details', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('property_id');
-            $table->foreign('property_id')->references('id')->on('properties')->onDelete('cascade');
-            $table->string('type', 255);
-            $table->integer('bedrooms');
-            $table->integer('baths');
-            $table->integer('half_baths');
-            $table->integer('sleeps');
-            $table->integer('garages');
-            $table->integer('square_feets');
-            $table->longText('stories');
-            $table->integer('units');
-            $table->integer('lot_size');
-            $table->integer('year_built');
-            $table->string('zoning', 255);
-            $table->integer('value');
+            $table->foreignId('property_id')->constrained('properties')->cascadeOnDelete();
+            $table->string('type', 255)->index();
+            $table->unsignedSmallInteger('bedrooms')->default(0)->index();
+            $table->unsignedSmallInteger('baths')->default(0)->index();
+            $table->unsignedSmallInteger('half_baths')->default(0);
+            $table->unsignedSmallInteger('sleeps')->default(0);
+            $table->unsignedSmallInteger('garages')->default(0);
+            $table->unsignedInteger('square_feets')->default(0)->index();
+            $table->string('stories', 255)->nullable();
+            $table->unsignedSmallInteger('units')->default(1);
+            $table->decimal('lot_size', 8, 2)->default(0);
+            $table->unsignedSmallInteger('year_built')->nullable()->index();
+            $table->string('zoning', 255)->nullable();
+            $table->unsignedBigInteger('value')->default(0)->index();
             $table->timestamps();
         });
     }

@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use App\Models\PropertyModel;
 use App\Models\PropertyDocumentModel;
-use App\Models\PropertyTaxModel;
 use App\Models\PropertyImageModel;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
@@ -21,10 +20,9 @@ class PropertyController extends Controller
 
 
         $property = DB::table('properties')
-            ->leftJoin('properties_tax', 'properties.id', '=', 'properties_tax.property_id')
             ->leftJoin('properties_document', 'properties.id', '=', 'properties_document.property_id')
             ->leftJoin('property_images', 'properties.id', '=', 'property_images.property_id')
-            ->select('properties.*', 'properties_tax.Tax', 'properties_document.document_1', 'property_images.property_images')
+            ->select('properties.*', 'properties_document.document_1', 'property_images.property_images')
             ->get();
 
         $data['property'] = $property;

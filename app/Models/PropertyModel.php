@@ -21,10 +21,6 @@ class PropertyModel extends Model
         'availability',
     ];
 
-    public function propertyTax(): HasMany
-    {
-        return $this->hasMany('\App\Models\PropertyTaxModel', 'property_id');
-    }
     public function propertyAddress(): HasOne
     {
         return $this->hasOne('\App\Models\PropertyAddress', 'property_id');
@@ -41,51 +37,18 @@ class PropertyModel extends Model
     {
         return $this->hasOne('\App\Models\PropertyDetails', 'property_id');
     }
-    public function MarketDetails(): HasOne
-    {
-        return $this->hasOne('\App\Models\MarketDetails', 'property_id');
-    }
     public function propertyFloorplan(): HasMany
     {
         return $this->hasMany('\App\Models\PropertyFloorplan', 'property_id');
     }
 
-    public function PropertyExtraDetails(): HasOne
-    {
-        return $this->hasOne('\App\Models\PropertyExtraDetails', 'property_id');
-    }
-
-    public function propertyAacf(): HasOne
-    {
-        return $this->hasOne('\App\Models\PropertyAacf', 'property_id');
-    }
-
-    public function propertyUrl(): HasOne
-    {
-        return $this->hasOne('\App\Models\PropertyUrl', 'property_id');
-    }
     public function propertyOffering(): HasOne
     {
         return $this->hasOne('\App\Models\PropertyOffering', 'property_id');
     }
-    public function propertyShare(): HasOne
-    {
-        return $this->hasOne('\App\Models\PropertyShare', 'property_id');
-    }
 
-    public function calcPreset(): HasMany
-    {
-        return $this->hasMany('\App\Models\CalcPreset', 'property_id');
-
-    }
     public function propertyDocumentModel(): HasMany
     {
         return $this->hasMany('\App\Models\PropertyDocumentModel', 'property_id');
-
     }
-    public function propertyFinancialDetail(): HasOne
-    {
-        return $this->hasOne('\App\Models\PropertyFinancialDetail', 'property_id');
-    }
-
 }

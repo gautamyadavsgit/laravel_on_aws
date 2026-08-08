@@ -93,7 +93,7 @@ class SeedMillionPropertiesCommand extends Command
                 $propertiesBatch[] = [
                     'admin_id' => $adminId,
                     'name' => "{$prefix} {$type} #{$uniqueIdx}",
-                    'availability' => ($uniqueIdx % 5 === 0) ? '100% Fully Funded' : (($uniqueIdx % 3 === 0) ? '70% Funded' : 'Active Capital Raise'),
+                    'availability' => ($uniqueIdx % 5 === 0) ? 'Not Available' : (($uniqueIdx % 3 === 0) ? 'Available' : 'Available'),
                     'description' => "Institutional-grade fractional investment property #{$uniqueIdx} located in prime tourist corridor with verified annual yield and professional management.",
                     'management_company' => 'Gautam Asset Management LLC',
                     'created_at' => $now,
@@ -111,19 +111,13 @@ class SeedMillionPropertiesCommand extends Command
                 $endId = $startId + $currentChunk - 1;
 
                 $addresses = [];
-                $aacfList = [];
                 $imagesList = [];
                 $detailsList = [];
-                $sharesList = [];
 
                 for ($id = $startId; $id <= $endId; $id++) {
                     $location = $cities[$id % count($cities)];
                     $imgNum = ($id % 10) + 1;
-                    $rent = 55000 + (($id % 80) * 1000);
-                    $expenses = (int) ($rent * 0.22);
-                    $net = $rent - $expenses;
                     $raise = 450000 + (($id % 60) * 10000);
-                    $yield = round(($rent / $raise) * 100, 2);
 
                     // Address
                     $addresses[] = [
@@ -133,17 +127,6 @@ class SeedMillionPropertiesCommand extends Command
                         'city' => $location['city'],
                         'state' => $location['state'],
                         'zip' => $location['zip'],
-                        'created_at' => $now,
-                        'updated_at' => $now,
-                    ];
-
-                    // AACF
-                    $aacfList[] = [
-                        'property_id' => $id,
-                        'annual_rent_amount' => $rent,
-                        'annual_rent_gross_yield' => $yield,
-                        'aacf_expences' => $expenses,
-                        'aacf_net' => $net,
                         'created_at' => $now,
                         'updated_at' => $now,
                     ];
@@ -176,37 +159,17 @@ class SeedMillionPropertiesCommand extends Command
                         'created_at' => $now,
                         'updated_at' => $now,
                     ];
-
-                    // Shares
-                    $sharesList[] = [
-                        'property_id' => $id,
-                        'equity_raise' => $raise,
-                        'price_per_share_deed' => 50,
-                        'total_developer_share_deeds' => (int) ($raise / 50 * 0.08),
-                        'total_raise_share_deeds' => (int) ($raise / 50 * 0.92),
-                        'total_share_deeds' => (int) ($raise / 50),
-                        'first_dividend_date' => '2026-09-30',
-                        'seccond_dividend_date' => '2026-12-31',
-                        'created_at' => $now,
-                        'updated_at' => $now,
-                    ];
                 }
 
                 // Chunk sub-records into safe batches of 1,500 rows to satisfy MySQL 65,535 parameter limit
                 foreach (array_chunk($addresses, 1500) as $subChunk) {
                     DB::table('property_address')->insert($subChunk);
                 }
-                foreach (array_chunk($aacfList, 1500) as $subChunk) {
-                    DB::table('property_aacf')->insert($subChunk);
-                }
                 foreach (array_chunk($imagesList, 1500) as $subChunk) {
                     DB::table('property_images')->insert($subChunk);
                 }
                 foreach (array_chunk($detailsList, 1500) as $subChunk) {
                     DB::table('property_details')->insert($subChunk);
-                }
-                foreach (array_chunk($sharesList, 1500) as $subChunk) {
-                    DB::table('property_shares')->insert($subChunk);
                 }
             });
 

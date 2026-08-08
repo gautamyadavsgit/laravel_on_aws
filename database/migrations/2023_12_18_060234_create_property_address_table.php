@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -13,13 +12,12 @@ return new class extends Migration
     {
         Schema::create('property_address', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('property_id');
-            $table->foreign('property_id')->references('id')->on('properties')->onDelete('cascade');
-            $table->string('address_1',255);
-            $table->string('address_2',255);
-            $table->string('city',112);
-            $table->string('state',112);
-            $table->integer('zip');
+            $table->foreignId('property_id')->constrained('properties')->cascadeOnDelete();
+            $table->string('address_1', 255);
+            $table->string('address_2', 255)->nullable();
+            $table->string('city', 112)->index();
+            $table->string('state', 112)->index();
+            $table->string('zip', 20)->index();
             $table->timestamps();
         });
     }

@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -13,13 +12,12 @@ return new class extends Migration
     {
         Schema::create('property_offerings', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('property_id');
-            $table->foreign('property_id')->references('id')->on('properties')->onDelete('cascade');
-            $table->integer('offering_purchase');
-            $table->integer('offering_build_cost');
-            $table->integer('offering_improvements');
-            $table->string('offering_closing_cost');
-            $table->string('offering_sourcing_fees');
+            $table->foreignId('property_id')->constrained('properties')->cascadeOnDelete();
+            $table->unsignedBigInteger('offering_purchase')->default(0);
+            $table->unsignedBigInteger('offering_build_cost')->default(0);
+            $table->unsignedBigInteger('offering_improvements')->default(0);
+            $table->unsignedBigInteger('offering_closing_cost')->default(0);
+            $table->unsignedBigInteger('offering_sourcing_fees')->default(0);
             $table->timestamps();
         });
     }

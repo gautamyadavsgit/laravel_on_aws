@@ -12,9 +12,8 @@ return new class extends Migration {
     {
         Schema::create('property_amenities', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('property_id');
-            $table->foreign('property_id')->references('id')->on('properties')->onDelete('cascade');
-            $table->string('property_amenities');
+            $table->foreignId('property_id')->constrained('properties')->cascadeOnDelete();
+            $table->text('property_amenities');
             $table->timestamps();
         });
     }

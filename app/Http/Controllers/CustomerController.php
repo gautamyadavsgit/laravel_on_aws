@@ -12,9 +12,10 @@ class CustomerController extends Controller
     }
     public function investor()
     {
-        $properties = \App\Models\PropertyModel::with(['propertyImage', 'propertyAddress', 'propertyAacf', 'propertyShare'])
+        $properties = \App\Models\PropertyModel::with(['propertyImage', 'propertyAddress'])
             ->latest()
             ->paginate(9)
+            ->onEachSide(2)
             ->withQueryString();
 
         return view('frontend.properties', compact('properties'));
@@ -29,8 +30,6 @@ class CustomerController extends Controller
             'propertyDocumentModel',
             'propertyAddress',
             'propertyDetails',
-            'propertyAacf',
-            'propertyShare',
             'propertyAmenities'
         ]);
 

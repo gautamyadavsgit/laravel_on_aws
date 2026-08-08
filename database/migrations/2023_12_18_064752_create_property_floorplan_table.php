@@ -12,8 +12,7 @@ return new class extends Migration {
     {
         Schema::create('property_floorplan', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('property_id');
-            $table->foreign('property_id')->references('id')->on('properties')->onDelete('cascade');
+            $table->foreignId('property_id')->constrained('properties')->cascadeOnDelete();
             $table->string('key', 255);
             $table->string('value', 255);
             $table->timestamps();

@@ -1,7 +1,7 @@
 @include('frontend.common.header', ['title' => 'Smoky Mountain Luxury Estate - Fractional Investment | Gautam Real Estate'])
 
 @php
-    $featuredProperty = \App\Models\PropertyModel::with(['propertyImage', 'propertyFloorplan', 'propertyDocumentModel', 'propertyAddress', 'propertyDetails', 'propertyAacf', 'propertyShare', 'propertyAmenities'])->first();
+    $featuredProperty = \App\Models\PropertyModel::with(['propertyImage', 'propertyFloorplan', 'propertyDocumentModel', 'propertyAddress', 'propertyDetails', 'propertyAmenities'])->first();
     $propName = $featuredProperty->name ?? 'Smoky Mountain Luxury Cabin';
     $propDesc = $featuredProperty->description ?? 'Located in the high-demand vacation corridor of Gatlinburg, TN, this luxury short-term rental property features custom timber architecture, panoramic Great Smoky Mountain vistas, private hot tub deck, and dedicated entertainment suites.';
     $details = $featuredProperty->propertyDetails ?? null;
@@ -9,14 +9,6 @@
     $baths = $details->baths ?? 3.5;
     $sqft = $details->square_feets ?? 2850;
     $year = $details->year_built ?? 2022;
-    $aacf = $featuredProperty->propertyAacf ?? null;
-    $grossRent = $aacf->annual_rent_amount ?? 64000;
-    $expenses = $aacf->aacf_expences ?? 14500;
-    $netRent = $aacf->aacf_net ?? 49500;
-    $yield = $aacf->annual_rent_gross_yield ?? 10.4;
-    $share = $featuredProperty->propertyShare ?? null;
-    $raise = $share->equity_raise ?? 617000;
-    $pricePerShare = $share->price_per_share_deed ?? 50.00;
     $images = $featuredProperty && count($featuredProperty->propertyImage ?? []) > 0 ? $featuredProperty->propertyImage : null;
 @endphp
 
@@ -128,73 +120,48 @@
                         <div class="flex items-center gap-2"><i class="bi bi-check2-circle text-emerald-500 text-base"></i> Keyless Smart Lock</div>
                     </div>
                 </div>
-
-                <!-- Financial Performance Breakdown -->
-                <div class="card-tw space-y-4">
-                    <div class="card-header-tw">
-                        <h2 class="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                            <i class="bi bi-calculator text-indigo-600 dark:text-indigo-400"></i> Annual Cash Flow (AACF)
-                        </h2>
-                    </div>
-                    <div class="divide-y divide-slate-100 dark:divide-slate-800 text-sm">
-                        <div class="flex justify-between py-3">
-                            <span class="text-slate-600 dark:text-slate-400">Gross Projected Annual Rent</span>
-                            <span class="font-semibold text-emerald-600 dark:text-emerald-400">${{ number_format($grossRent, 2) }}</span>
-                        </div>
-                        <div class="flex justify-between py-3">
-                            <span class="text-slate-600 dark:text-slate-400">Property Management & Reserves</span>
-                            <span class="text-slate-500 dark:text-slate-400">-${{ number_format($expenses, 2) }}</span>
-                        </div>
-                        <div class="flex justify-between py-3 font-bold text-base">
-                            <span class="text-slate-900 dark:text-white">Net Annual Dividend Pool</span>
-                            <span class="text-indigo-600 dark:text-indigo-400">${{ number_format($netRent, 2) }}</span>
-                        </div>
-                    </div>
-                </div>
             </div>
 
-            <!-- Right Column: Sticky Investment Action Card -->
+            <!-- Right Column: Property Info Card -->
             <div class="lg:col-span-4">
                 <div class="card-tw sticky top-28 p-6 space-y-6 shadow-md">
                     <div>
-                        <span class="badge-tw badge-success-tw text-xs font-semibold mb-3">
-                            <i class="bi bi-shield-check"></i> SEC Qualified Offering
-                        </span>
-                        <h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">${{ number_format($raise) }} Total Raise</h2>
-                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Deed Share Price: <strong class="text-slate-900 dark:text-white font-semibold">${{ number_format($pricePerShare, 2) }} / Share</strong></p>
+                        <h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">{{ $propName }}</h2>
+                        @if($featuredProperty && $featuredProperty->propertyAddress)
+                            <p class="text-sm text-slate-500 dark:text-slate-400 mt-1 flex items-center gap-1.5">
+                                <i class="bi bi-geo-alt-fill text-rose-500"></i>
+                                {{ $featuredProperty->propertyAddress->address ?? '' }},
+                                {{ $featuredProperty->propertyAddress->city ?? '' }},
+                                {{ $featuredProperty->propertyAddress->state ?? '' }}
+                            </p>
+                        @endif
                     </div>
 
-                    <div class="grid grid-cols-3 gap-3 p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-800 text-center">
+                    <div class="grid grid-cols-2 gap-3 p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-800 text-center">
                         <div>
-                            <span class="text-[11px] font-semibold uppercase text-slate-400 dark:text-slate-500 block">Proj. Yield</span>
-                            <strong class="text-sm font-bold text-emerald-600 dark:text-emerald-400 mt-0.5 block">{{ $yield }}%</strong>
-                        </div>
-                        <div>
-                            <span class="text-[11px] font-semibold uppercase text-slate-400 dark:text-slate-500 block">Hold Period</span>
-                            <strong class="text-sm font-bold text-slate-900 dark:text-white mt-0.5 block">5 Years</strong>
+                            <span class="text-[11px] font-semibold uppercase text-slate-400 dark:text-slate-500 block">Bedrooms</span>
+                            <strong class="text-sm font-bold text-slate-900 dark:text-white mt-0.5 block">{{ $beds }} Beds</strong>
                         </div>
                         <div>
-                            <span class="text-[11px] font-semibold uppercase text-slate-400 dark:text-slate-500 block">Investors</span>
-                            <strong class="text-sm font-bold text-slate-900 dark:text-white mt-0.5 block">365</strong>
+                            <span class="text-[11px] font-semibold uppercase text-slate-400 dark:text-slate-500 block">Bathrooms</span>
+                            <strong class="text-sm font-bold text-slate-900 dark:text-white mt-0.5 block">{{ $baths }} Baths</strong>
                         </div>
-                    </div>
-
-                    <div class="space-y-2">
-                        <div class="flex justify-between text-xs font-semibold text-slate-700 dark:text-slate-300">
-                            <span>Funding Progress</span>
-                            <span class="text-indigo-600 dark:text-indigo-400">90% (${{ number_format($raise * 0.9) }})</span>
+                        <div>
+                            <span class="text-[11px] font-semibold uppercase text-slate-400 dark:text-slate-500 block">Square Feet</span>
+                            <strong class="text-sm font-bold text-slate-900 dark:text-white mt-0.5 block">{{ number_format($sqft) }} SqFt</strong>
                         </div>
-                        <div class="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-2.5 overflow-hidden">
-                            <div class="bg-indigo-600 h-2.5 rounded-full" style="width: 90%;"></div>
+                        <div>
+                            <span class="text-[11px] font-semibold uppercase text-slate-400 dark:text-slate-500 block">Year Built</span>
+                            <strong class="text-sm font-bold text-slate-900 dark:text-white mt-0.5 block">{{ $year }}</strong>
                         </div>
                     </div>
 
                     <a href="{{ url('register') }}" class="btn-primary-tw w-full py-3 text-base shadow-md">
-                        <i class="bi bi-cart-check"></i> Invest in Fractional Deeds
+                        <i class="bi bi-envelope-check"></i> Enquire About This Property
                     </a>
 
                     <div class="text-center text-xs text-slate-400 dark:text-slate-500 flex items-center justify-center gap-1.5">
-                        <i class="bi bi-lock-fill text-slate-400"></i> Backed by Recorded Master Deed
+                        <i class="bi bi-lock-fill text-slate-400"></i> Your information is kept private
                     </div>
                 </div>
             </div>
