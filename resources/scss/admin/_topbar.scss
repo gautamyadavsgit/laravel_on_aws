@@ -1,0 +1,178 @@
+// Admin Topbar
+@import '../variables';
+@import '../mixins';
+
+.admin-topbar {
+  height: $topbar-height;
+  background: #ffffff;
+  border-bottom: 1px solid $gray-200;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.75rem;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04);
+
+  .topbar-left {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    .brand-link {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      text-decoration: none;
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: $gray-900;
+      letter-spacing: -0.02em;
+
+      .brand-icon {
+        width: 36px;
+        height: 36px;
+        background: linear-gradient(135deg, $primary, #4f46e5);
+        color: #fff;
+        border-radius: $border-radius-sm;
+        @include flex-center;
+        font-size: 1.1rem;
+        font-weight: 700;
+      }
+
+      .brand-text {
+        span {
+          color: $primary;
+        }
+      }
+    }
+
+    .sidebar-toggle-btn {
+      background: $gray-100;
+      border: 1px solid $gray-200;
+      color: $gray-700;
+      width: 38px;
+      height: 38px;
+      border-radius: $border-radius-sm;
+      @include flex-center;
+      cursor: pointer;
+      transition: $transition-base;
+
+      &:hover {
+        background: $gray-200;
+        color: $primary;
+      }
+    }
+  }
+
+  .topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+
+    .topbar-search {
+      position: relative;
+      width: 240px;
+
+      @media (max-width: 768px) {
+        display: none;
+      }
+
+      .search-input {
+        width: 100%;
+        padding: 0.45rem 0.85rem 0.45rem 2.2rem;
+        font-size: 0.875rem;
+        border: 1px solid $gray-200;
+        border-radius: $border-radius-pill;
+        background: $gray-50;
+        transition: $transition-base;
+
+        &:focus {
+          outline: none;
+          border-color: $primary;
+          background: #fff;
+          box-shadow: 0 0 0 3px rgba($primary, 0.12);
+        }
+      }
+
+      .search-icon {
+        position: absolute;
+        left: 0.75rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: $gray-400;
+        pointer-events: none;
+      }
+    }
+
+    .user-dropdown {
+      .dropdown-toggle {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        padding: 0.35rem 0.65rem;
+        border-radius: $border-radius-pill;
+        border: 1px solid $gray-200;
+        background: #fff;
+        color: $gray-800;
+        font-size: 0.875rem;
+        font-weight: 500;
+        text-decoration: none;
+        cursor: pointer;
+        transition: $transition-base;
+
+        &:hover, &:focus {
+          background: $gray-50;
+          border-color: $gray-300;
+        }
+
+        &::after {
+          margin-left: 0.3rem;
+          vertical-align: 0.15em;
+        }
+
+        .user-avatar {
+          width: 32px;
+          height: 32px;
+          border-radius: 50%;
+          background: linear-gradient(135deg, $primary, $info);
+          color: #fff;
+          font-weight: 600;
+          @include flex-center;
+          font-size: 0.85rem;
+        }
+      }
+
+      .dropdown-menu {
+        border-radius: $border-radius;
+        border: 1px solid $gray-200;
+        box-shadow: $box-shadow-md;
+        padding: 0.5rem;
+        min-width: 200px;
+        margin-top: 0.5rem;
+
+        .dropdown-item {
+          border-radius: $border-radius-sm;
+          padding: 0.5rem 0.85rem;
+          font-size: 0.875rem;
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          color: $gray-700;
+          transition: $transition-base;
+
+          &:hover {
+            background: $primary-light;
+            color: $primary;
+          }
+
+          &.text-danger:hover {
+            background: $danger-light;
+            color: $danger;
+          }
+        }
+      }
+    }
+  }
+}

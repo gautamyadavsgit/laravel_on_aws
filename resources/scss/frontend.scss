@@ -1,0 +1,25 @@
+// ==========================================
+// Master Frontend SCSS Entry Point
+// ==========================================
+
+@import 'variables';
+@import 'mixins';
+
+// Base Body & HTML Reset
+body.frontend-body {
+  font-family: $font-family-base;
+  background-color: #ffffff;
+  color: $gray-800;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+// Import Frontend Sub-modules
+@import 'frontend/navbar';
+@import 'frontend/hero';
+@import 'frontend/features';
+@import 'frontend/properties';
+@import 'frontend/single-property';
+@import 'frontend/wizard';
+@import 'frontend/footer';

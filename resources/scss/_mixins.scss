@@ -1,0 +1,39 @@
+// ==========================================
+// SCSS Mixins & Utilities
+// ==========================================
+@import 'variables';
+
+@mixin card-style {
+  background: #ffffff;
+  border: 1px solid $gray-200;
+  border-radius: $border-radius;
+  box-shadow: $box-shadow-sm;
+  transition: $transition-smooth;
+}
+
+@mixin card-hover {
+  &:hover {
+    box-shadow: $box-shadow-md;
+    border-color: darken($gray-200, 4%);
+    transform: translateY(-2px);
+  }
+}
+
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@mixin glassmorphism {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}

@@ -1,0 +1,110 @@
+// Frontend Registration Multi-Step Wizard
+@import '../variables';
+@import '../mixins';
+
+.wizard-page-wrapper {
+  padding: 6.5rem 1.5rem 4rem;
+  background: radial-gradient(circle at 50% 15%, #eff6ff 0%, #f8fafc 100%);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .wizard-card {
+    max-width: 680px;
+    width: 100%;
+    background: #ffffff;
+    border: 1px solid $gray-200;
+    border-radius: $border-radius-lg;
+    box-shadow: $box-shadow-lg;
+    padding: 2.5rem;
+
+    .wizard-progress {
+      display: flex;
+      justify-content: space-between;
+      position: relative;
+      margin-bottom: 2.5rem;
+
+      &::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 20px;
+        right: 20px;
+        height: 2px;
+        background: $gray-200;
+        transform: translateY(-50%);
+        z-index: 1;
+      }
+
+      .step-bubble {
+        position: relative;
+        z-index: 2;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: #ffffff;
+        border: 2px solid $gray-300;
+        color: $gray-500;
+        font-weight: 700;
+        font-size: 0.95rem;
+        @include flex-center;
+        transition: $transition-smooth;
+
+        &.active {
+          border-color: $primary;
+          background: $primary;
+          color: #ffffff;
+          box-shadow: 0 0 0 4px rgba($primary, 0.15);
+        }
+
+        &.completed {
+          border-color: $success;
+          background: $success;
+          color: #ffffff;
+        }
+      }
+    }
+
+    .wizard-step-section {
+      display: none;
+
+      &.active {
+        display: block;
+        animation: fadeIn 0.3s ease;
+      }
+
+      .step-title {
+        font-size: 1.35rem;
+        font-weight: 700;
+        color: $gray-900;
+        margin-bottom: 0.35rem;
+      }
+
+      .step-description {
+        font-size: 0.9rem;
+        color: $gray-500;
+        margin-bottom: 1.5rem;
+      }
+    }
+
+    .wizard-nav-buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid $gray-100;
+    }
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

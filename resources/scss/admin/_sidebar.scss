@@ -1,0 +1,141 @@
+// Admin Sidebar
+@import '../variables';
+@import '../mixins';
+
+.admin-sidebar {
+  width: $sidebar-width;
+  background: #ffffff;
+  border-right: 1px solid $gray-200;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  min-height: 100vh;
+  transition: width $transition-smooth;
+  position: relative;
+  z-index: 99;
+
+  @media (max-width: 992px) {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: -$sidebar-width;
+    z-index: 1050;
+    box-shadow: $box-shadow-lg;
+
+    &.mobile-open {
+      left: 0;
+    }
+  }
+
+  .sidebar-brand {
+    height: $topbar-height;
+    padding: 0 1.5rem;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid $gray-200;
+    text-decoration: none;
+
+    .brand-title {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: $gray-900;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+
+      .brand-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: $primary;
+      }
+    }
+  }
+
+  .sidebar-nav {
+    flex: 1;
+    padding: 1.25rem 0.85rem;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+
+    .nav-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: $gray-400;
+      padding: 0.75rem 0.75rem 0.35rem;
+    }
+
+    .nav-item {
+      list-style: none;
+
+      .nav-link {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.65rem 0.85rem;
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: $gray-600;
+        border-radius: $border-radius-sm;
+        text-decoration: none;
+        transition: $transition-base;
+
+        .nav-icon {
+          font-size: 1.15rem;
+          color: $gray-400;
+          transition: $transition-base;
+          width: 20px;
+          text-align: center;
+        }
+
+        &:hover {
+          background: $gray-100;
+          color: $gray-900;
+
+          .nav-icon {
+            color: $primary;
+          }
+        }
+
+        &.active {
+          background: $primary-light;
+          color: $primary;
+          font-weight: 600;
+
+          .nav-icon {
+            color: $primary;
+          }
+        }
+      }
+    }
+  }
+
+  .sidebar-footer {
+    padding: 1rem 1.25rem;
+    border-top: 1px solid $gray-200;
+    font-size: 0.8rem;
+    color: $gray-400;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.sidebar-backdrop {
+  display: none;
+
+  @media (max-width: 992px) {
+    &.show {
+      display: block;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.4);
+      z-index: 1040;
+      backdrop-filter: blur(2px);
+    }
+  }
+}

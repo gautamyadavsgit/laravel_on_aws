@@ -1,0 +1,157 @@
+// Frontend Navbar
+@import '../variables';
+@import '../mixins';
+
+.site-navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  padding: 1rem 0;
+  transition: $transition-smooth;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba($gray-200, 0.8);
+
+  &.scrolled {
+    padding: 0.65rem 0;
+    box-shadow: $box-shadow-sm;
+    background: #ffffff;
+  }
+
+  .navbar-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    @include flex-between;
+  }
+
+  .site-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: $gray-900;
+    letter-spacing: -0.02em;
+
+    .brand-logo-badge {
+      width: 38px;
+      height: 38px;
+      border-radius: $border-radius-sm;
+      background: linear-gradient(135deg, $primary, #4338ca);
+      color: #fff;
+      @include flex-center;
+      font-size: 1.15rem;
+      font-weight: 700;
+    }
+
+    span.brand-accent {
+      color: $primary;
+    }
+  }
+
+  .nav-menu {
+    display: flex;
+    align-items: center;
+    gap: 1.75rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    @media (max-width: 992px) {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: #ffffff;
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 1.5rem;
+      border-bottom: 1px solid $gray-200;
+      box-shadow: $box-shadow-lg;
+      gap: 1rem;
+
+      &.open {
+        display: flex;
+      }
+    }
+
+    .nav-item {
+      .nav-link {
+        font-size: 0.95rem;
+        font-weight: 500;
+        color: $gray-600;
+        text-decoration: none;
+        transition: $transition-base;
+        padding: 0.25rem 0;
+
+        &:hover, &.active {
+          color: $primary;
+        }
+      }
+    }
+  }
+
+  .nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+
+    .nav-btn {
+      padding: 0.55rem 1.25rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+      border-radius: $border-radius-pill;
+      text-decoration: none;
+      transition: $transition-smooth;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+
+      &.btn-primary-pill {
+        background: $primary;
+        color: #fff;
+        border: 1px solid $primary;
+
+        &:hover {
+          background: $primary-hover;
+          border-color: $primary-hover;
+          transform: translateY(-1px);
+        }
+      }
+
+      &.btn-outline-pill {
+        background: transparent;
+        color: $gray-700;
+        border: 1px solid $gray-300;
+
+        &:hover {
+          background: $gray-100;
+          color: $gray-900;
+        }
+      }
+    }
+
+    .mobile-menu-btn {
+      display: none;
+      background: $gray-100;
+      border: 1px solid $gray-200;
+      border-radius: $border-radius-sm;
+      width: 40px;
+      height: 40px;
+      color: $gray-800;
+      font-size: 1.25rem;
+      @include flex-center;
+      cursor: pointer;
+
+      @media (max-width: 992px) {
+        display: flex;
+      }
+    }
+  }
+}

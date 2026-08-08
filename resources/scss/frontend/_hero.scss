@@ -1,0 +1,126 @@
+// Frontend Hero Section
+@import '../variables';
+@import '../mixins';
+
+.hero-section {
+  padding: 8.5rem 1.5rem 5rem;
+  background: radial-gradient(circle at 50% 10%, #eff6ff 0%, #ffffff 80%);
+  position: relative;
+  overflow: hidden;
+
+  .hero-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.35rem 1rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: $primary;
+    background: $primary-light;
+    border: 1px solid rgba($primary, 0.2);
+    border-radius: $border-radius-pill;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero-title {
+    font-size: clamp(2.25rem, 5vw, 3.75rem);
+    font-weight: 800;
+    color: $gray-900;
+    line-height: 1.15;
+    letter-spacing: -0.03em;
+    max-width: 860px;
+    margin: 0 auto 1.25rem;
+
+    .gradient-text {
+      background: linear-gradient(135deg, $primary, #6366f1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+  }
+
+  .hero-subtitle {
+    font-size: 1.15rem;
+    color: $gray-600;
+    max-width: 640px;
+    margin: 0 auto 2.25rem;
+    line-height: 1.6;
+  }
+
+  .hero-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 3.5rem;
+
+    .hero-search-form {
+      display: flex;
+      align-items: center;
+      background: #ffffff;
+      padding: 0.35rem;
+      border-radius: $border-radius-pill;
+      border: 1px solid $gray-200;
+      box-shadow: $box-shadow-md;
+      max-width: 480px;
+      width: 100%;
+
+      input {
+        flex: 1;
+        border: none;
+        padding: 0.6rem 1.25rem;
+        font-size: 0.95rem;
+        outline: none;
+        background: transparent;
+      }
+
+      button {
+        padding: 0.65rem 1.5rem;
+        border-radius: $border-radius-pill;
+        border: none;
+        background: $primary;
+        color: #fff;
+        font-weight: 600;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: $transition-base;
+
+        &:hover {
+          background: $primary-hover;
+        }
+      }
+    }
+  }
+
+  .hero-stats-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    max-width: 900px;
+    margin: 0 auto;
+
+    .hero-stat-card {
+      @include card-style;
+      padding: 1.25rem;
+      text-align: center;
+
+      .stat-num {
+        font-size: 1.75rem;
+        font-weight: 800;
+        color: $gray-900;
+      }
+
+      .stat-label {
+        font-size: 0.85rem;
+        color: $gray-500;
+        margin-top: 0.25rem;
+      }
+    }
+  }
+}

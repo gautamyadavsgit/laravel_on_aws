@@ -1,0 +1,100 @@
+// Admin Dashboard
+@import '../variables';
+@import '../mixins';
+
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.25rem;
+  margin-bottom: 1.75rem;
+}
+
+.stat-card {
+  @include card-style;
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  position: relative;
+  overflow: hidden;
+
+  .stat-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: $border-radius;
+    @include flex-center;
+    font-size: 1.5rem;
+    flex-shrink: 0;
+
+    &.primary {
+      background: $primary-light;
+      color: $primary;
+    }
+
+    &.success {
+      background: $success-light;
+      color: $success;
+    }
+
+    &.warning {
+      background: $warning-light;
+      color: $warning;
+    }
+
+    &.info {
+      background: $info-light;
+      color: $info;
+    }
+  }
+
+  .stat-details {
+    flex: 1;
+
+    .stat-label {
+      font-size: 0.8125rem;
+      font-weight: 500;
+      color: $gray-500;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.25rem;
+    }
+
+    .stat-value {
+      font-size: 1.625rem;
+      font-weight: 700;
+      color: $gray-900;
+      line-height: 1.2;
+    }
+
+    .stat-meta {
+      font-size: 0.75rem;
+      color: $gray-400;
+      margin-top: 0.25rem;
+    }
+  }
+}
+
+.dashboard-card {
+  @include card-style;
+  margin-bottom: 1.75rem;
+
+  .card-header {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid $gray-200;
+    background: transparent;
+    @include flex-between;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+
+    .card-title {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: $gray-900;
+      margin: 0;
+    }
+  }
+
+  .card-body {
+    padding: 1.5rem;
+  }
+}
