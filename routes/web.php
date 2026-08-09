@@ -69,26 +69,15 @@ Route::prefix('/admin')->group(function () {
 
             Route::post('/update-property-metrics/{id}', [ManagePropertyController::class, 'update_property_metrics'])->name('admin.manage-property.update-property-metrics');
         });
-
-
-
-
-
-
-
-
-
-
     });
 });
-
-
-
-
-
-
-Route::get('/register', [CustomerController::class, 'index']);
+Route::get('/login', [AdminController::class, 'index'])->name('login');
+Route::get('/register', [CustomerController::class, 'index'])->name('register');
+Route::post('/register', [CustomerController::class, 'registerStore'])->name('register.post');
+Route::get('/verify-email/{token}', [CustomerController::class, 'verifyEmail'])->name('verification.verify.token');
 Route::get('/invest', [CustomerController::class, 'investor'])->name('properties');
+Route::get('/property_singlepage', [CustomerController::class, 'property_singlepage'])->name('property_singlepage');
 
-Route::get('/property_singlepage', [CustomerController::class, 'property_singlepage']);
+
+
 

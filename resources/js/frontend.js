@@ -86,9 +86,24 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentStep = 1;
     const totalSteps = 3;
 
+    function validateCurrentStep(step) {
+      const stepContainer = document.querySelector(`[data-wizard-step="${step}"]`);
+      if (!stepContainer) return true;
+
+      const inputs = stepContainer.querySelectorAll('input, select, textarea');
+      for (let input of inputs) {
+        if (!input.checkValidity()) {
+          input.reportValidity();
+          return false;
+        }
+      }
+      return true;
+    }
+
     const showStep = (step) => {
       document.querySelectorAll('[data-wizard-step]').forEach(sec => {
-        if (parseInt(sec.getAttribute('data-wizard-step')) === step) {
+        const s = parseInt(sec.getAttribute('data-wizard-step'));
+        if (s === step) {
           sec.classList.remove('hidden');
         } else {
           sec.classList.add('hidden');
@@ -100,11 +115,13 @@ document.addEventListener('DOMContentLoaded', () => {
         bubble.classList.remove('bg-indigo-600', 'text-white', 'bg-emerald-600', 'bg-slate-200', 'dark:bg-slate-800', 'text-slate-600', 'dark:text-slate-400');
         if (bubbleStep === step) {
           bubble.classList.add('bg-indigo-600', 'text-white', 'ring-4', 'ring-indigo-100', 'dark:ring-indigo-950');
+          bubble.innerText = bubbleStep;
         } else if (bubbleStep < step) {
           bubble.classList.add('bg-emerald-600', 'text-white');
           bubble.innerHTML = '<i class="bi bi-check-lg"></i>';
         } else {
           bubble.classList.add('bg-slate-200', 'dark:bg-slate-800', 'text-slate-600', 'dark:text-slate-400');
+          bubble.innerText = bubbleStep;
         }
       });
 
@@ -147,9 +164,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (nextBtn) {
       nextBtn.addEventListener('click', (e) => {
         e.preventDefault();
-        if (currentStep < totalSteps) {
-          currentStep++;
-          showStep(currentStep);
+        if (validateCurrentStep(currentStep)) {
+          if (currentStep < totalSteps) {
+            currentStep++;
+            showStep(currentStep);
+          }
         }
       });
     }

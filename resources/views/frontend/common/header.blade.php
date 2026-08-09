@@ -42,19 +42,24 @@
             <nav class="hidden md:flex items-center gap-1">
                 <a href="{{ url('/') }}" class="px-3.5 py-2 rounded-lg text-sm font-medium transition {{ request()->is('/') ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-50/70 dark:bg-indigo-950/50' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-300 dark:hover:text-white dark:hover:bg-slate-800' }}">Home</a>
                 <a href="{{ url('invest') }}" class="px-3.5 py-2 rounded-lg text-sm font-medium transition {{ request()->is('invest') ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-50/70 dark:bg-indigo-950/50' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-300 dark:hover:text-white dark:hover:bg-slate-800' }}">Browse Investments</a>
-                <a href="{{ url('/#how-it-works') }}" class="px-3.5 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-300 dark:hover:text-white dark:hover:bg-slate-800 transition">How It Works</a>
-                <a href="{{ url('/#features') }}" class="px-3.5 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-300 dark:hover:text-white dark:hover:bg-slate-800 transition">Why Fractional</a>
                 <a href="{{ url('property_singlepage') }}" class="px-3.5 py-2 rounded-lg text-sm font-medium transition {{ request()->is('property_singlepage') ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-50/70 dark:bg-indigo-950/50' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-300 dark:hover:text-white dark:hover:bg-slate-800' }}">Featured Asset</a>
+                <a href="{{ url('register') }}" class="px-3.5 py-2 rounded-lg text-sm font-medium transition {{ request()->is('register') ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-50/70 dark:bg-indigo-950/50' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-300 dark:hover:text-white dark:hover:bg-slate-800' }}">Investor Registration</a>
             </nav>
 
-            <div class="flex items-center gap-3">
+            <div class="flex items-center gap-2.5">
                 <!-- Theme Switcher -->
                 <button type="button" onclick="toggleTheme()" class="p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition" aria-label="Toggle Dark Mode" title="Toggle Theme">
                     <i class="bi bi-moon-stars-fill theme-toggle-icon text-slate-600 dark:text-amber-400 text-base"></i>
                 </button>
 
-                <a href="{{ url('register') }}" class="hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded-full bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-700 active:bg-indigo-800 shadow-sm shadow-indigo-500/25 transition">
-                    <i class="bi bi-person-plus"></i> Join Platform
+                <!-- Login Button -->
+                <a href="{{ url('/login') }}" class="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-200 text-sm font-semibold hover:bg-slate-100 dark:hover:bg-slate-800 hover:border-slate-300 dark:hover:border-slate-700 transition">
+                    <i class="bi bi-box-arrow-in-right text-indigo-600 dark:text-indigo-400"></i> Log In
+                </a>
+
+                <!-- Register Button -->
+                <a href="{{ url('register') }}" class="hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-indigo-600 text-white text-sm font-semibold hover:bg-indigo-700 active:bg-indigo-800 shadow-sm shadow-indigo-500/25 transition">
+                    <i class="bi bi-person-plus"></i> Register
                 </a>
 
                 <!-- Mobile Menu Button -->
@@ -66,14 +71,17 @@
 
         <!-- Mobile Drawer Navigation -->
         <div id="mobileNavMenu" class="hidden md:hidden border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 px-4 py-4 space-y-2">
-            <a href="{{ url('/') }}" class="block px-3 py-2 rounded-lg text-base font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800">Home</a>
-            <a href="{{ url('invest') }}" class="block px-3 py-2 rounded-lg text-base font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800">Browse Investments</a>
-            <a href="{{ url('/#how-it-works') }}" class="block px-3 py-2 rounded-lg text-base font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800">How It Works</a>
-            <a href="{{ url('/#features') }}" class="block px-3 py-2 rounded-lg text-base font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800">Why Fractional</a>
-            <a href="{{ url('property_singlepage') }}" class="block px-3 py-2 rounded-lg text-base font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800">Featured Asset</a>
-            <div class="pt-2">
-                <a href="{{ url('register') }}" class="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-600 text-white text-sm font-medium">
-                    <i class="bi bi-person-plus"></i> Join Platform
+            <a href="{{ url('/') }}" class="block px-3 py-2 rounded-lg text-base font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 {{ request()->is('/') ? 'text-indigo-600 dark:text-indigo-400 font-semibold' : '' }}">Home</a>
+            <a href="{{ url('invest') }}" class="block px-3 py-2 rounded-lg text-base font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 {{ request()->is('invest') ? 'text-indigo-600 dark:text-indigo-400 font-semibold' : '' }}">Browse Investments</a>
+            <a href="{{ url('property_singlepage') }}" class="block px-3 py-2 rounded-lg text-base font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 {{ request()->is('property_singlepage') ? 'text-indigo-600 dark:text-indigo-400 font-semibold' : '' }}">Featured Asset</a>
+            <a href="{{ url('register') }}" class="block px-3 py-2 rounded-lg text-base font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 {{ request()->is('register') ? 'text-indigo-600 dark:text-indigo-400 font-semibold' : '' }}">Investor Registration</a>
+            
+            <div class="pt-3 border-t border-slate-100 dark:border-slate-800 grid grid-cols-2 gap-2">
+                <a href="{{ url('/login') }}" class="w-full inline-flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-200 text-sm font-semibold hover:bg-slate-100 dark:hover:bg-slate-800">
+                    <i class="bi bi-box-arrow-in-right text-indigo-600"></i> Log In
+                </a>
+                <a href="{{ url('register') }}" class="w-full inline-flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl bg-indigo-600 text-white text-sm font-semibold shadow-sm hover:bg-indigo-700">
+                    <i class="bi bi-person-plus"></i> Register
                 </a>
             </div>
         </div>
