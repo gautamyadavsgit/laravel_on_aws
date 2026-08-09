@@ -112,6 +112,15 @@
                 <i class="bi bi-file-earmark-pdf"></i>
                 <span>7. Documents</span>
             </a>
+
+            <i class="bi bi-chevron-right text-slate-300 dark:text-slate-700 text-xs"></i>
+
+            <!-- 8. Metrics -->
+            <a href="{{ route('admin.manage-property.edit-property-metrics', ['id' => $propId]) }}" 
+               class="flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold transition {{ $currentRoute === 'admin.manage-property.edit-property-metrics' ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800' }}">
+                <i class="bi bi-graph-up-arrow"></i>
+                <span>8. Underwriting & Metrics</span>
+            </a>
         </nav>
     </div>
 </div>

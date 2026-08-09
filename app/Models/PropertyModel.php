@@ -51,4 +51,9 @@ class PropertyModel extends Model
     {
         return $this->hasMany('\App\Models\PropertyDocumentModel', 'property_id');
     }
+
+    public function propertyMetrics(): HasOne
+    {
+        return $this->hasOne(\App\Models\PropertyMetrics::class, 'property_id');
+    }
 }

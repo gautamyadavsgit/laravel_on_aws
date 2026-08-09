@@ -15,6 +15,8 @@ use App\Http\Requests\Admin\UpdatePropertyDocumentRequest;
 use App\Http\Requests\Admin\UpdatePropertyFloorPlanRequest;
 use App\Http\Requests\Admin\UpdatePropertyOfferingRequest;
 use App\Http\Requests\Admin\UpdatePropertyRequest;
+use App\Http\Requests\Admin\UpdatePropertyMetricsRequest;
+use App\Services\PropertyMetricsService;
 
 class ManagePropertyController extends Controller
 {
@@ -30,7 +32,8 @@ class ManagePropertyController extends Controller
             'propertyOffering',
             'propertyAmenities',
             'propertyFloorplan',
-            'propertyDocumentModel'
+            'propertyDocumentModel',
+            'propertyMetrics',
         ])
             ->latest()
             ->paginate(15)
@@ -330,8 +333,34 @@ class ManagePropertyController extends Controller
         } else {
             $property->propertyDocumentModel()->createMany($newData);
         }
-        return redirect(route('manage-property.index'))->with('success', 'Documents updated successfully.');
+        return redirect(route('admin.manage-property.edit-property-metrics', ['id' => $id]))->with('success', 'Documents updated successfully.');
 
+    }
+
+    public function edit_property_metrics(Request $request, string $id)
+    {
+        $property = PropertyModel::with(['propertyDetails', 'propertyOffering', 'propertyMetrics'])->findOrFail($id);
+        
+        $propertyMetrics = $property->propertyMetrics;
+        if (!$propertyMetrics) {
+            $propertyMetrics = PropertyMetricsService::syncForProperty($property);
+        }
+
+        return view('admin.properties.edit_property_metrics')->with([
+            'property' => $property,
+            'propertyMetrics' => $propertyMetrics,
+            'property_id' => $id,
+        ]);
+    }
+
+    public function update_property_metrics(UpdatePropertyMetricsRequest $request, string $id)
+    {
+        $data = $request->validated();
+        $property = PropertyModel::findOrFail($id);
+
+        PropertyMetricsService::syncForProperty($property, $data);
+
+        return redirect(route('manage-property.index'))->with('success', 'Property metrics and investment underwriting saved successfully.');
     }
 
 }

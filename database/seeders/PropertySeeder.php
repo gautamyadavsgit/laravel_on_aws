@@ -9,8 +9,10 @@ use App\Models\PropertyDetails;
 use App\Models\PropertyDocumentModel;
 use App\Models\PropertyFloorplan;
 use App\Models\PropertyImageModel;
+use App\Models\PropertyMetrics;
 use App\Models\PropertyModel;
 use App\Models\PropertyOffering;
+use App\Services\PropertyMetricsService;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -403,6 +405,26 @@ class PropertySeeder extends Seeder
                     'document_value' => $docFile,
                 ]);
             }
+
+            // 10. Financial Underwriting & Goal Match Metrics
+            $aacf = $propData['aacf'] ?? [];
+            PropertyMetricsService::syncForProperty($property, [
+                'gross_annual_rent' => $aacf['annual_rent_amount'] ?? null,
+                'operating_expenses' => $aacf['aacf_expences'] ?? null,
+                'net_operating_income' => $aacf['aacf_net'] ?? null,
+                'cap_rate' => $aacf['annual_rent_gross_yield'] ?? null,
+                'annual_cash_flow' => $aacf['aacf_net'] ?? null,
+                'cash_on_cash_return' => $aacf['annual_rent_gross_yield'] ?? null,
+                'estimated_appreciation_rate' => 5.40,
+                'is_1031_exchange_eligible' => true,
+                'cost_segregation_eligible' => true,
+                'diversification_score' => 9.2,
+                'occupancy_rate_projected' => 88.5,
+                'cash_flow_rating' => 95,
+                'appreciation_rating' => 89,
+                'tax_benefit_rating' => 93,
+                'diversification_rating' => 91,
+            ]);
         }
     }
 }

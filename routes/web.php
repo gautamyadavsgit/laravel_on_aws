@@ -63,6 +63,11 @@ Route::prefix('/admin')->group(function () {
             Route::get('/edit-property-documents/{id}', [ManagePropertyController::class, 'edit_property_documents'])->name('admin.manage-property.edit-property-documents');
 
             Route::post('/update-property-documents/{id}', [ManagePropertyController::class, 'update_property_documents'])->name('admin.manage-property.update-property-documents');
+
+            // edit property metrics (Stage 8)
+            Route::get('/edit-property-metrics/{id}', [ManagePropertyController::class, 'edit_property_metrics'])->name('admin.manage-property.edit-property-metrics');
+
+            Route::post('/update-property-metrics/{id}', [ManagePropertyController::class, 'update_property_metrics'])->name('admin.manage-property.update-property-metrics');
         });
 
 

@@ -12,7 +12,7 @@ class CustomerController extends Controller
     }
     public function investor()
     {
-        $properties = \App\Models\PropertyModel::with(['propertyImage', 'propertyAddress'])
+        $properties = \App\Models\PropertyModel::with(['propertyImage', 'propertyAddress', 'propertyMetrics', 'propertyDetails'])
             ->latest()
             ->paginate(9)
             ->onEachSide(2)
@@ -30,7 +30,8 @@ class CustomerController extends Controller
             'propertyDocumentModel',
             'propertyAddress',
             'propertyDetails',
-            'propertyAmenities'
+            'propertyAmenities',
+            'propertyMetrics'
         ]);
 
         $featuredProperty = $propertyId ? $query->find($propertyId) : $query->first();
