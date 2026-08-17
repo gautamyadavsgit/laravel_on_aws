@@ -31,10 +31,10 @@ class SeedMillionPropertiesCommand extends Command
         $total = (int) $this->option('count');
         $chunkSize = (int) $this->option('chunk');
 
-        $this->info("===================================================================");
+        $this->info('===================================================================');
         $this->info(" Starting High-Performance Seeding: {$total} Properties");
         $this->info(" Chunk size: {$chunkSize} records per bulk transaction");
-        $this->info("===================================================================");
+        $this->info('===================================================================');
 
         // Ensure physical sample images & storage link exist
         ImageSeederHelper::ensureSeedAssets();
@@ -65,13 +65,13 @@ class SeedMillionPropertiesCommand extends Command
             'Smoky Mountain', 'Blue Ridge', 'Gulf Coast', 'Aspen Alpine',
             'Napa Valley', 'Scottsdale Desert', 'Lake Tahoe', 'Jackson Hole',
             'Key West', 'Sedona Red Rock', 'Emerald Bay', 'Whispering Pines',
-            'Sunset Ridge', 'Silver King', 'Pelican Bay', 'Highland Timber'
+            'Sunset Ridge', 'Silver King', 'Pelican Bay', 'Highland Timber',
         ];
 
         $propertyTypes = [
             'Luxury Cabin', 'Mountain Retreat', 'Waterfront Villa', 'Ski Chalet',
             'Vineyard Estate', 'Desert Oasis', 'Lakeside Manor', 'Alpine Lodge',
-            'Coastal Sanctuary', 'Red Rock Haven', 'Contemporary Villa', 'Timber Lodge'
+            'Coastal Sanctuary', 'Red Rock Haven', 'Contemporary Villa', 'Timber Lodge',
         ];
 
         $now = now()->format('Y-m-d H:i:s');
@@ -122,8 +122,8 @@ class SeedMillionPropertiesCommand extends Command
                     // Address
                     $addresses[] = [
                         'property_id' => $id,
-                        'address_1' => (100 + ($id % 900)) . ' Mountain Vista Way',
-                        'address_2' => 'Unit #' . (($id % 50) + 1),
+                        'address_1' => (100 + ($id % 900)).' Mountain Vista Way',
+                        'address_2' => 'Unit #'.(($id % 50) + 1),
                         'city' => $location['city'],
                         'state' => $location['state'],
                         'zip' => $location['zip'],
@@ -135,7 +135,7 @@ class SeedMillionPropertiesCommand extends Command
                     $imagesList[] = [
                         'property_id' => $id,
                         'property_image_key' => 'property_image',
-                        'property_image_value' => 'property_images/property_' . $imgNum . '.png',
+                        'property_image_value' => 'property_images/property_'.$imgNum.'.png',
                         'created_at' => $now,
                         'updated_at' => $now,
                     ];
@@ -183,11 +183,11 @@ class SeedMillionPropertiesCommand extends Command
         $duration = round(microtime(true) - $startTime, 2);
         $rate = round($total / max(0.001, $duration));
 
-        $this->info("===================================================================");
+        $this->info('===================================================================');
         $this->info(" SUCCESS: Seeded {$total} Properties with sub-records in {$duration}s ({$rate} rows/sec)");
-        $this->info(" All seeded images resolve to verified storage assets.");
-        $this->info(" Pagination is configured to handle high volume seamlessly.");
-        $this->info("===================================================================");
+        $this->info(' All seeded images resolve to verified storage assets.');
+        $this->info(' Pagination is configured to handle high volume seamlessly.');
+        $this->info('===================================================================');
 
         return Command::SUCCESS;
     }

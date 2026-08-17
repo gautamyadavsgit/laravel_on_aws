@@ -2,9 +2,8 @@
 
 namespace App\Services;
 
-use App\Models\PropertyModel;
 use App\Models\PropertyMetrics;
-use Illuminate\Support\Facades\Log;
+use App\Models\PropertyModel;
 
 class PropertyMetricsService
 {
@@ -15,8 +14,8 @@ class PropertyMetricsService
     {
         $property->loadMissing(['propertyDetails', 'propertyOffering', 'propertyAddress']);
 
-        $valuation = (float) ($property->propertyDetails->value 
-            ?? $property->propertyOffering->offering_purchase 
+        $valuation = (float) ($property->propertyDetails->value
+            ?? $property->propertyOffering->offering_purchase
             ?? 600000);
 
         if ($valuation <= 0) {

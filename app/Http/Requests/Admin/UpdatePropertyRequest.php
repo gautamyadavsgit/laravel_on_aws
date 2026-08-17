@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Admin;
 
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdatePropertyRequest extends FormRequest
@@ -17,7 +18,7 @@ class UpdatePropertyRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
@@ -26,7 +27,7 @@ class UpdatePropertyRequest extends FormRequest
             'name' => 'required',
             'description' => 'required',
             'management_company' => 'required',
-            'property_images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048', //Assuming property_images are images
+            'property_images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // Assuming property_images are images
         ];
     }
 }

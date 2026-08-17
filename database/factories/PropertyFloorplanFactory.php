@@ -6,7 +6,7 @@ use App\Models\PropertyFloorplan;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\PropertyFloorplan>
+ * @extends Factory<PropertyFloorplan>
  */
 class PropertyFloorplanFactory extends Factory
 {
@@ -17,8 +17,8 @@ class PropertyFloorplanFactory extends Factory
         $planNum = fake()->numberBetween(1, 6);
 
         return [
-            'key' => 'Floorplan Architectural Level ' . $planNum,
-            'value' => 'floorplan_images/floorplan_' . $planNum . '.png',
+            'key' => 'Floorplan Architectural Level '.$planNum,
+            'value' => 'floorplan_images/floorplan_'.$planNum.'.png',
         ];
     }
 }

@@ -1,10 +1,16 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ManagePropertyController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Auth\EmailVerificationNotificationController;
+use App\Http\Controllers\Auth\NewPasswordController;
+use App\Http\Controllers\Auth\PasswordResetLinkController;
+use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\Auth\VerifyEmailController;
 use App\Http\Controllers\CustomerController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,67 +23,70 @@ use App\Http\Controllers\CustomerController;
 |
 */
 
+// Public Frontend
 Route::get('/', function () {
     return view('frontend.index');
+})->name('home');
+
+Route::get('/invest', [CustomerController::class, 'investor'])->name('properties');
+Route::get('/property/{slug}', [CustomerController::class, 'property_singlepage'])->name('property.singlepage');
+Route::get('/property_singlepage', [CustomerController::class, 'property_singlepage'])->name('property_singlepage');
+
+// Customer / Investor Authentication (Laravel Breeze Flow)
+Route::middleware('guest')->group(function () {
+    Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
+    Route::post('/register', [RegisteredUserController::class, 'store'])->name('register.post');
+
+    Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login');
+    Route::post('/login', [AuthenticatedSessionController::class, 'store'])->name('login.post');
+
+    Route::get('/forgot-password', [PasswordResetLinkController::class, 'create'])->name('password.request');
+    Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])->name('password.email');
+
+    Route::get('/reset-password/{token}', [NewPasswordController::class, 'create'])->name('password.reset');
+    Route::post('/reset-password', [NewPasswordController::class, 'store'])->name('password.update');
 });
 
+// Authenticated Routes
+Route::match(['get', 'post'], '/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 
+// Email Verification
+Route::get('/verify-email/{token}', VerifyEmailController::class)->name('verification.verify.token');
+Route::post('/resend-verification', [EmailVerificationNotificationController::class, 'store'])->name('verification.resend');
 
+// Admin Authentication & Management
 Route::prefix('/admin')->group(function () {
     Route::get('/', [AdminController::class, 'index'])->name('admin.index');
     Route::post('/login', [AdminController::class, 'login'])->name('admin.login.post');
+
     Route::middleware('admin.access')->group(function () {
         Route::get('/logout', [AdminController::class, 'logout'])->name('admin.logout');
         Route::get('/dashboard', [DashboardController::class, 'viewDashboard'])->name('admin.dashboard');
 
-        // new property routes
-
+        // Manage Property Routes
         Route::resource('manage-property', ManagePropertyController::class);
-        //extra routes for working with extra data
 
         Route::prefix('/manage-property')->group(function () {
-            Route::get('/edit-address/{id}', [ManagePropertyController::class, 'edit_address'])->name('admin.manage-property.edit-address');
-            Route::post('/update-address/{id}', [ManagePropertyController::class, 'update_address'])->name('admin.manage-property.update-address');
+            Route::get('/edit-address/{id}', [ManagePropertyController::class, 'editAddress'])->name('admin.manage-property.edit-address');
+            Route::post('/update-address/{id}', [ManagePropertyController::class, 'updateAddress'])->name('admin.manage-property.update-address');
 
+            Route::get('/edit-details/{id}', [ManagePropertyController::class, 'editDetails'])->name('admin.manage-property.edit-details');
+            Route::post('/update-details/{id}', [ManagePropertyController::class, 'updateDetails'])->name('admin.manage-property.update-details');
 
-            // edit property details
-            Route::get('/edit-details/{id}', [ManagePropertyController::class, 'edit_property_details'])->name('admin.manage-property.edit-details');
-            Route::post('/update-details/{id}', [ManagePropertyController::class, 'update_property_details'])->name('admin.manage-property.update-details');
+            Route::get('/edit-amenities/{id}', [ManagePropertyController::class, 'editAmenities'])->name('admin.manage-property.edit-amenities');
+            Route::post('/update-aminities/{id}', [ManagePropertyController::class, 'updateAmenities'])->name('admin.manage-property.update-aminities');
 
-            // edit Amenities (list)
+            Route::get('/edit-floorplan/{id}', [ManagePropertyController::class, 'editFloorplan'])->name('admin.manage-property.edit-floorplan');
+            Route::post('/update-floorplan/{id}', [ManagePropertyController::class, 'updateFloorplan'])->name('admin.manage-property.update-floorplan');
 
-            Route::get('/edit-amenities/{id}', [ManagePropertyController::class, 'edit_amenities'])->name('admin.manage-property.edit-amenities');
+            Route::get('/edit-property-offerings/{id}', [ManagePropertyController::class, 'editOfferings'])->name('admin.manage-property.edit-property-offerings');
+            Route::post('/update-property-offerings/{id}', [ManagePropertyController::class, 'updateOfferings'])->name('admin.manage-property.update-property-offerings');
 
-            Route::post('/update-aminities/{id}', [ManagePropertyController::class, 'update_aminities'])->name('admin.manage-property.update-aminities');
-            //edit floor plan
-            Route::get('/edit-floorplan/{id}', [ManagePropertyController::class, 'edit_floorplan'])->name('admin.manage-property.edit-floorplan');
+            Route::get('/edit-property-documents/{id}', [ManagePropertyController::class, 'editDocuments'])->name('admin.manage-property.edit-property-documents');
+            Route::post('/update-property-documents/{id}', [ManagePropertyController::class, 'updateDocuments'])->name('admin.manage-property.update-property-documents');
 
-            Route::post('/update-floorplan/{id}', [ManagePropertyController::class, 'update_floorplan'])->name('admin.manage-property.update-floorplan');
-
-            // property offerings 
-            Route::get('/edit-property-offerings/{id}', [ManagePropertyController::class, 'edit_property_offerings'])->name('admin.manage-property.edit-property-offerings');
-
-            Route::post('/update-property-offerings/{id}', [ManagePropertyController::class, 'update_property_offerings'])->name('admin.manage-property.update-property-offerings');
-
-            // edit property documents
-            Route::get('/edit-property-documents/{id}', [ManagePropertyController::class, 'edit_property_documents'])->name('admin.manage-property.edit-property-documents');
-
-            Route::post('/update-property-documents/{id}', [ManagePropertyController::class, 'update_property_documents'])->name('admin.manage-property.update-property-documents');
-
-            // edit property metrics (Stage 8)
-            Route::get('/edit-property-metrics/{id}', [ManagePropertyController::class, 'edit_property_metrics'])->name('admin.manage-property.edit-property-metrics');
-
-            Route::post('/update-property-metrics/{id}', [ManagePropertyController::class, 'update_property_metrics'])->name('admin.manage-property.update-property-metrics');
+            Route::get('/edit-property-metrics/{id}', [ManagePropertyController::class, 'editMetrics'])->name('admin.manage-property.edit-property-metrics');
+            Route::post('/update-property-metrics/{id}', [ManagePropertyController::class, 'updateMetrics'])->name('admin.manage-property.update-property-metrics');
         });
     });
 });
-Route::get('/login', [AdminController::class, 'index'])->name('login');
-Route::get('/register', [CustomerController::class, 'index'])->name('register');
-Route::post('/register', [CustomerController::class, 'registerStore'])->name('register.post');
-Route::get('/verify-email/{token}', [CustomerController::class, 'verifyEmail'])->name('verification.verify.token');
-Route::get('/invest', [CustomerController::class, 'investor'])->name('properties');
-Route::get('/property_singlepage', [CustomerController::class, 'property_singlepage'])->name('property_singlepage');
-
-
-
-

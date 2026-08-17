@@ -37,8 +37,7 @@
         </div>
 
         <!-- Quick Actions -->
-        <div class="flex items-center gap-2 shrink-0 flex-wrap">
-            <a href="{{ url('/property_singlepage?id=' . $propId) }}" target="_blank" class="btn-secondary-tw text-xs py-2 px-3 flex items-center gap-1.5" title="Preview public listing">
+            <a href="{{ isset($property) && !empty($property->slug) ? route('property.singlepage', ['slug' => $property->slug]) : url('/property_singlepage?id=' . $propId) }}" target="_blank" class="btn-secondary-tw text-xs py-2 px-3 flex items-center gap-1.5" title="Preview public listing">
                 <i class="bi bi-box-arrow-up-right"></i>
                 <span class="hidden sm:inline">Preview Live</span>
             </a>

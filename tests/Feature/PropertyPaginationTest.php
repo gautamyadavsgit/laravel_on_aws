@@ -3,7 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Admins;
-use App\Models\PropertyModel;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Tests\TestCase;
 
 class PropertyPaginationTest extends TestCase
@@ -16,9 +16,9 @@ class PropertyPaginationTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertViewHas('property');
-        
+
         $paginator = $response->viewData('property');
-        $this->assertInstanceOf(\Illuminate\Contracts\Pagination\LengthAwarePaginator::class, $paginator);
+        $this->assertInstanceOf(LengthAwarePaginator::class, $paginator);
         $this->assertEquals(15, $paginator->perPage());
     }
 
@@ -30,7 +30,7 @@ class PropertyPaginationTest extends TestCase
         $response->assertViewHas('properties');
 
         $paginator = $response->viewData('properties');
-        $this->assertInstanceOf(\Illuminate\Contracts\Pagination\LengthAwarePaginator::class, $paginator);
+        $this->assertInstanceOf(LengthAwarePaginator::class, $paginator);
         $this->assertEquals(9, $paginator->perPage());
     }
 }

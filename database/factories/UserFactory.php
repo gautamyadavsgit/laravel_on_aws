@@ -8,11 +8,12 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
+ * @extends Factory<User>
  */
 class UserFactory extends Factory
 {
     protected $model = User::class;
+
     protected static ?string $password;
 
     public function definition(): array
@@ -26,7 +27,7 @@ class UserFactory extends Factory
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
-            'verification_link' => 'https://gautamrei.com/verify/' . Str::random(32),
+            'verification_link' => 'https://gautamrei.com/verify/'.Str::random(32),
             'verification_token' => Str::random(60),
             'company_name' => fake()->optional(0.6)->company(),
             'phone' => (int) fake()->numerify('1800######'),
@@ -44,7 +45,7 @@ class UserFactory extends Factory
             'phone_verified' => 1,
             'app_connected' => 1,
             'dob' => fake()->date('Y-m-d', '-25 years'),
-            'social_security_number' => 'XXX-XX-' . fake()->numerify('####'),
+            'social_security_number' => 'XXX-XX-'.fake()->numerify('####'),
         ];
     }
 

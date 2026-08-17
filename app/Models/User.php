@@ -2,9 +2,12 @@
 
 namespace App\Models;
 
+use App\Mail\ResetPasswordMail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
@@ -23,6 +26,7 @@ class User extends Authenticatable
         'suffix',
         'email',
         'password',
+        'email_verified_at',
         'verification_link',
         'verification_token',
         'company_name',
@@ -68,10 +72,25 @@ class User extends Authenticatable
     }
 
     /**
+     * Send the password reset notification.
+     *
+     * @param  string  $token
+     */
+    public function sendPasswordResetNotification($token): void
+    {
+        $resetUrl = route('password.reset', ['token' => $token, 'email' => $this->email]);
+        try {
+            Mail::to($this->email)->send(new ResetPasswordMail($this, $resetUrl));
+        } catch (\Throwable $e) {
+            Log::error('Failed to send password reset email: '.$e->getMessage());
+        }
+    }
+
+    /**
      * Full name accessor
      */
     public function getNameAttribute(): string
     {
-        return trim($this->first_name . ' ' . ($this->last_name ?? ''));
+        return trim($this->first_name.' '.($this->last_name ?? ''));
     }
 }

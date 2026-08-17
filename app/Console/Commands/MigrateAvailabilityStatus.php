@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 class MigrateAvailabilityStatus extends Command
 {
     protected $signature = 'properties:migrate-availability';
+
     protected $description = 'Migrate stale availability values to Available / Not Available';
 
     public function handle(): int
@@ -24,7 +25,7 @@ class MigrateAvailabilityStatus extends Command
             ->groupBy('availability')
             ->get();
 
-        $this->table(['Status', 'Count'], $counts->map(fn($r) => [$r->availability, $r->cnt])->toArray());
+        $this->table(['Status', 'Count'], $counts->map(fn ($r) => [$r->availability, $r->cnt])->toArray());
 
         return self::SUCCESS;
     }

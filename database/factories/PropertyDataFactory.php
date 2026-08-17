@@ -32,7 +32,7 @@ class PropertyDataFactory extends Factory
             'Lake Tahoe Waterfront Haven',
             'Jackson Hole Mountain Lodge',
             'Key West Coastal Sanctuary',
-            'Sedona Red Rock Manor'
+            'Sedona Red Rock Manor',
         ];
 
         return [
@@ -58,7 +58,7 @@ class PropertyDataFactory extends Factory
                 PropertyImageModel::factory()->create([
                     'property_id' => $property->id,
                     'property_image_key' => 'property_image',
-                    'property_image_value' => 'property_images/property_' . $imgNum . '.png',
+                    'property_image_value' => 'property_images/property_'.$imgNum.'.png',
                 ]);
             }
 
@@ -77,8 +77,8 @@ class PropertyDataFactory extends Factory
                 $planNum = (($property->id + $i - 2) % 6) + 1;
                 PropertyFloorplan::factory()->create([
                     'property_id' => $property->id,
-                    'key' => 'Floorplan Level ' . $i,
-                    'value' => 'floorplan_images/floorplan_' . $planNum . '.png',
+                    'key' => 'Floorplan Level '.$i,
+                    'value' => 'floorplan_images/floorplan_'.$planNum.'.png',
                 ]);
             }
 

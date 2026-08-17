@@ -29,21 +29,22 @@ class RecalculatePropertyMetricsCommand extends Command
     {
         $propertyId = $this->option('property') ? (int) $this->option('property') : null;
 
-        $this->info("==========================================================");
-        $this->info(" Starting Property Underwriting & Metrics Recalculation");
+        $this->info('==========================================================');
+        $this->info(' Starting Property Underwriting & Metrics Recalculation');
         if ($propertyId) {
             $this->info(" Targeted Property ID: #{$propertyId}");
         } else {
-            $this->info(" Scope: All active properties in the database");
+            $this->info(' Scope: All active properties in the database');
         }
-        $this->info("==========================================================");
+        $this->info('==========================================================');
 
         $startTime = microtime(true);
 
         if ($propertyId) {
             $property = PropertyModel::find($propertyId);
-            if (!$property) {
+            if (! $property) {
                 $this->error("Property with ID #{$propertyId} not found.");
+
                 return Command::FAILURE;
             }
 
@@ -56,7 +57,7 @@ class RecalculatePropertyMetricsCommand extends Command
         $duration = round(microtime(true) - $startTime, 2);
 
         $this->info(" Successfully updated metrics for {$processedCount} property(ies) in {$duration}s.");
-        $this->info(" Formulas updated: NOI, Cap Rate, 5-Yr / 10-Yr Compound Growth, MACRS 27.5-Yr Tax Deductions, Goal Suitability.");
+        $this->info(' Formulas updated: NOI, Cap Rate, 5-Yr / 10-Yr Compound Growth, MACRS 27.5-Yr Tax Deductions, Goal Suitability.');
 
         return Command::SUCCESS;
     }

@@ -170,7 +170,7 @@
                                     </a>
 
                                     <!-- Preview Public Page Link -->
-                                    <a href="{{ url('/property_singlepage?id=' . $prop->id) }}" target="_blank" class="p-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition" title="Preview Live Listing">
+                                    <a href="{{ route('property.singlepage', ['slug' => $prop->slug ?? $prop->id]) }}" target="_blank" class="p-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition" title="Preview Live Listing">
                                         <i class="bi bi-box-arrow-up-right text-xs"></i>
                                     </a>
 

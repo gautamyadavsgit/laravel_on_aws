@@ -6,7 +6,7 @@ use App\Models\PropertyImageModel;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\PropertyImageModel>
+ * @extends Factory<PropertyImageModel>
  */
 class PropertyImageModelFactory extends Factory
 {
@@ -18,7 +18,7 @@ class PropertyImageModelFactory extends Factory
 
         return [
             'property_image_key' => 'property_image',
-            'property_image_value' => 'property_images/property_' . $imageNum . '.png',
+            'property_image_value' => 'property_images/property_'.$imageNum.'.png',
         ];
     }
 }

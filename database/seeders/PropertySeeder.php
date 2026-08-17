@@ -9,12 +9,10 @@ use App\Models\PropertyDetails;
 use App\Models\PropertyDocumentModel;
 use App\Models\PropertyFloorplan;
 use App\Models\PropertyImageModel;
-use App\Models\PropertyMetrics;
 use App\Models\PropertyModel;
 use App\Models\PropertyOffering;
 use App\Services\PropertyMetricsService;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class PropertySeeder extends Seeder
 {
@@ -369,8 +367,8 @@ class PropertySeeder extends Seeder
                 $planNum = (($index + $f - 1) % 6) + 1;
                 PropertyFloorplan::create([
                     'property_id' => $propId,
-                    'key' => 'Architectural Floorplan Level ' . $f,
-                    'value' => 'floorplan_images/floorplan_' . $planNum . '.png',
+                    'key' => 'Architectural Floorplan Level '.$f,
+                    'value' => 'floorplan_images/floorplan_'.$planNum.'.png',
                 ]);
             }
 

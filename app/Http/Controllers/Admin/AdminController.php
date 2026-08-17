@@ -3,41 +3,51 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\AdminLoginRequest;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Requests\Admin\AdminLoginRequest;
+use Illuminate\View\View;
 
 class AdminController extends Controller
 {
-    public function index()
+    /**
+     * Show the admin login page or redirect to dashboard.
+     */
+    public function index(): View|RedirectResponse
     {
         if (Auth::guard('admin')->check()) {
             return redirect(route('admin.dashboard'));
-        } else {
-            return view('admin.login');
         }
 
+        return view('admin.login');
     }
 
-    public function login(AdminLoginRequest $request)
+    /**
+     * Handle admin login authentication.
+     */
+    public function login(AdminLoginRequest $request): RedirectResponse
     {
-
-        $credentials = [
-            'email' => $request->input('email'),
-            'password' => $request->input('password'),
-        ];
+        $credentials = $request->only('email', 'password');
 
         if (Auth::guard('admin')->attempt($credentials)) {
+            $request->session()->regenerate();
+
             return redirect(route('admin.dashboard'));
-        } else {
-            return back()->with('error', 'The provided credentials do not match our records.')->withInput();
         }
+
+        return back()->with('error', 'The provided credentials do not match our records.')->withInput();
     }
 
-    public function logout(Request $request)
+    /**
+     * Log the admin out of the session.
+     */
+    public function logout(Request $request): RedirectResponse
     {
         Auth::guard('admin')->logout();
         $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
         return redirect('/admin');
     }
 }

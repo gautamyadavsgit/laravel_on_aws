@@ -2,9 +2,9 @@
 
 namespace App\Http\Requests\Admin;
 
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
-
 
 class AdminAddPropertyRequest extends FormRequest
 {
@@ -23,7 +23,7 @@ class AdminAddPropertyRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
@@ -32,7 +32,7 @@ class AdminAddPropertyRequest extends FormRequest
             'name' => 'required',
             'description' => 'required',
             'management_company' => 'required',
-            'property_images.*' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', //Assuming property_images are images
+            'property_images.*' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Assuming property_images are images
         ];
     }
 }

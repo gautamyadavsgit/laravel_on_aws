@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Admin;
 
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdatePropertyFloorPlanRequest extends FormRequest
@@ -17,11 +18,11 @@ class UpdatePropertyFloorPlanRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
-        
+
         return [
             'floor_plan_1' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
             'floor_plan_2' => 'image|mimes:jpeg,png,jpg,gif|max:2048',

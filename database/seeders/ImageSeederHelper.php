@@ -35,8 +35,8 @@ class ImageSeederHelper
 
         // 1. Generate Property Photos (800x600)
         foreach ($palettes as $index => $color) {
-            $filename = "property_images/property_" . ($index + 1) . ".png";
-            if (!$disk->exists($filename)) {
+            $filename = 'property_images/property_'.($index + 1).'.png';
+            if (! $disk->exists($filename)) {
                 $png = self::createImageBinary(800, 600, $color['r'], $color['g'], $color['b'], 'photo');
                 $disk->put($filename, $png);
             }
@@ -45,7 +45,7 @@ class ImageSeederHelper
         // 2. Generate Architectural Floorplans (800x600 with blueprint grid)
         for ($i = 1; $i <= 6; $i++) {
             $filename = "floorplan_images/floorplan_{$i}.png";
-            if (!$disk->exists($filename)) {
+            if (! $disk->exists($filename)) {
                 $png = self::createImageBinary(800, 600, 25, 45, 80, 'blueprint');
                 $disk->put($filename, $png);
             }
@@ -54,7 +54,7 @@ class ImageSeederHelper
         // 3. Generate Market Trend Images (800x600 with chart styling)
         for ($i = 1; $i <= 6; $i++) {
             $filename = "market_image/market_{$i}.png";
-            if (!$disk->exists($filename)) {
+            if (! $disk->exists($filename)) {
                 $png = self::createImageBinary(800, 600, 35, 60, 95, 'chart');
                 $disk->put($filename, $png);
             }
@@ -67,12 +67,12 @@ class ImageSeederHelper
             'rent_calculation',
             'expense_statement',
             'deed_restrictions',
-            'closing_statement'
+            'closing_statement',
         ];
 
         foreach ($documentTypes as $index => $type) {
-            $filename = "property_documents/{$type}_" . ($index + 1) . ".pdf";
-            if (!$disk->exists($filename)) {
+            $filename = "property_documents/{$type}_".($index + 1).'.pdf';
+            if (! $disk->exists($filename)) {
                 $pdf = self::createPdfBinary(ucwords(str_replace('_', ' ', $type)));
                 $disk->put($filename, $pdf);
             }
@@ -104,19 +104,19 @@ class ImageSeederHelper
                 } elseif ($type === 'chart') {
                     // Gradient + diagonal chart accent
                     $grad = ($x + $y) / ($width + $height);
-                    $r = min(255, max(0, (int)($r + $grad * 40 - 20)));
-                    $g = min(255, max(0, (int)($g + $grad * 50 - 25)));
-                    $b = min(255, max(0, (int)($b + $grad * 60 - 30)));
+                    $r = min(255, max(0, (int) ($r + $grad * 40 - 20)));
+                    $g = min(255, max(0, (int) ($g + $grad * 50 - 25)));
+                    $b = min(255, max(0, (int) ($b + $grad * 60 - 30)));
                 } else {
                     // Smooth visual gradient
                     $gradX = $x / $width;
                     $gradY = $y / $height;
-                    $r = min(255, max(0, (int)($r + $gradX * 35 - 15)));
-                    $g = min(255, max(0, (int)($g + $gradY * 40 - 20)));
-                    $b = min(255, max(0, (int)($b + ($gradX + $gradY) * 25 - 20)));
+                    $r = min(255, max(0, (int) ($r + $gradX * 35 - 15)));
+                    $g = min(255, max(0, (int) ($g + $gradY * 40 - 20)));
+                    $b = min(255, max(0, (int) ($b + ($gradX + $gradY) * 25 - 20)));
                 }
 
-                $raw .= chr($r) . chr($g) . chr($b);
+                $raw .= chr($r).chr($g).chr($b);
             }
         }
 
@@ -125,13 +125,13 @@ class ImageSeederHelper
 
         // IHDR Chunk
         $ihdrData = pack('NNCCCCC', $width, $height, 8, 2, 0, 0, 0);
-        $png .= pack('N', 13) . 'IHDR' . $ihdrData . pack('N', crc32('IHDR' . $ihdrData));
+        $png .= pack('N', 13).'IHDR'.$ihdrData.pack('N', crc32('IHDR'.$ihdrData));
 
         // IDAT Chunk
-        $png .= pack('N', strlen($compressed)) . 'IDAT' . $compressed . pack('N', crc32('IDAT' . $compressed));
+        $png .= pack('N', strlen($compressed)).'IDAT'.$compressed.pack('N', crc32('IDAT'.$compressed));
 
         // IEND Chunk
-        $png .= pack('N', 0) . 'IEND' . pack('N', crc32('IEND'));
+        $png .= pack('N', 0).'IEND'.pack('N', crc32('IEND'));
 
         return $png;
     }
@@ -141,26 +141,26 @@ class ImageSeederHelper
      */
     public static function createPdfBinary(string $title): string
     {
-        $content = "BT\n/F1 24 Tf\n50 720 Td\n({$title}) Tj\nET\n" .
-                   "BT\n/F1 12 Tf\n50 680 Td\n(Gautam Real Estate Institutional Fractional Ownership Document) Tj\nET\n" .
+        $content = "BT\n/F1 24 Tf\n50 720 Td\n({$title}) Tj\nET\n".
+                   "BT\n/F1 12 Tf\n50 680 Td\n(Gautam Real Estate Institutional Fractional Ownership Document) Tj\nET\n".
                    "BT\n/F1 10 Tf\n50 650 Td\n(This is a verified legal pro-forma statement generated for property underwriting.) Tj\nET\n";
 
         $contentLength = strlen($content);
 
-        return "%PDF-1.4\n" .
-               "1 0 obj<</Type/Catalog/Pages 2 0 R>>endobj\n" .
-               "2 0 obj<</Type/Pages/Count 1/Kids[3 0 R]>>endobj\n" .
-               "3 0 obj<</Type/Page/MediaBox[0 0 612 792]/Parent 2 0 R/Resources<</Font<</F1 4 0 R>>>>/Contents 5 0 R>>endobj\n" .
-               "4 0 obj<</Type/Font/Subtype/Type1/BaseFont/Helvetica>>endobj\n" .
-               "5 0 obj<</Length {$contentLength}>>\nstream\n{$content}\nendstream\nendobj\n" .
-               "xref\n0 6\n" .
-               "0000000000 65535 f \n" .
-               "0000000009 00000 n \n" .
-               "0000000052 00000 n \n" .
-               "0000000101 00000 n \n" .
-               "0000000212 00000 n \n" .
-               "0000000279 00000 n \n" .
-               "trailer<</Size 6/Root 1 0 R>>\n" .
+        return "%PDF-1.4\n".
+               "1 0 obj<</Type/Catalog/Pages 2 0 R>>endobj\n".
+               "2 0 obj<</Type/Pages/Count 1/Kids[3 0 R]>>endobj\n".
+               "3 0 obj<</Type/Page/MediaBox[0 0 612 792]/Parent 2 0 R/Resources<</Font<</F1 4 0 R>>>>/Contents 5 0 R>>endobj\n".
+               "4 0 obj<</Type/Font/Subtype/Type1/BaseFont/Helvetica>>endobj\n".
+               "5 0 obj<</Length {$contentLength}>>\nstream\n{$content}\nendstream\nendobj\n".
+               "xref\n0 6\n".
+               "0000000000 65535 f \n".
+               "0000000009 00000 n \n".
+               "0000000052 00000 n \n".
+               "0000000101 00000 n \n".
+               "0000000212 00000 n \n".
+               "0000000279 00000 n \n".
+               "trailer<</Size 6/Root 1 0 R>>\n".
                "startxref\n380\n%%EOF\n";
     }
 }

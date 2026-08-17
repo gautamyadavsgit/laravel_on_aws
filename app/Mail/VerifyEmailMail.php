@@ -4,21 +4,20 @@ namespace App\Mail;
 
 use App\Models\User;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Address;
+use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
-// In the future, to send this email via background queue, simply add:
-// use Illuminate\Contracts\Queue\ShouldQueue;
-// and add "implements ShouldQueue" to the class below:
-// class VerifyEmailMail extends Mailable implements ShouldQueue
 
-class VerifyEmailMail extends Mailable
+class VerifyEmailMail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
     public User $user;
+
     public string $verificationUrl;
 
     /**
@@ -58,7 +57,7 @@ class VerifyEmailMail extends Mailable
     /**
      * Get the attachments for the message.
      *
-     * @return array<int, \Illuminate\Mail\Mailables\Attachment>
+     * @return array<int, Attachment>
      */
     public function attachments(): array
     {

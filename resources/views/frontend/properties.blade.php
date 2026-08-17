@@ -4,9 +4,60 @@
     $propertyList = isset($properties) ? $properties : \App\Models\PropertyModel::with(['propertyImage', 'propertyAddress'])->latest()->paginate(9)->withQueryString();
 @endphp
 
-<section class="py-16">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-10">
+<section class="py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+        <!-- Flash Alerts -->
+        @if (session('success'))
+            <div role="alert" class="alert-tw alert-success-tw">
+                <i class="bi bi-check-circle-fill text-lg text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5"></i>
+                <div class="flex-1 text-sm font-medium">
+                    {{ session('success') }}
+                </div>
+            </div>
+        @endif
+
+        @if (session('error'))
+            <div role="alert" class="alert-tw alert-danger-tw">
+                <i class="bi bi-exclamation-triangle-fill text-lg text-rose-600 dark:text-rose-400 shrink-0 mt-0.5"></i>
+                <div class="flex-1 text-sm font-medium">
+                    {{ session('error') }}
+                </div>
+            </div>
+        @endif
+
+        @if (session('status'))
+            <div role="alert" class="alert-tw alert-success-tw">
+                <i class="bi bi-info-circle-fill text-lg text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5"></i>
+                <div class="flex-1 text-sm font-medium">
+                    {{ session('status') }}
+                </div>
+            </div>
+        @endif
+
+        <!-- Unverified Email Notification Banner -->
+        @auth
+            @if (!Auth::user()->email_verified_at)
+                <div class="p-4 rounded-xl bg-amber-50 border border-amber-200 dark:bg-amber-950/40 dark:border-amber-800/70 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-amber-900 dark:text-amber-200 shadow-sm">
+                    <div class="flex items-center gap-3">
+                        <div class="w-9 h-9 rounded-lg bg-amber-500/20 text-amber-600 dark:text-amber-400 flex items-center justify-center text-lg shrink-0">
+                            <i class="bi bi-envelope-exclamation"></i>
+                        </div>
+                        <div>
+                            <div class="text-sm font-bold">Please verify your email address ({{ Auth::user()->email }})</div>
+                            <div class="text-xs text-amber-700 dark:text-amber-300">An activation link was sent to your inbox. Verify your account to finalize deed access.</div>
+                        </div>
+                    </div>
+                    <form action="{{ route('verification.resend') }}" method="POST" class="shrink-0">
+                        @csrf
+                        <button type="submit" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-600 hover:bg-amber-700 active:bg-amber-800 text-white text-xs font-semibold shadow-sm transition">
+                            <i class="bi bi-arrow-clockwise"></i> Resend Email
+                        </button>
+                    </form>
+                </div>
+            @endif
+        @endauth
+
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
                 <h1 class="text-3xl font-bold tracking-tight text-slate-900 dark:text-white">Available Properties</h1>
                 <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Explore our curated selection of quality real estate listings.</p>
@@ -70,7 +121,7 @@
                     </div>
 
                     <div class="p-6 pt-0">
-                        <a href="{{ url('property_singlepage?id=' . $prop->id) }}" class="btn-primary-tw w-full py-2.5 text-center flex items-center justify-center gap-2">
+                        <a href="{{ route('property.singlepage', ['slug' => $prop->slug ?? $prop->id]) }}" class="btn-primary-tw w-full py-2.5 text-center flex items-center justify-center gap-2">
                             <i class="bi bi-eye"></i> View Underwriting & Specs
                         </a>
                     </div>
