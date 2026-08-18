@@ -7,7 +7,7 @@
     if (!$featuredProperty) {
         $featuredProperty = \App\Models\PropertyModel::with(['propertyImage', 'propertyFloorplan', 'propertyDocumentModel', 'propertyAddress', 'propertyDetails', 'propertyAmenities', 'propertyMetrics'])->first();
     }
-    
+
     $propName = $featuredProperty->name ?? 'Smoky Mountain Luxury Cabin';
     $propDesc = $featuredProperty->description ?? 'Located in the high-demand vacation corridor of Gatlinburg, TN, this luxury short-term rental property features custom timber architecture, panoramic Great Smoky Mountain vistas, private hot tub deck, and dedicated entertainment suites.';
     $details = $featuredProperty->propertyDetails ?? null;
@@ -18,6 +18,7 @@
     $year = $details->year_built ?? 2022;
     $val = $details->value ?? 617000;
     $images = $featuredProperty && count($featuredProperty->propertyImage ?? []) > 0 ? $featuredProperty->propertyImage : null;
+    $isFavorited = Auth::check() ? \App\Models\PropertyFavorite::where('user_id', Auth::id())->where('property_id', $featuredProperty->id)->exists() : false;
 @endphp
 
 <div class="py-10 lg:py-14">
@@ -25,7 +26,7 @@
         <!-- Back Navigation -->
         <div class="mb-6">
             <a href="{{ url('invest') }}" class="inline-flex items-center gap-2 text-sm font-semibold text-slate-600 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition">
-                <i class="bi bi-arrow-left"></i> View All Investments
+                <i class="bi bi-arrow-left"></i> {{ __('properties.view_all_investments') }}
             </a>
         </div>
 
@@ -74,25 +75,25 @@
                 <div class="card-tw p-5">
                     <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center divide-y sm:divide-y-0 sm:divide-x divide-slate-100 dark:divide-slate-800">
                         <div class="pt-2 sm:pt-0">
-                            <span class="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500 block">Bedrooms</span>
+                            <span class="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500 block">{{ __('properties.bedrooms') }}</span>
                             <strong class="text-lg font-bold text-slate-900 dark:text-white flex items-center justify-center gap-1.5 mt-0.5">
-                                <i class="bi bi-door-closed text-indigo-600 dark:text-indigo-400"></i> {{ $beds }} Beds
+                                <i class="bi bi-door-closed text-indigo-600 dark:text-indigo-400"></i> {{ $beds }} {{ __('properties.beds') }}
                             </strong>
                         </div>
                         <div class="pt-2 sm:pt-0">
-                            <span class="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500 block">Bathrooms</span>
+                            <span class="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500 block">{{ __('properties.bathrooms') }}</span>
                             <strong class="text-lg font-bold text-slate-900 dark:text-white flex items-center justify-center gap-1.5 mt-0.5">
-                                <i class="bi bi-droplet text-indigo-600 dark:text-indigo-400"></i> {{ $baths }} Baths
+                                <i class="bi bi-droplet text-indigo-600 dark:text-indigo-400"></i> {{ $baths }} {{ __('properties.baths') }}
                             </strong>
                         </div>
                         <div class="pt-2 sm:pt-0">
-                            <span class="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500 block">Square Footage</span>
+                            <span class="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500 block">{{ __('properties.square_footage') }}</span>
                             <strong class="text-lg font-bold text-slate-900 dark:text-white flex items-center justify-center gap-1.5 mt-0.5">
-                                <i class="bi bi-aspect-ratio text-indigo-600 dark:text-indigo-400"></i> {{ number_format($sqft) }} SqFt
+                                <i class="bi bi-aspect-ratio text-indigo-600 dark:text-indigo-400"></i> {{ number_format($sqft) }} {{ __('properties.sqft') }}
                             </strong>
                         </div>
                         <div class="pt-2 sm:pt-0">
-                            <span class="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500 block">Year Built</span>
+                            <span class="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500 block">{{ __('properties.year_built') }}</span>
                             <strong class="text-lg font-bold text-slate-900 dark:text-white flex items-center justify-center gap-1.5 mt-0.5">
                                 <i class="bi bi-calendar3 text-indigo-600 dark:text-indigo-400"></i> {{ $year }}
                             </strong>
@@ -105,16 +106,16 @@
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 dark:border-slate-800 pb-4">
                         <div>
                             <div class="flex items-center gap-2">
-                                <span class="badge-tw badge-info-tw text-[10px] tracking-wider uppercase">Underwritten Asset</span>
-                                <span class="text-xs text-slate-400">Audited Financial Metrics</span>
+                                <span class="badge-tw badge-info-tw text-[10px] tracking-wider uppercase">{{ __('properties.underwritten_asset') }}</span>
+                                <span class="text-xs text-slate-400">{{ __('properties.audited_financials') }}</span>
                             </div>
                             <h2 class="text-xl font-bold tracking-tight text-slate-900 dark:text-white mt-1">
-                                Investment Goals & Financial Pro-Forma
+                                {{ __('properties.investment_metrics') }}
                             </h2>
                         </div>
                         <div class="flex items-center gap-2">
                             <div class="text-right">
-                                <span class="text-[11px] font-semibold uppercase text-slate-400 block">Cap Rate</span>
+                                <span class="text-[11px] font-semibold uppercase text-slate-400 block">{{ __('properties.cap_rate') }}</span>
                                 <span class="text-lg font-extrabold text-emerald-600 dark:text-emerald-400">{{ $metrics->cap_rate ?? '8.62' }}%</span>
                             </div>
                         </div>
@@ -123,16 +124,16 @@
                     <!-- Goal Selector Tabs -->
                     <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 bg-slate-100 dark:bg-slate-800/80 p-1.5 rounded-xl">
                         <button type="button" onclick="switchGoalTab('cash_flow')" id="tab-cash_flow" class="goal-tab-btn px-3 py-2 rounded-lg text-xs font-bold transition bg-white dark:bg-slate-900 text-indigo-600 dark:text-indigo-400 shadow-sm flex items-center justify-center gap-1.5">
-                            <i class="bi bi-cash-stack"></i> Cash Flow
+                            <i class="bi bi-cash-stack"></i> {{ __('properties.cash_flow') }}
                         </button>
                         <button type="button" onclick="switchGoalTab('appreciation')" id="tab-appreciation" class="goal-tab-btn px-3 py-2 rounded-lg text-xs font-semibold transition text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white flex items-center justify-center gap-1.5">
-                            <i class="bi bi-graph-up-arrow"></i> Appreciation
+                            <i class="bi bi-graph-up-arrow"></i> {{ __('properties.appreciation') }}
                         </button>
                         <button type="button" onclick="switchGoalTab('tax_benefits')" id="tab-tax_benefits" class="goal-tab-btn px-3 py-2 rounded-lg text-xs font-semibold transition text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white flex items-center justify-center gap-1.5">
-                            <i class="bi bi-shield-check"></i> Tax Shelter
+                            <i class="bi bi-shield-check"></i> {{ __('properties.tax_benefits') }}
                         </button>
                         <button type="button" onclick="switchGoalTab('diversification')" id="tab-diversification" class="goal-tab-btn px-3 py-2 rounded-lg text-xs font-semibold transition text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white flex items-center justify-center gap-1.5">
-                            <i class="bi bi-globe2"></i> Diversification
+                            <i class="bi bi-globe2"></i> {{ __('properties.diversification') }}
                         </button>
                     </div>
 
@@ -140,10 +141,10 @@
                     <div id="panel-cash_flow" class="goal-panel space-y-4">
                         <div class="p-4 rounded-xl bg-indigo-50/50 dark:bg-indigo-950/20 border border-indigo-100 dark:border-indigo-900/30 flex items-center justify-between">
                             <div>
-                                <h3 class="text-sm font-bold text-indigo-950 dark:text-indigo-200">Quarterly Cash Flow Objective</h3>
-                                <p class="text-xs text-indigo-700 dark:text-indigo-400 mt-0.5">Optimized for consistent passive rental dividends distributed quarterly.</p>
+                                <h3 class="text-sm font-bold text-indigo-950 dark:text-indigo-200">{{ __('properties.cash_flow_objective') }}</h3>
+                                <p class="text-xs text-indigo-700 dark:text-indigo-400 mt-0.5">{{ __('properties.passive_dividends') }}</p>
                             </div>
-                            <span class="badge-tw badge-success-tw text-xs font-bold">{{ $metrics->cash_flow_rating ?? 92 }}/100 Match</span>
+                            <span class="badge-tw badge-success-tw text-xs font-bold">{{ $metrics->cash_flow_rating ?? 92 }}/100 {{ __('properties.match') }}</span>
                         </div>
 
                         <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
@@ -363,12 +364,31 @@
                         </div>
                     </div>
 
-                    <a href="{{ url('register') }}" class="btn-primary-tw w-full py-3 text-base shadow-md text-center flex items-center justify-center gap-2">
-                        <i class="bi bi-wallet2"></i> Invest in this Offering
-                    </a>
+                    @if(Auth::check())
+                        <form action="{{ route('investment.submit', ['propertyId' => $featuredProperty->id ?? $propId]) }}" method="POST" class="w-full">
+                            @csrf
+                            <button type="submit" class="btn-primary-tw w-full py-3 text-base shadow-md text-center flex items-center justify-center gap-2">
+                                <i class="bi bi-wallet2"></i> {{ __('properties.invest_offering') }}
+                            </button>
+                        </form>
+                    @else
+                        <a href="{{ route('register', ['redirect' => 'investment_interest']) }}" class="btn-primary-tw w-full py-3 text-base shadow-md text-center flex items-center justify-center gap-2">
+                            <i class="bi bi-wallet2"></i> {{ __('properties.invest_offering') }}
+                        </a>
+                    @endif
+
+                    @if(Auth::check())
+                        <button type="button"
+                            data-favorite-btn
+                            data-property-id="{{ $featuredProperty->id ?? $propId }}"
+                            class="favorite-btn w-full py-3 text-base text-center flex items-center justify-center gap-2 px-4 rounded-xl border transition {{ $isFavorited ? 'border-rose-300 dark:border-rose-800 bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400' : 'border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-200 hover:bg-rose-50 dark:hover:bg-rose-950/40' }}"
+                            title="Add to favorites">
+                            <i class="bi bi-heart{{ $isFavorited ? '-fill' : '' }} text-lg"></i> <span class="favorite-text">{{ $isFavorited ? 'Favorited' : 'Add to Favorites' }}</span>
+                        </button>
+                    @endif
 
                     <div class="text-center text-xs text-slate-400 dark:text-slate-500 flex items-center justify-center gap-1.5">
-                        <i class="bi bi-lock-fill text-slate-400"></i> Institutional fractional ownership deed
+                        <i class="bi bi-lock-fill text-slate-400"></i> {{ __('properties.institutional_ownership') }}
                     </div>
                 </div>
             </div>

@@ -17,13 +17,34 @@ class CustomerController extends Controller
     }
 
     /**
-     * Browse investor properties with Cache facade
+     * Browse investor properties with multi-criteria filtering and personalized recommendations
      */
-    public function investor(): View
+    public function investor(Request $request): View
     {
-        $properties = $this->propertyService->getPaginatedProperties(9);
+        $filters = $request->only([
+            'q',
+            'location',
+            'min_price',
+            'max_price',
+            'property_type',
+            'bedrooms',
+            'bathrooms',
+            'min_cap_rate',
+            'is_1031',
+            'sort_by',
+        ]);
 
-        return view('frontend.properties', compact('properties'));
+        $properties = $this->propertyService->getFilteredProperties($filters, 9);
+        $this->propertyService->logUserSearch($filters, $properties->total());
+
+        $recommendations = $this->propertyService->getPersonalizedRecommendations(auth()->user(), 3);
+        $filterOptions = $this->propertyService->getFilterOptions();
+
+        $favoriteIds = auth()->check()
+            ? \App\Models\PropertyFavorite::where('user_id', auth()->id())->pluck('property_id')->toArray()
+            : [];
+
+        return view('frontend.properties', compact('properties', 'favoriteIds', 'filters', 'filterOptions', 'recommendations'));
     }
 
     /**

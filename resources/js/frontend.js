@@ -22,6 +22,104 @@ function updateThemeIcons() {
 document.addEventListener('DOMContentLoaded', () => {
   updateThemeIcons();
 
+  // Favorite button toggle
+  document.querySelectorAll('[data-favorite-btn]').forEach(btn => {
+    btn.addEventListener('click', async (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const propertyId = btn.getAttribute('data-property-id');
+      if (!propertyId) return;
+
+      try {
+        const response = await fetch(`/property/${propertyId}/favorite`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
+          }
+        });
+
+        if (response.status === 401 || response.redirected) {
+          window.location.href = '/login';
+          return;
+        }
+
+        const data = await response.json();
+
+        if (data.success) {
+          const matchingBtns = document.querySelectorAll(`[data-favorite-btn][data-property-id="${propertyId}"]`);
+          matchingBtns.forEach(targetBtn => {
+            const icon = targetBtn.querySelector('i');
+            const text = targetBtn.querySelector('.favorite-text');
+
+            if (data.isFavorited) {
+              if (targetBtn.classList.contains('favorite-card-btn')) {
+                targetBtn.classList.remove('bg-slate-900/60', 'hover:text-rose-400');
+                targetBtn.classList.add('bg-rose-500/90', 'hover:bg-rose-600');
+              } else if (targetBtn.classList.contains('favorite-icon-btn')) {
+                targetBtn.classList.remove('border-slate-200', 'dark:border-slate-800', 'text-slate-600', 'dark:text-slate-300', 'hover:text-rose-600', 'hover:bg-rose-50/50', 'dark:hover:bg-rose-950/20');
+                targetBtn.classList.add('border-rose-300', 'dark:border-rose-800', 'bg-rose-50', 'dark:bg-rose-950/40', 'text-rose-600', 'dark:text-rose-400');
+              } else {
+                targetBtn.classList.remove('border-slate-200', 'dark:border-slate-800', 'text-slate-700', 'dark:text-slate-200');
+                targetBtn.classList.add('border-rose-300', 'dark:border-rose-800', 'bg-rose-50', 'dark:bg-rose-950/40', 'text-rose-600', 'dark:text-rose-400');
+              }
+
+              if (icon) {
+                icon.classList.remove('bi-heart');
+                icon.classList.add('bi-heart-fill');
+              }
+              if (text) {
+                text.textContent = 'Favorited';
+              }
+              targetBtn.setAttribute('title', 'Remove from Favorites');
+            } else {
+              if (targetBtn.classList.contains('favorite-card-btn')) {
+                targetBtn.classList.remove('bg-rose-500/90', 'hover:bg-rose-600');
+                targetBtn.classList.add('bg-slate-900/60', 'hover:text-rose-400');
+              } else if (targetBtn.classList.contains('favorite-icon-btn')) {
+                targetBtn.classList.remove('border-rose-300', 'dark:border-rose-800', 'bg-rose-50', 'dark:bg-rose-950/40', 'text-rose-600', 'dark:text-rose-400');
+                targetBtn.classList.add('border-slate-200', 'dark:border-slate-800', 'text-slate-600', 'dark:text-slate-300');
+              } else {
+                targetBtn.classList.remove('border-rose-300', 'dark:border-rose-800', 'bg-rose-50', 'dark:bg-rose-950/40', 'text-rose-600', 'dark:text-rose-400');
+                targetBtn.classList.add('border-slate-200', 'dark:border-slate-800', 'text-slate-700', 'dark:text-slate-200');
+              }
+
+              if (icon) {
+                icon.classList.remove('bi-heart-fill');
+                icon.classList.add('bi-heart');
+              }
+              if (text) {
+                text.textContent = 'Add to Favorites';
+              }
+              targetBtn.setAttribute('title', 'Add to Favorites');
+            }
+          });
+        }
+      } catch (error) {
+        console.error('Error toggling favorite:', error);
+      }
+    });
+  });
+
+  // User dropdown toggle in header
+  document.querySelectorAll('[data-user-menu-toggle]').forEach(toggle => {
+    const targetId = toggle.getAttribute('data-user-menu-toggle');
+    const target = document.getElementById(targetId);
+    if (!target) return;
+
+    toggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      target.classList.toggle('hidden');
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!target.contains(e.target) && !toggle.contains(e.target)) {
+        target.classList.add('hidden');
+      }
+    });
+  });
+
   // Mobile Menu Toggler
   const mobileMenuBtn = document.getElementById('mobileMenuBtn');
   const mobileNavMenu = document.getElementById('mobileNavMenu');

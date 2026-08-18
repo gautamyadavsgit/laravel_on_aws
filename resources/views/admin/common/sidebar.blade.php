@@ -32,6 +32,10 @@
                     <i class="bi bi-building text-base"></i>
                     <span>View All Properties</span>
                 </a>
+                <a href="{{ route('admin.users.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition {{ request()->routeIs('admin.users.index') || request()->routeIs('admin.users.show') ? 'bg-indigo-50 text-indigo-700 dark:bg-indigo-950/60 dark:text-indigo-300' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-200' }}">
+                    <i class="bi bi-people text-base"></i>
+                    <span>User Management</span>
+                </a>
                 <a href="{{ route('manage-property.create') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition {{ request()->routeIs('manage-property.create') ? 'bg-indigo-50 text-indigo-700 dark:bg-indigo-950/60 dark:text-indigo-300' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-200' }}">
                     <i class="bi bi-plus-circle text-base"></i>
                     <span>Add New Property</span>
@@ -90,6 +94,9 @@
                     </a>
                     <a href="{{ route('manage-property.index') }}" class="flex items-center gap-2.5 px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 transition">
                         <i class="bi bi-building"></i> Properties
+                    </a>
+                    <a href="{{ route('admin.users.index') }}" class="flex items-center gap-2.5 px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 transition">
+                        <i class="bi bi-people"></i> Users
                     </a>
                     <div class="my-1 border-t border-slate-100 dark:border-slate-800"></div>
                     <a href="{{ route('admin.logout') }}" class="flex items-center gap-2.5 px-4 py-2 text-sm text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition">

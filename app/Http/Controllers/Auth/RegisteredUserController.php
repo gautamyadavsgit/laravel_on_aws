@@ -24,7 +24,7 @@ class RegisteredUserController extends Controller
     public function create(): View|RedirectResponse
     {
         if (Auth::guard('web')->check()) {
-            return redirect()->route('properties');
+            return redirect()->route(request('redirect') === 'investment_interest' ? 'investment.interest' : 'properties');
         }
 
         return view('register');
@@ -38,7 +38,9 @@ class RegisteredUserController extends Controller
         $validated = $request->validated();
         $user = $this->registrationService->register($validated);
 
-        return redirect()->route('properties')->with(
+        $redirectTo = $request->input('redirect') === 'investment_interest' ? 'investment.interest' : 'properties';
+
+        return redirect()->route($redirectTo)->with(
             'success',
             'Registration successful! A verification email with an activation link has been sent to '.$user->email.'.'
         );

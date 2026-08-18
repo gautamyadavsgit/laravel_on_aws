@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ManagePropertyController;
+use App\Http\Controllers\Admin\UserManagementController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\EmailVerificationNotificationController;
 use App\Http\Controllers\Auth\NewPasswordController;
@@ -47,6 +48,33 @@ Route::middleware('guest')->group(function () {
     Route::post('/reset-password', [NewPasswordController::class, 'store'])->name('password.update');
 });
 
+Route::get('/investment-interest', function () {
+    return view('frontend.investment_interest');
+})->name('investment.interest');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/dashboard', [\App\Http\Controllers\UserDashboardController::class, 'dashboard'])->name('user.dashboard');
+    Route::get('/profile', [\App\Http\Controllers\UserDashboardController::class, 'profile'])->name('user.profile');
+    Route::post('/investment-interest/{propertyId}', function ($propertyId) {
+        $user = auth()->user();
+
+        \App\Models\PropertyInterest::updateOrCreate(
+            [
+                'user_id' => $user->id,
+                'property_id' => $propertyId,
+            ],
+            [
+                'status' => 'new',
+            ]
+        );
+
+        return redirect()->route('investment.interest')->with('success', 'Your investment interest has been submitted. Our team will connect with you soon.');
+    })->name('investment.submit');
+
+    // Property Favorites
+    Route::post('/property/{propertyId}/favorite', [\App\Http\Controllers\PropertyFavoriteController::class, 'toggle'])->name('property.favorite.toggle');
+});
+
 // Authenticated Routes
 Route::match(['get', 'post'], '/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 
@@ -62,6 +90,8 @@ Route::prefix('/admin')->group(function () {
     Route::middleware('admin.access')->group(function () {
         Route::get('/logout', [AdminController::class, 'logout'])->name('admin.logout');
         Route::get('/dashboard', [DashboardController::class, 'viewDashboard'])->name('admin.dashboard');
+        Route::get('/users', [UserManagementController::class, 'index'])->name('admin.users.index');
+        Route::get('/users/{user}', [UserManagementController::class, 'show'])->name('admin.users.show');
 
         // Manage Property Routes
         Route::resource('manage-property', ManagePropertyController::class);

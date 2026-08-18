@@ -72,6 +72,30 @@ class User extends Authenticatable
     }
 
     /**
+     * Get the user's favorite properties.
+     */
+    public function propertyFavorites()
+    {
+        return $this->hasMany(PropertyFavorite::class);
+    }
+
+    /**
+     * Get the user's search history logs.
+     */
+    public function searchLogs()
+    {
+        return $this->hasMany(UserSearchLog::class);
+    }
+
+    /**
+     * Get the user's property interests.
+     */
+    public function propertyInterests()
+    {
+        return $this->hasMany(PropertyInterest::class);
+    }
+
+    /**
      * Send the password reset notification.
      *
      * @param  string  $token

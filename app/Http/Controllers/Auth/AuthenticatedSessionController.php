@@ -25,7 +25,7 @@ class AuthenticatedSessionController extends Controller
     public function create(): View|RedirectResponse
     {
         if (Auth::guard('web')->check()) {
-            return redirect()->route('properties');
+            return redirect()->route(request('redirect') === 'investment_interest' ? 'investment.interest' : 'properties');
         }
 
         return view('auth.login');
@@ -42,7 +42,9 @@ class AuthenticatedSessionController extends Controller
         if ($this->authService->login($credentials, $remember)) {
             $request->session()->regenerate();
 
-            return redirect()->intended(route('properties'))->with(
+            $redirectTo = $request->input('redirect') === 'investment_interest' ? 'investment.interest' : 'properties';
+
+            return redirect()->route($redirectTo)->with(
                 'success',
                 'Welcome back, '.Auth::guard('web')->user()->first_name.'!'
             );
