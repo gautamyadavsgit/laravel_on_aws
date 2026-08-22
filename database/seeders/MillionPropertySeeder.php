@@ -15,8 +15,8 @@ class MillionPropertySeeder extends Seeder
         $output = $this->command ? $this->command->getOutput() : null;
 
         Artisan::call('property:seed-million', [
-            '--count' => 1000000,
-            '--chunk' => 5000,
+            '--count' => 100,
+            '--chunk' => 10,
         ], $output);
     }
 }

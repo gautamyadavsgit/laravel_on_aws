@@ -123,4 +123,9 @@ return [
 
     'password_timeout' => 10800,
 
+    'admin_cred' => [
+        'email' => env('ADMIN_EMAIL'),
+        'password' => env('ADMIN_PASSWORD'),
+    ]
+
 ];

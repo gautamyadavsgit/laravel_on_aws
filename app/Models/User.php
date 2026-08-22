@@ -96,6 +96,78 @@ class User extends Authenticatable
     }
 
     /**
+     * Get the user's accreditation status.
+     */
+    public function accreditationStatus()
+    {
+        return $this->belongsTo(AccreditationStatus::class, 'accreditation_status');
+    }
+
+    /**
+     * Get the user's experience level.
+     */
+    public function experienceLevel()
+    {
+        return $this->belongsTo(ExperienceLevel::class, 'experiance_level');
+    }
+
+    /**
+     * Get the user's reason for investing.
+     */
+    public function investingReason()
+    {
+        return $this->belongsTo(ReasonForInvesting::class, 'investing_reason');
+    }
+
+    /**
+     * Get the user's investment source.
+     */
+    public function investmentSource()
+    {
+        return $this->belongsTo(InvestmentSource::class, 'investment_sources');
+    }
+
+    /**
+     * Get the user's investment timeline.
+     */
+    public function investmentTimeline()
+    {
+        return $this->belongsTo(InvestmentTimeline::class, 'investing_timeline');
+    }
+
+    /**
+     * Get the user's investment goals.
+     */
+    public function investmentGoal()
+    {
+        return $this->belongsTo(InvestmentGoal::class, 'investment_goals');
+    }
+
+    /**
+     * Get the user's investment time length.
+     */
+    public function investmentTimelength()
+    {
+        return $this->belongsTo(InvestmentTimelength::class, 'investment_timelength');
+    }
+
+    /**
+     * Get the user's net worth tier.
+     */
+    public function userNetWorth()
+    {
+        return $this->belongsTo(UserNetWorth::class, 'users_net_worth');
+    }
+
+    /**
+     * Get how the user heard about the platform.
+     */
+    public function hearAboutUs()
+    {
+        return $this->belongsTo(HearAboutUs::class, 'hear_about_us');
+    }
+
+    /**
      * Send the password reset notification.
      *
      * @param  string  $token

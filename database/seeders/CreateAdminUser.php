@@ -13,21 +13,13 @@ class CreateAdminUser extends Seeder
      */
     public function run(): void
     {
+        $email = config('auth.admin_cred.email');
+        $password = config('auth.admin_cred.password');
         DB::table('admins')->updateOrInsert(
-            ['email' => 'softgetix.test@gmail.com'],
+            ['email' => $email],
             [
-                'username' => 'pawan',
-                'password' => Hash::make('123456'),
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]
-        );
-
-        DB::table('admins')->updateOrInsert(
-            ['email' => 'admin@gautamrei.com'],
-            [
-                'username' => 'admin',
-                'password' => Hash::make('password'),
+                'username' => 'gautam',
+                'password' => Hash::make($password),
                 'created_at' => now(),
                 'updated_at' => now(),
             ]

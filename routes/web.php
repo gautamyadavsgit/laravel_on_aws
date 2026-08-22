@@ -90,8 +90,7 @@ Route::prefix('/admin')->group(function () {
     Route::middleware('admin.access')->group(function () {
         Route::get('/logout', [AdminController::class, 'logout'])->name('admin.logout');
         Route::get('/dashboard', [DashboardController::class, 'viewDashboard'])->name('admin.dashboard');
-        Route::get('/users', [UserManagementController::class, 'index'])->name('admin.users.index');
-        Route::get('/users/{user}', [UserManagementController::class, 'show'])->name('admin.users.show');
+        Route::resource('users', UserManagementController::class)->names('admin.users');
 
         // Manage Property Routes
         Route::resource('manage-property', ManagePropertyController::class);

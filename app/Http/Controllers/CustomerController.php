@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\PropertyService;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
+
+use App\Services\PropertyService;
 
 class CustomerController extends Controller
 {
@@ -78,7 +79,6 @@ class CustomerController extends Controller
         if ($featuredProperty && ! empty($featuredProperty->slug)) {
             return redirect()->route('property.singlepage', ['slug' => $featuredProperty->slug], 301);
         }
-
         return view('frontend.property_singlepage', compact('featuredProperty'));
     }
 }
