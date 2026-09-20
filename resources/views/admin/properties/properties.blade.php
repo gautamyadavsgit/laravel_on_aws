@@ -85,7 +85,7 @@
                                 <div class="flex items-center gap-4">
                                     <div class="w-16 h-14 rounded-xl overflow-hidden bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shrink-0 shadow-sm flex items-center justify-center">
                                         @if($thumb && !empty($thumb->property_image_value))
-                                            <img src="{{ \App\Support\Media::url($thumb->property_image_value) }}" alt="{{ $prop->name }}" class="w-full h-full object-cover" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'100\' fill=\'%2364748b\'><rect width=\'100\' height=\'100\' fill=\'%23e2e8f0\'/><text x=\'50%\' y=\'50%\' font-size=\'10\' text-anchor=\'middle\' dy=\'.3em\'>Estate</text></svg>'">
+                                            <img src="{{ \Illuminate\Support\Facades\Storage::url($thumb->property_image_value) }}" alt="{{ $prop->name }}" class="w-full h-full object-cover" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'100\' fill=\'%2364748b\'><rect width=\'100\' height=\'100\' fill=\'%23e2e8f0\'/><text x=\'50%\' y=\'50%\' font-size=\'10\' text-anchor=\'middle\' dy=\'.3em\'>Estate</text></svg>'">
                                         @else
                                             <i class="bi bi-building text-slate-400 text-2xl"></i>
                                         @endif

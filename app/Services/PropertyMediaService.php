@@ -3,20 +3,11 @@
 namespace App\Services;
 
 use App\Models\PropertyModel;
-use App\Support\Media;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 
 class PropertyMediaService
 {
-    /**
-     * Get default storage disk name
-     */
-    protected function disk(): string
-    {
-        return Media::disk();
-    }
-
     /**
      * Upload and attach property gallery images
      *
@@ -24,12 +15,11 @@ class PropertyMediaService
      */
     public function uploadPropertyImages(PropertyModel $property, array $files): void
     {
-        $diskName = $this->disk();
         $records = [];
 
         foreach ($files as $file) {
             if ($file instanceof UploadedFile) {
-                $path = Storage::disk($diskName)->putFile('property_images', $file);
+                $path = Storage::putFile('property_images', $file);
                 if ($path) {
                     $records[] = [
                         'property_image_key' => 'property_image',
@@ -49,13 +39,12 @@ class PropertyMediaService
      */
     public function uploadFloorplans(PropertyModel $property, array $fileInputs, array $filteredData): void
     {
-        $diskName = $this->disk();
         $propertyFloorplan = $property->propertyFloorplan;
         $newData = [];
 
         foreach ($filteredData as $key => $value) {
             if (isset($fileInputs[$key]) && $fileInputs[$key] instanceof UploadedFile) {
-                $path = Storage::disk($diskName)->putFile('floorplan_images', $fileInputs[$key]);
+                $path = Storage::putFile('floorplan_images', $fileInputs[$key]);
                 if ($path) {
                     $newData[] = ['key' => $key, 'value' => $path];
                 }
@@ -65,7 +54,7 @@ class PropertyMediaService
         if (! $propertyFloorplan->isEmpty()) {
             foreach ($propertyFloorplan as $model) {
                 if (array_key_exists($model->key, $filteredData)) {
-                    Storage::disk($diskName)->delete($model->value);
+                    Storage::delete($model->value);
                     $model->delete();
                 }
             }
@@ -81,13 +70,12 @@ class PropertyMediaService
      */
     public function uploadDocuments(PropertyModel $property, array $fileInputs, array $filteredData): void
     {
-        $diskName = $this->disk();
         $propertyDocumentModel = $property->propertyDocumentModel;
         $newData = [];
 
         foreach ($filteredData as $key => $value) {
             if (isset($fileInputs[$key]) && $fileInputs[$key] instanceof UploadedFile) {
-                $path = Storage::disk($diskName)->putFile('property_documents', $fileInputs[$key]);
+                $path = Storage::putFile('property_documents', $fileInputs[$key]);
                 if ($path) {
                     $newData[] = ['document_key' => $key, 'document_value' => $path];
                 }
@@ -97,7 +85,7 @@ class PropertyMediaService
         if (! $propertyDocumentModel->isEmpty()) {
             foreach ($propertyDocumentModel as $model) {
                 if (array_key_exists($model->document_key, $filteredData)) {
-                    Storage::disk($diskName)->delete($model->document_value);
+                    Storage::delete($model->document_value);
                     $model->delete();
                 }
             }
@@ -113,8 +101,6 @@ class PropertyMediaService
      */
     public function deleteFile(string $path, ?string $disk = null): bool
     {
-        $diskName = $disk ?? $this->disk();
-
-        return Storage::disk($diskName)->delete($path);
+        return Storage::disk($disk)->delete($path);
     }
 }

@@ -27,8 +27,8 @@ class AuditNegativePathTest extends TestCase
     {
         parent::setUp();
 
+        config(['filesystems.default' => 'public']);
         Storage::fake('public');
-        Storage::fake(config('filesystems.default', 'public'));
         RateLimiter::clear('audit@example.com|127.0.0.1');
     }
 
@@ -934,7 +934,7 @@ class AuditNegativePathTest extends TestCase
     {
         $admin = $this->admin();
         $property = $this->property();
-        $disk = Storage::disk(config('filesystems.default', 'public') === 'local' ? 'public' : config('filesystems.default', 'public'));
+        $disk = Storage::disk();
 
         $this->actingAs($admin, 'admin')->post("/admin/manage-property/update-floorplan/{$property->id}", [
             'floor_plan_1' => UploadedFile::fake()->image('one.png', 40, 40),

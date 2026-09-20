@@ -47,7 +47,7 @@
                         @foreach($propertyFloorplan as $index => $plan)
                             <div class="rounded-xl border border-slate-200 dark:border-slate-800 p-3 bg-slate-50 dark:bg-slate-900/60">
                                 <div class="aspect-video rounded-lg overflow-hidden bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 flex items-center justify-center mb-2">
-                                    <img src="{{ \App\Support\Media::url($plan->value) }}" alt="{{ $plan->key }}" class="w-full h-full object-contain" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'60\' fill=\'%2364748b\'><rect width=\'100\' height=\'60\' fill=\'%23f1f5f9\'/><text x=\'50%\' y=\'50%\' font-size=\'8\' text-anchor=\'middle\' dy=\'.3em\'>Floorplan Preview</text></svg>'">
+                                    <img src="{{ \Illuminate\Support\Facades\Storage::url($plan->value) }}" alt="{{ $plan->key }}" class="w-full h-full object-contain" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'60\' fill=\'%2364748b\'><rect width=\'100\' height=\'60\' fill=\'%23f1f5f9\'/><text x=\'50%\' y=\'50%\' font-size=\'8\' text-anchor=\'middle\' dy=\'.3em\'>Floorplan Preview</text></svg>'">
                                 </div>
                                 <div class="flex items-center justify-between text-xs">
                                     <span class="font-medium text-slate-800 dark:text-slate-200">{{ $plan->key ?? 'Level ' . ($index + 1) }}</span>

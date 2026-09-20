@@ -316,7 +316,7 @@
                     @foreach($recommendations as $rec)
                         @php
                             $recImage = $rec->propertyImage ? $rec->propertyImage->firstWhere('property_image_key', 'property_image') : null;
-                            $recImgSrc = $recImage ? \App\Support\Media::url($recImage->property_image_value) : \App\Support\Media::url('property_images/property_1.png');
+                            $recImgSrc = $recImage ? \Illuminate\Support\Facades\Storage::url($recImage->property_image_value) : \Illuminate\Support\Facades\Storage::url('property_images/property_1.png');
                             $recCap = $rec->propertyMetrics->cap_rate ?? null;
                             $recCity = $rec->propertyAddress->city ?? 'Gatlinburg';
                             $recState = $rec->propertyAddress->state ?? 'TN';
@@ -363,7 +363,7 @@
             @forelse ($propertyList as $prop)
                 @php
                     $heroImage = $prop->propertyImage ? $prop->propertyImage->firstWhere('property_image_key', 'property_image') : null;
-                    $imageSrc = $heroImage ? \App\Support\Media::url($heroImage->property_image_value) : \App\Support\Media::url('property_images/property_1.png');
+                    $imageSrc = $heroImage ? \Illuminate\Support\Facades\Storage::url($heroImage->property_image_value) : \Illuminate\Support\Facades\Storage::url('property_images/property_1.png');
                     $city = $prop->propertyAddress->city ?? 'Gatlinburg';
                     $state = $prop->propertyAddress->state ?? 'TN';
                     $metrics = $prop->propertyMetrics;
