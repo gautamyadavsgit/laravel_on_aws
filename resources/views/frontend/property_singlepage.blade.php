@@ -39,18 +39,18 @@
                         @if ($images)
                             @foreach ($images as $idx => $img)
                                 <div data-carousel-item class="absolute inset-0 transition-opacity duration-300 {{ $idx > 0 ? 'opacity-0 pointer-events-none hidden' : '' }}">
-                                    <img src="{{ asset('storage/' . $img->property_image_value) }}" alt="Property Image {{ $idx + 1 }}" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'1200\' height=\'800\' viewBox=\'0 0 1200 800\'><rect width=\'1200\' height=\'800\' fill=\'%23312e81\'/><text x=\'50%25\' y=\'50%25\' dominant-baseline=\'middle\' text-anchor=\'middle\' font-family=\'sans-serif\' font-size=\'32\' fill=\'%23ffffff\'>Luxury Fractional Estate</text></svg>';">
+                                    <img src="{{ \App\Support\Media::url($img->property_image_value) }}" alt="Property Image {{ $idx + 1 }}" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'1200\' height=\'800\' viewBox=\'0 0 1200 800\'><rect width=\'1200\' height=\'800\' fill=\'%23312e81\'/><text x=\'50%25\' y=\'50%25\' dominant-baseline=\'middle\' text-anchor=\'middle\' font-family=\'sans-serif\' font-size=\'32\' fill=\'%23ffffff\'>Luxury Fractional Estate</text></svg>';">
                                 </div>
                             @endforeach
                         @else
                             <div data-carousel-item class="absolute inset-0 transition-opacity duration-300">
-                                <img src="{{ asset('storage/property_images/property_1.png') }}" alt="Estate Exterior" class="w-full h-full object-cover">
+                                <img src="{{ \App\Support\Media::url('property_images/property_1.png') }}" alt="Estate Exterior" class="w-full h-full object-cover">
                             </div>
                             <div data-carousel-item class="absolute inset-0 transition-opacity duration-300 opacity-0 pointer-events-none hidden">
-                                <img src="{{ asset('storage/property_images/property_2.png') }}" alt="Luxury Living Room" class="w-full h-full object-cover">
+                                <img src="{{ \App\Support\Media::url('property_images/property_2.png') }}" alt="Luxury Living Room" class="w-full h-full object-cover">
                             </div>
                             <div data-carousel-item class="absolute inset-0 transition-opacity duration-300 opacity-0 pointer-events-none hidden">
-                                <img src="{{ asset('storage/property_images/property_3.png') }}" alt="Mountain View Deck" class="w-full h-full object-cover">
+                                <img src="{{ \App\Support\Media::url('property_images/property_3.png') }}" alt="Mountain View Deck" class="w-full h-full object-cover">
                             </div>
                         @endif
                     </div>

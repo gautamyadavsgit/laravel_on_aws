@@ -97,7 +97,7 @@
                             <i class="bi bi-search text-sm"></i>
                         </div>
                         <input type="text"
-                            name="q"
+                            name="q" maxlength="100"
                             id="searchQuery"
                             value="{{ request('q') }}"
                             placeholder="Search by name, features, or keywords..."
@@ -111,7 +111,7 @@
                             <i class="bi bi-geo-alt-fill text-sm text-rose-500"></i>
                         </div>
                         <input type="text"
-                            name="location"
+                            name="location" maxlength="100"
                             id="locationQuery"
                             list="locationSuggestions"
                             value="{{ request('location') }}"
@@ -163,7 +163,7 @@
                         <div>
                             <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Min Price ($)</label>
                             <input type="number"
-                                name="min_price"
+                                name="min_price" min="0" max="100000000000"
                                 step="25000"
                                 value="{{ request('min_price') }}"
                                 placeholder="Min ($)"
@@ -174,7 +174,7 @@
                         <div>
                             <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Max Price ($)</label>
                             <input type="number"
-                                name="max_price"
+                                name="max_price" min="0" max="100000000000"
                                 step="50000"
                                 value="{{ request('max_price') }}"
                                 placeholder="Max ($)"
@@ -316,7 +316,7 @@
                     @foreach($recommendations as $rec)
                         @php
                             $recImage = $rec->propertyImage ? $rec->propertyImage->firstWhere('property_image_key', 'property_image') : null;
-                            $recImgSrc = $recImage ? asset('storage/' . $recImage->property_image_value) : asset('storage/property_images/property_1.png');
+                            $recImgSrc = $recImage ? \App\Support\Media::url($recImage->property_image_value) : \App\Support\Media::url('property_images/property_1.png');
                             $recCap = $rec->propertyMetrics->cap_rate ?? null;
                             $recCity = $rec->propertyAddress->city ?? 'Gatlinburg';
                             $recState = $rec->propertyAddress->state ?? 'TN';
@@ -363,7 +363,7 @@
             @forelse ($propertyList as $prop)
                 @php
                     $heroImage = $prop->propertyImage ? $prop->propertyImage->firstWhere('property_image_key', 'property_image') : null;
-                    $imageSrc = $heroImage ? asset('storage/' . $heroImage->property_image_value) : asset('storage/property_images/property_1.png');
+                    $imageSrc = $heroImage ? \App\Support\Media::url($heroImage->property_image_value) : \App\Support\Media::url('property_images/property_1.png');
                     $city = $prop->propertyAddress->city ?? 'Gatlinburg';
                     $state = $prop->propertyAddress->state ?? 'TN';
                     $metrics = $prop->propertyMetrics;

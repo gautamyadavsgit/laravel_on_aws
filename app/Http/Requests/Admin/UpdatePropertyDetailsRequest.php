@@ -18,24 +18,27 @@ class UpdatePropertyDetailsRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
+     * Bounds mirror the property_details column types (unsigned small int / int / decimal(8,2))
+     * so out-of-range input is reported to the admin instead of failing at the database.
+     *
      * @return array<string, ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
         return [
-            'type' => 'required',
-            'bedrooms' => 'required|integer',
-            'baths' => 'required|integer',
-            'half_baths' => 'required|integer',
-            'sleeps' => 'required|integer',
-            'garages' => 'required|integer',
-            'square_feets' => 'required|integer',
-            'stories' => 'required|string',
-            'units' => 'required|integer',
-            'lot_size' => 'required|integer',
-            'year_built' => 'required|integer|digits:4',
-            'zoning' => 'required',
-            'value' => 'required|integer',
+            'type' => ['required', 'string', 'max:255'],
+            'bedrooms' => ['required', 'integer', 'min:0', 'max:1000'],
+            'baths' => ['required', 'integer', 'min:0', 'max:1000'],
+            'half_baths' => ['required', 'integer', 'min:0', 'max:1000'],
+            'sleeps' => ['required', 'integer', 'min:0', 'max:1000'],
+            'garages' => ['required', 'integer', 'min:0', 'max:1000'],
+            'square_feets' => ['required', 'integer', 'min:0', 'max:100000000'],
+            'stories' => ['required', 'string', 'max:255'],
+            'units' => ['required', 'integer', 'min:1', 'max:10000'],
+            'lot_size' => ['required', 'numeric', 'min:0', 'max:999999.99'],
+            'year_built' => ['required', 'integer', 'digits:4', 'between:1800,'.((int) date('Y') + 5)],
+            'zoning' => ['required', 'string', 'max:255'],
+            'value' => ['required', 'integer', 'min:0', 'max:1000000000'],
         ];
     }
 }

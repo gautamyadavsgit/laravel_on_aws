@@ -44,7 +44,7 @@
                     <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300" for="Documents_Master_Deed">
                         Master Deed & Fractional Title (PDF)
                     </label>
-                    <input type="file" class="input-tw file:mr-3 file:py-1 file:px-2.5 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 dark:file:bg-indigo-950 dark:file:text-indigo-300" accept="application/pdf" name="Documents_Master_Deed" id="Documents_Master_Deed">
+                    <input type="file" class="input-tw file:mr-3 file:py-1 file:px-2.5 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 dark:file:bg-indigo-950 dark:file:text-indigo-300" accept="application/pdf" data-max-kb="2048" data-allowed-types="application/pdf" name="Documents_Master_Deed" id="Documents_Master_Deed">
                     <p class="text-[11px] text-slate-400">Master deed establishing fractional ownership rights.</p>
                 </div>
 
@@ -53,7 +53,7 @@
                     <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300" for="Documents_Expence_Calculations">
                         Expense Statement & Escrow (PDF)
                     </label>
-                    <input type="file" class="input-tw file:mr-3 file:py-1 file:px-2.5 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 dark:file:bg-indigo-950 dark:file:text-indigo-300" accept="application/pdf" name="Documents_Expence_Calculations" id="Documents_Expence_Calculations">
+                    <input type="file" class="input-tw file:mr-3 file:py-1 file:px-2.5 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 dark:file:bg-indigo-950 dark:file:text-indigo-300" accept="application/pdf" data-max-kb="2048" data-allowed-types="application/pdf" name="Documents_Expence_Calculations" id="Documents_Expence_Calculations">
                     <p class="text-[11px] text-slate-400">Detailed line-item maintenance, insurance, and HOA.</p>
                 </div>
 
@@ -62,7 +62,7 @@
                     <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300" for="Documents_Rent_Calculations">
                         Rental Yield & Pro-Forma (PDF)
                     </label>
-                    <input type="file" class="input-tw file:mr-3 file:py-1 file:px-2.5 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 dark:file:bg-indigo-950 dark:file:text-indigo-300" accept="application/pdf" name="Documents_Rent_Calculations" id="Documents_Rent_Calculations">
+                    <input type="file" class="input-tw file:mr-3 file:py-1 file:px-2.5 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 dark:file:bg-indigo-950 dark:file:text-indigo-300" accept="application/pdf" data-max-kb="2048" data-allowed-types="application/pdf" name="Documents_Rent_Calculations" id="Documents_Rent_Calculations">
                     <p class="text-[11px] text-slate-400">Projected ADR, historical occupancy, and seasonal rates.</p>
                 </div>
 
@@ -71,7 +71,7 @@
                     <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300" for="document_1">
                         LLC Operating Agreement (PDF)
                     </label>
-                    <input type="file" class="input-tw file:mr-3 file:py-1 file:px-2.5 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 dark:file:bg-indigo-950 dark:file:text-indigo-300" accept="application/pdf" name="document_1" id="document_1">
+                    <input type="file" class="input-tw file:mr-3 file:py-1 file:px-2.5 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 dark:file:bg-indigo-950 dark:file:text-indigo-300" accept="application/pdf" data-max-kb="2048" data-allowed-types="application/pdf" name="document_1" id="document_1">
                     <p class="text-[11px] text-slate-400">Property-holding SPV LLC governing documents.</p>
                 </div>
 
@@ -80,7 +80,7 @@
                     <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300" for="Documents_Closing_Statement_Example">
                         Closing Statement Sample (PDF)
                     </label>
-                    <input type="file" class="input-tw file:mr-3 file:py-1 file:px-2.5 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 dark:file:bg-indigo-950 dark:file:text-indigo-300" accept="application/pdf" name="Documents_Closing_Statement_Example" id="Documents_Closing_Statement_Example">
+                    <input type="file" class="input-tw file:mr-3 file:py-1 file:px-2.5 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 dark:file:bg-indigo-950 dark:file:text-indigo-300" accept="application/pdf" data-max-kb="2048" data-allowed-types="application/pdf" name="Documents_Closing_Statement_Example" id="Documents_Closing_Statement_Example">
                     <p class="text-[11px] text-slate-400">HUD-1/Settlement statement closing audit.</p>
                 </div>
 
@@ -89,7 +89,7 @@
                     <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300" for="Documents_Deed_Restrictions">
                         Deed Restrictions & HOA (PDF)
                     </label>
-                    <input type="file" class="input-tw file:mr-3 file:py-1 file:px-2.5 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 dark:file:bg-indigo-950 dark:file:text-indigo-300" accept="application/pdf" name="Documents_Deed_Restrictions" id="Documents_Deed_Restrictions">
+                    <input type="file" class="input-tw file:mr-3 file:py-1 file:px-2.5 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 dark:file:bg-indigo-950 dark:file:text-indigo-300" accept="application/pdf" data-max-kb="2048" data-allowed-types="application/pdf" name="Documents_Deed_Restrictions" id="Documents_Deed_Restrictions">
                     <p class="text-[11px] text-slate-400">CC&Rs, bylaws, and rental governance.</p>
                 </div>
             </div>

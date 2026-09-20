@@ -33,8 +33,9 @@ class PasswordResetLinkController extends Controller
     {
         $status = $this->authService->sendPasswordResetLink($request->validated('email'));
 
-        if ($status === Password::RESET_LINK_SENT) {
-            return back()->with('status', 'A password reset link has been dispatched to your email address.');
+        // Same answer for known and unknown addresses so the form can't be used to discover accounts
+        if ($status === Password::RESET_LINK_SENT || $status === Password::INVALID_USER) {
+            return back()->with('status', 'If an account exists for that email address, a password reset link has been sent to it.');
         }
 
         return back()->withErrors(['email' => __($status)])->withInput($request->only('email'));

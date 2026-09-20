@@ -125,7 +125,7 @@
                         <a href="{{ route('property.singlepage', ['id' => $property->id]) }}" class="group relative rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 hover:border-rose-300 dark:hover:border-rose-700 hover:shadow-lg transition">
                             <div class="aspect-video bg-slate-100 dark:bg-slate-800 overflow-hidden">
                                 @if($property && $property->propertyImage && count($property->propertyImage) > 0)
-                                    <img src="{{ asset('storage/' . $property->propertyImage[0]->property_image_value) }}" alt="{{ $property->name }}" class="w-full h-full object-cover group-hover:scale-110 transition duration-300">
+                                    <img src="{{ \App\Support\Media::url($property->propertyImage[0]->property_image_value) }}" alt="{{ $property->name }}" class="w-full h-full object-cover group-hover:scale-110 transition duration-300">
                                 @else
                                     <div class="w-full h-full flex items-center justify-center text-slate-400">
                                         <i class="bi bi-image text-2xl"></i>

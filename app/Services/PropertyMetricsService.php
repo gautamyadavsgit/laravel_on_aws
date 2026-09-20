@@ -33,7 +33,9 @@ class PropertyMetricsService
             : round($grossRent * 0.23, 2);
 
         // 3. NOI (Net Operating Income)
-        $noi = max(0, $grossRent - $expenses);
+        $noi = isset($overrides['net_operating_income']) && $overrides['net_operating_income'] !== ''
+            ? (float) $overrides['net_operating_income']
+            : max(0, $grossRent - $expenses);
 
         // 4. Cap Rate (%)
         $capRate = isset($overrides['cap_rate']) && $overrides['cap_rate'] !== ''
@@ -111,13 +113,14 @@ class PropertyMetricsService
             'gross_annual_rent' => $grossRent,
             'operating_expenses' => $expenses,
             'net_operating_income' => $noi,
-            'cap_rate' => $capRate,
+            // Derived figures are clamped to what their decimal columns can hold (5,2 for rates, 14,2 for valuations)
+            'cap_rate' => min($capRate, 999.99),
             'annual_cash_flow' => $annualCashFlow,
-            'cash_on_cash_return' => $cashOnCash,
-            'projected_irr' => $projectedIrr,
+            'cash_on_cash_return' => min($cashOnCash, 999.99),
+            'projected_irr' => min($projectedIrr, 999.99),
             'estimated_appreciation_rate' => $appreciationRate,
-            'projected_value_5yr' => $projVal5,
-            'projected_value_10yr' => $projVal10,
+            'projected_value_5yr' => min($projVal5, 999999999999.99),
+            'projected_value_10yr' => min($projVal10, 999999999999.99),
             'annual_depreciation_deduction' => $annualDepreciation,
             'tax_savings_estimate' => $taxSavings,
             'is_1031_exchange_eligible' => isset($overrides['is_1031_exchange_eligible']) ? (bool) $overrides['is_1031_exchange_eligible'] : true,

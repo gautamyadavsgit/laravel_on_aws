@@ -31,8 +31,8 @@
             @forelse ($property->propertyImage as $image)
                 @if ($image->property_image_key == 'property_image')
                     <div class="border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden bg-slate-50 dark:bg-slate-800/50 w-56 shadow-sm">
-                        <a target="_blank" href="{{ asset('storage/' . $image->property_image_value) }}">
-                            <img class="w-full h-40 object-cover hover:scale-105 transition duration-300" src="{{ asset('storage/' . $image->property_image_value) }}" alt="Property Image" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'800\' height=\'600\' viewBox=\'0 0 800 600\'><rect width=\'800\' height=\'600\' fill=\'%23312e81\'/><text x=\'50%25\' y=\'50%25\' dominant-baseline=\'middle\' text-anchor=\'middle\' font-family=\'sans-serif\' font-size=\'24\' fill=\'%23ffffff\'>Luxury Real Estate</text></svg>';">
+                        <a target="_blank" href="{{ \App\Support\Media::url($image->property_image_value) }}">
+                            <img class="w-full h-40 object-cover hover:scale-105 transition duration-300" src="{{ \App\Support\Media::url($image->property_image_value) }}" alt="Property Image" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'800\' height=\'600\' viewBox=\'0 0 800 600\'><rect width=\'800\' height=\'600\' fill=\'%23312e81\'/><text x=\'50%25\' y=\'50%25\' dominant-baseline=\'middle\' text-anchor=\'middle\' font-family=\'sans-serif\' font-size=\'24\' fill=\'%23ffffff\'>Luxury Real Estate</text></svg>';">
                         </a>
                     </div>
                 @endif
@@ -55,8 +55,8 @@
             <div class="flex flex-wrap gap-4">
                 @forelse ($property->propertyFloorplan ?? [] as $plan)
                     <div class="border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden bg-slate-50 dark:bg-slate-800/50 w-44 shadow-sm">
-                        <a target="_blank" href="{{ asset('storage/' . $plan->value) }}">
-                            <img class="w-full h-32 object-cover hover:scale-105 transition duration-300" src="{{ asset('storage/' . $plan->value) }}" alt="Floor Plan" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'800\' height=\'600\' viewBox=\'0 0 800 600\'><rect width=\'800\' height=\'600\' fill=\'%231e293b\'/><text x=\'50%25\' y=\'50%25\' dominant-baseline=\'middle\' text-anchor=\'middle\' font-family=\'sans-serif\' font-size=\'22\' fill=\'%2338bdf8\'>Architectural Blueprint</text></svg>';">
+                        <a target="_blank" href="{{ \App\Support\Media::url($plan->value) }}">
+                            <img class="w-full h-32 object-cover hover:scale-105 transition duration-300" src="{{ \App\Support\Media::url($plan->value) }}" alt="Floor Plan" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'800\' height=\'600\' viewBox=\'0 0 800 600\'><rect width=\'800\' height=\'600\' fill=\'%231e293b\'/><text x=\'50%25\' y=\'50%25\' dominant-baseline=\'middle\' text-anchor=\'middle\' font-family=\'sans-serif\' font-size=\'22\' fill=\'%2338bdf8\'>Architectural Blueprint</text></svg>';">
                         </a>
                     </div>
                 @empty
@@ -76,7 +76,7 @@
             </div>
             <div class="divide-y divide-slate-100 dark:divide-slate-800">
                 @forelse ($property->propertyDocumentModel ?? [] as $doc)
-                    <a target="_blank" href="{{ asset('storage/' . $doc->document_value) }}" class="flex items-center justify-between py-3 px-2 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800/60 transition text-sm">
+                    <a target="_blank" href="{{ \App\Support\Media::url($doc->document_value) }}" class="flex items-center justify-between py-3 px-2 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800/60 transition text-sm">
                         <div class="flex items-center gap-2.5">
                             <i class="bi bi-file-earmark-pdf-fill text-rose-600 text-lg"></i>
                             <span class="font-medium text-slate-700 dark:text-slate-200">{{ ucfirst(str_replace('_', ' ', $doc->document_key)) }}</span>

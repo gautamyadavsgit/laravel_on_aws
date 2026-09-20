@@ -54,34 +54,39 @@ class RegistrationService
         $token = Str::random(64);
         $verifyUrl = route('verification.verify.token', ['token' => $token]);
 
-        $user = User::create([
-            'first_name' => $data['first_name'],
-            'middile_name' => $data['middle_name'] ?? null,
-            'last_name' => $data['last_name'],
-            'suffix' => $data['suffix'] ?? null,
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-            'phone' => $data['phone'] ?? null,
-            'verification_token' => $token,
-            'verification_link' => $verifyUrl,
-            'hear_about_us' => $refId,
-            'experiance_level' => $expId,
-            'investment_goals' => $goalId,
-            'email_verified_at' => null,
-        ]);
+        // The account and its default alert preferences are created together or not at all
+        $user = DB::transaction(function () use ($data, $token, $verifyUrl, $refId, $expId, $goalId) {
+            $user = User::create([
+                'first_name' => $data['first_name'],
+                'middile_name' => $data['middle_name'] ?? null,
+                'last_name' => $data['last_name'],
+                'suffix' => $data['suffix'] ?? null,
+                'email' => $data['email'],
+                'password' => Hash::make($data['password']),
+                'phone' => $data['phone'] ?? null,
+                'verification_token' => $token,
+                'verification_link' => $verifyUrl,
+                'hear_about_us' => $refId,
+                'experiance_level' => $expId,
+                'investment_goals' => $goalId,
+                'email_verified_at' => null,
+            ]);
 
-        // Auto create default user alerts
-        DB::table('user_alerts')->updateOrInsert(
-            ['user_id' => $user->id],
-            [
-                'new_deals' => 1,
-                'system_notice' => 1,
-                'emails' => 1,
-                'sms' => 1,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]
-        );
+            // Auto create default user alerts
+            DB::table('user_alerts')->updateOrInsert(
+                ['user_id' => $user->id],
+                [
+                    'new_deals' => 1,
+                    'system_notice' => 1,
+                    'emails' => 1,
+                    'sms' => 1,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]
+            );
+
+            return $user;
+        });
 
         // Dispatch queued verification email asynchronously
         try {

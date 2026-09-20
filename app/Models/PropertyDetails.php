@@ -25,6 +25,8 @@ class PropertyDetails extends Model
         'units',
         'lot_size',
         'year_built',
+        'zoning',
+        'value',
     ];
 
     public function property(): BelongsTo

@@ -32,13 +32,19 @@
                     <i class="bi bi-building text-base"></i>
                     <span>View All Properties</span>
                 </a>
-                <a href="{{ route('admin.users.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition {{ request()->routeIs('admin.users.*') ? 'bg-indigo-50 text-indigo-700 dark:bg-indigo-950/60 dark:text-indigo-300' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-200' }}">
-                    <i class="bi bi-people text-base"></i>
-                    <span>User Management</span>
-                </a>
                 <a href="{{ route('manage-property.create') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition {{ request()->routeIs('manage-property.create') ? 'bg-indigo-50 text-indigo-700 dark:bg-indigo-950/60 dark:text-indigo-300' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-200' }}">
                     <i class="bi bi-plus-circle text-base"></i>
                     <span>Add New Property</span>
+                </a>
+            </div>
+        </div>
+
+        <div>
+            <span class="px-3 text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">User Management</span>
+            <div class="mt-2 space-y-1">
+                <a href="{{ route('admin.users.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition {{ request()->routeIs('admin.users.*') ? 'bg-indigo-50 text-indigo-700 dark:bg-indigo-950/60 dark:text-indigo-300' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-200' }}">
+                    <i class="bi bi-people text-base"></i>
+                    <span>User Management</span>
                 </a>
             </div>
         </div>

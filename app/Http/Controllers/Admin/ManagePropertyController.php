@@ -18,6 +18,7 @@ use App\Services\PropertyMetricsService;
 use App\Services\PropertyService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\View\View;
 
 class ManagePropertyController extends Controller
@@ -68,7 +69,7 @@ class ManagePropertyController extends Controller
      */
     public function store(AdminAddPropertyRequest $request): RedirectResponse
     {
-        $data = $request->validated();
+        $data = Arr::except($request->validated(), ['property_images']);
         $data['admin_id'] = auth('admin')->id();
         $property = PropertyModel::create($data);
 
@@ -109,8 +110,9 @@ class ManagePropertyController extends Controller
      */
     public function update(UpdatePropertyRequest $request, string $id): RedirectResponse
     {
-        $data = $request->validated();
+        $data = Arr::except($request->validated(), ['property_images']);
         $property = PropertyModel::findOrFail($id);
+        $oldSlug = $property->slug;
 
         $property->update($data);
 
@@ -119,6 +121,9 @@ class ManagePropertyController extends Controller
             $this->mediaService->uploadPropertyImages($property, (array) $request->file('property_images'));
         }
 
+        if ($oldSlug && $oldSlug !== $property->slug) {
+            $this->propertyService->clearPropertiesCache($oldSlug);
+        }
         $this->propertyService->clearPropertiesCache($property->slug);
 
         return redirect()->back()->with('success', 'Property updated successfully.');
@@ -129,13 +134,11 @@ class ManagePropertyController extends Controller
      */
     public function destroy(string $id): RedirectResponse
     {
-        $property = PropertyModel::find($id);
+        $property = PropertyModel::findOrFail($id);
 
-        if ($property) {
-            $slug = $property->slug;
-            $property->delete();
-            $this->propertyService->clearPropertiesCache($slug);
-        }
+        $slug = $property->slug;
+        $property->delete();
+        $this->propertyService->clearPropertiesCache($slug);
 
         return redirect()->back()->with('success', 'Property deleted successfully');
     }
@@ -324,7 +327,7 @@ class ManagePropertyController extends Controller
         PropertyMetricsService::syncForProperty($property, $data);
         $this->propertyService->clearPropertiesCache($property->slug);
 
-        return redirect(route('admin.manage-property.index'))->with('success', 'Property metrics updated successfully.');
+        return redirect(route('manage-property.index'))->with('success', 'Property metrics updated successfully.');
     }
 
     // ==========================================

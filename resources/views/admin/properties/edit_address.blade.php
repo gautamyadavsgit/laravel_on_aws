@@ -42,14 +42,14 @@
                     <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5" for="address_1">
                         Address Line 1 <span class="text-rose-500">*</span>
                     </label>
-                    <textarea class="textarea-tw" name="address_1" id="address_1" rows="2" required placeholder="Street address, P.O. box">{{ $propertyAddress['address_1'] ?? old('address_1') }}</textarea>
+                    <textarea class="textarea-tw" name="address_1" maxlength="255" id="address_1" rows="2" required placeholder="Street address, P.O. box">{{ old('address_1', $propertyAddress['address_1'] ?? '') }}</textarea>
                 </div>
 
                 <div>
                     <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5" for="address_2">
                         Address Line 2 (Optional)
                     </label>
-                    <textarea class="textarea-tw" name="address_2" id="address_2" rows="2" placeholder="Apartment, suite, unit, building, floor, etc.">{{ $propertyAddress['address_2'] ?? old('address_2') }}</textarea>
+                    <textarea class="textarea-tw" name="address_2" maxlength="255" id="address_2" rows="2" placeholder="Apartment, suite, unit, building, floor, etc.">{{ old('address_2', $propertyAddress['address_2'] ?? '') }}</textarea>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -57,21 +57,21 @@
                         <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5" for="city">
                             City <span class="text-rose-500">*</span>
                         </label>
-                        <input class="input-tw" type="text" name="city" id="city" value="{{ $propertyAddress['city'] ?? old('city') }}" placeholder="City name" required>
+                        <input class="input-tw" type="text" name="city" maxlength="112" id="city" value="{{ old('city', $propertyAddress['city'] ?? '') }}" placeholder="City name" required>
                     </div>
 
                     <div>
                         <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5" for="state">
                             State / Province <span class="text-rose-500">*</span>
                         </label>
-                        <input class="input-tw" type="text" name="state" id="state" value="{{ $propertyAddress['state'] ?? old('state') }}" placeholder="e.g. TN, CO, FL" required>
+                        <input class="input-tw" type="text" name="state" maxlength="112" id="state" value="{{ old('state', $propertyAddress['state'] ?? '') }}" placeholder="e.g. TN, CO, FL" required>
                     </div>
 
                     <div>
                         <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5" for="zip">
                             Postal / Zip Code <span class="text-rose-500">*</span>
                         </label>
-                        <input class="input-tw" type="text" name="zip" id="zip" value="{{ $propertyAddress['zip'] ?? old('zip') }}" placeholder="e.g. 37738" required>
+                        <input class="input-tw" type="text" name="zip" maxlength="20" pattern="[A-Za-z0-9][A-Za-z0-9 \-]*" title="Letters, numbers, spaces and hyphens only" id="zip" value="{{ old('zip', $propertyAddress['zip'] ?? '') }}" placeholder="e.g. 37738" required>
                     </div>
                 </div>
             </div>

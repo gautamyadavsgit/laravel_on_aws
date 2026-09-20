@@ -8,6 +8,7 @@ use App\Services\AuthService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\View\View;
 
 class AuthenticatedSessionController extends Controller
@@ -36,10 +37,13 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(InvestorLoginRequest $request): RedirectResponse
     {
+        $request->ensureIsNotRateLimited();
+
         $credentials = $request->only('email', 'password');
         $remember = $request->boolean('remember');
 
         if ($this->authService->login($credentials, $remember)) {
+            RateLimiter::clear($request->throttleKey());
             $request->session()->regenerate();
 
             $redirectTo = $request->input('redirect') === 'investment_interest' ? 'investment.interest' : 'properties';
@@ -49,6 +53,8 @@ class AuthenticatedSessionController extends Controller
                 'Welcome back, '.Auth::guard('web')->user()->first_name.'!'
             );
         }
+
+        RateLimiter::hit($request->throttleKey());
 
         return back()->withErrors([
             'email' => 'The provided credentials do not match our records.',

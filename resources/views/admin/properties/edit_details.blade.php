@@ -42,91 +42,91 @@
                     <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5" for="type">
                         Property Architecture / Type
                     </label>
-                    <input class="input-tw" type="text" name="type" id="type" value="{{ $propertyDetails['type'] ?? old('type') }}" placeholder="e.g. Single Family Luxury Cabin">
+                    <input class="input-tw" type="text" name="type" required maxlength="255" id="type" value="{{ old('type', $propertyDetails['type'] ?? '') }}" placeholder="e.g. Single Family Luxury Cabin">
                 </div>
 
                 <div>
                     <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5" for="bedrooms">
                         Bedrooms
                     </label>
-                    <input class="input-tw" type="number" name="bedrooms" id="bedrooms" value="{{ $propertyDetails['bedrooms'] ?? old('bedrooms') }}" placeholder="4">
+                    <input class="input-tw" type="number" name="bedrooms" required min="0" max="1000" step="1" id="bedrooms" value="{{ old('bedrooms', $propertyDetails['bedrooms'] ?? '') }}" placeholder="4">
                 </div>
 
                 <div>
                     <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5" for="baths">
                         Full Bathrooms
                     </label>
-                    <input class="input-tw" type="number" name="baths" id="baths" value="{{ $propertyDetails['baths'] ?? old('baths') }}" placeholder="3">
+                    <input class="input-tw" type="number" name="baths" required min="0" max="1000" step="1" id="baths" value="{{ old('baths', $propertyDetails['baths'] ?? '') }}" placeholder="3">
                 </div>
 
                 <div>
                     <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5" for="half_baths">
                         Half Baths
                     </label>
-                    <input class="input-tw" type="number" name="half_baths" id="half_baths" value="{{ $propertyDetails['half_baths'] ?? old('half_baths') }}" placeholder="1">
+                    <input class="input-tw" type="number" name="half_baths" required min="0" max="1000" step="1" id="half_baths" value="{{ old('half_baths', $propertyDetails['half_baths'] ?? '') }}" placeholder="1">
                 </div>
 
                 <div>
                     <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5" for="sleeps">
                         Sleeps (Guest Capacity)
                     </label>
-                    <input class="input-tw" type="number" name="sleeps" id="sleeps" value="{{ $propertyDetails['sleeps'] ?? old('sleeps') }}" placeholder="10">
+                    <input class="input-tw" type="number" name="sleeps" required min="0" max="1000" step="1" id="sleeps" value="{{ old('sleeps', $propertyDetails['sleeps'] ?? '') }}" placeholder="10">
                 </div>
 
                 <div>
                     <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5" for="garages">
                         Garage Spaces
                     </label>
-                    <input class="input-tw" type="number" name="garages" id="garages" value="{{ $propertyDetails['garages'] ?? old('garages') }}" placeholder="2">
+                    <input class="input-tw" type="number" name="garages" required min="0" max="1000" step="1" id="garages" value="{{ old('garages', $propertyDetails['garages'] ?? '') }}" placeholder="2">
                 </div>
 
                 <div>
                     <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5" for="square_feets">
                         Living Area (SqFt)
                     </label>
-                    <input class="input-tw" type="number" name="square_feets" id="square_feets" value="{{ $propertyDetails['square_feets'] ?? old('square_feets') }}" placeholder="3200">
+                    <input class="input-tw" type="number" name="square_feets" required min="0" max="100000000" step="1" id="square_feets" value="{{ old('square_feets', $propertyDetails['square_feets'] ?? '') }}" placeholder="3200">
                 </div>
 
                 <div>
                     <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5" for="units">
                         Total Units
                     </label>
-                    <input class="input-tw" type="number" name="units" id="units" value="{{ $propertyDetails['units'] ?? old('units') }}" placeholder="1">
+                    <input class="input-tw" type="number" name="units" required min="1" max="10000" step="1" id="units" value="{{ old('units', $propertyDetails['units'] ?? '') }}" placeholder="1">
                 </div>
 
                 <div>
                     <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5" for="lot_size">
                         Lot Size (SqFt)
                     </label>
-                    <input class="input-tw" type="number" name="lot_size" id="lot_size" value="{{ $propertyDetails['lot_size'] ?? old('lot_size') }}" placeholder="15000">
+                    <input class="input-tw" type="number" name="lot_size" required min="0" max="999999.99" step="0.01" id="lot_size" value="{{ old('lot_size', $propertyDetails['lot_size'] ?? '') }}" placeholder="15000">
                 </div>
 
                 <div>
                     <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5" for="year_built">
                         Year Built
                     </label>
-                    <input class="input-tw" type="number" name="year_built" id="year_built" value="{{ $propertyDetails['year_built'] ?? old('year_built') }}" placeholder="2022">
+                    <input class="input-tw" type="number" name="year_built" required min="1800" max="{{ date('Y') + 5 }}" step="1" id="year_built" value="{{ old('year_built', $propertyDetails['year_built'] ?? '') }}" placeholder="2022">
                 </div>
 
                 <div>
                     <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5" for="zoning">
                         Zoning Code
                     </label>
-                    <input class="input-tw" type="text" name="zoning" id="zoning" value="{{ $propertyDetails['zoning'] ?? old('zoning') }}" placeholder="R-1">
+                    <input class="input-tw" type="text" name="zoning" required maxlength="255" id="zoning" value="{{ old('zoning', $propertyDetails['zoning'] ?? '') }}" placeholder="R-1">
                 </div>
 
                 <div>
                     <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5" for="value">
                         Appraised Value ($)
                     </label>
-                    <input class="input-tw" type="number" name="value" id="value" value="{{ $propertyDetails['value'] ?? old('value') }}" placeholder="850000">
+                    <input class="input-tw" type="number" name="value" required min="0" max="1000000000" step="1" id="value" value="{{ old('value', $propertyDetails['value'] ?? '') }}" placeholder="850000">
                 </div>
 
                 <div class="sm:col-span-2 md:col-span-3">
                     <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5" for="stories">
                         Stories & Structural Architecture Notes
                     </label>
-                    <textarea class="textarea-tw" name="stories" id="stories" rows="2" placeholder="e.g. 2-story custom timber construction with panoramic deck and stone fireplace">{{ $propertyDetails['stories'] ?? old('stories') }}</textarea>
+                    <textarea class="textarea-tw" name="stories" required maxlength="255" id="stories" rows="2" placeholder="e.g. 2-story custom timber construction with panoramic deck and stone fireplace">{{ old('stories', $propertyDetails['stories'] ?? '') }}</textarea>
                 </div>
             </div>
 

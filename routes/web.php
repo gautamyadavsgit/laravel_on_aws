@@ -25,9 +25,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 // Public Frontend
-Route::get('/', function () {
-    return view('frontend.index');
-})->name('home');
+Route::view('/', 'frontend.index')->name('home');
 
 Route::get('/invest', [CustomerController::class, 'investor'])->name('properties');
 Route::get('/property/{slug}', [CustomerController::class, 'property_singlepage'])->name('property.singlepage');
@@ -48,31 +46,15 @@ Route::middleware('guest')->group(function () {
     Route::post('/reset-password', [NewPasswordController::class, 'store'])->name('password.update');
 });
 
-Route::get('/investment-interest', function () {
-    return view('frontend.investment_interest');
-})->name('investment.interest');
+Route::view('/investment-interest', 'frontend.investment_interest')->name('investment.interest');
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [\App\Http\Controllers\UserDashboardController::class, 'dashboard'])->name('user.dashboard');
     Route::get('/profile', [\App\Http\Controllers\UserDashboardController::class, 'profile'])->name('user.profile');
-    Route::post('/investment-interest/{propertyId}', function ($propertyId) {
-        $user = auth()->user();
-
-        \App\Models\PropertyInterest::updateOrCreate(
-            [
-                'user_id' => $user->id,
-                'property_id' => $propertyId,
-            ],
-            [
-                'status' => 'new',
-            ]
-        );
-
-        return redirect()->route('investment.interest')->with('success', 'Your investment interest has been submitted. Our team will connect with you soon.');
-    })->name('investment.submit');
+    Route::post('/investment-interest/{propertyId}', [\App\Http\Controllers\PropertyInterestController::class, 'store'])->whereNumber('propertyId')->name('investment.submit');
 
     // Property Favorites
-    Route::post('/property/{propertyId}/favorite', [\App\Http\Controllers\PropertyFavoriteController::class, 'toggle'])->name('property.favorite.toggle');
+    Route::post('/property/{propertyId}/favorite', [\App\Http\Controllers\PropertyFavoriteController::class, 'toggle'])->whereNumber('propertyId')->name('property.favorite.toggle');
 });
 
 // Authenticated Routes

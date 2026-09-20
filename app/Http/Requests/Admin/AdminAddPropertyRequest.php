@@ -28,11 +28,12 @@ class AdminAddPropertyRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'availability' => 'required',
-            'name' => 'required',
-            'description' => 'required',
-            'management_company' => 'required',
-            'property_images.*' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Assuming property_images are images
+            'availability' => ['required', 'string', 'in:Available,Not Available'],
+            'name' => ['required', 'string', 'max:255'],
+            'description' => ['required', 'string', 'max:20000'],
+            'management_company' => ['required', 'string', 'max:255'],
+            'property_images' => ['required', 'array', 'min:1', 'max:20'],
+            'property_images.*' => ['required', 'image', 'mimes:jpeg,png,jpg,gif,webp', 'max:2048'],
         ];
     }
 }

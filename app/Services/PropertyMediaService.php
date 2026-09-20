@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\PropertyModel;
+use App\Support\Media;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 
@@ -13,7 +14,7 @@ class PropertyMediaService
      */
     protected function disk(): string
     {
-        return config('filesystems.default', 'public') === 'local' ? 'public' : config('filesystems.default', 'public');
+        return Media::disk();
     }
 
     /**

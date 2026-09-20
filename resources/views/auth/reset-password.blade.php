@@ -61,7 +61,7 @@
                         New Password <span class="text-rose-500">*</span>
                     </label>
                     <div class="relative">
-                        <input type="password" class="input-tw pl-10 pr-10" name="password" id="password" minlength="6" required placeholder="Minimum 6 characters">
+                        <input type="password" class="input-tw pl-10 pr-10" name="password" id="password" minlength="8" maxlength="255" required autocomplete="new-password" placeholder="Minimum 8 characters">
                         <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
                             <i class="bi bi-lock"></i>
                         </div>
@@ -76,7 +76,7 @@
                         Confirm New Password <span class="text-rose-500">*</span>
                     </label>
                     <div class="relative">
-                        <input type="password" class="input-tw pl-10 pr-10" name="password_confirmation" id="password_confirmation" minlength="6" required placeholder="Re-enter password">
+                        <input type="password" class="input-tw pl-10 pr-10" name="password_confirmation" id="password_confirmation" minlength="8" maxlength="255" required autocomplete="new-password" placeholder="Re-enter password">
                         <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
                             <i class="bi bi-shield-check"></i>
                         </div>
@@ -116,6 +116,15 @@ function togglePasswordVisibility(inputId, btn) {
         icon.classList.add('bi-eye');
     }
 }
+
+(function () {
+    const pw = document.getElementById('password');
+    const confirm = document.getElementById('password_confirmation');
+    if (!pw || !confirm) return;
+    const sync = () => confirm.setCustomValidity(confirm.value !== '' && confirm.value !== pw.value ? 'Passwords do not match.' : '');
+    pw.addEventListener('input', sync);
+    confirm.addEventListener('input', sync);
+})();
 
 document.getElementById('resetForm')?.addEventListener('submit', function() {
     const btn = document.getElementById('submitBtn');

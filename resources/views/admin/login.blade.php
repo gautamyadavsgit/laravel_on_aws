@@ -75,14 +75,14 @@
                 @csrf
                 <div>
                     <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5" for="username">Email or Username</label>
-                    <input type="text" class="input-tw" name="email" id="username" value="{{ old('email') }}" placeholder="admin@example.com" required autofocus>
+                    <input type="email" class="input-tw" name="email" id="username" value="{{ old('email') }}" placeholder="admin@example.com" required autofocus maxlength="255" autocomplete="username">
                 </div>
 
                 <div>
                     <div class="flex justify-between items-center mb-1.5">
                         <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300" for="userpassword">Password</label>
                     </div>
-                    <input type="password" class="input-tw" name="password" id="userpassword" placeholder="••••••••" required>
+                    <input type="password" class="input-tw" name="password" id="userpassword" placeholder="••••••••" required maxlength="255" autocomplete="current-password">
                 </div>
 
                 <div class="flex items-center justify-between pt-1">

@@ -56,7 +56,7 @@
                         Account Email Address <span class="text-rose-500">*</span>
                     </label>
                     <div class="relative">
-                        <input type="email" class="input-tw pl-10" name="email" id="email" value="{{ old('email') }}" required autofocus placeholder="investor@example.com">
+                        <input type="email" class="input-tw pl-10" name="email" id="email" value="{{ old('email') }}" required autofocus maxlength="255" autocomplete="email" placeholder="investor@example.com">
                         <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
                             <i class="bi bi-envelope"></i>
                         </div>

@@ -51,43 +51,50 @@
                             <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5" for="first_name">
                                 {{ __('auth.first_name') }} <span class="text-rose-500">*</span>
                             </label>
-                            <input type="text" class="input-tw" name="first_name" id="first_name" value="{{ old('first_name') }}" required placeholder="John">
+                            <input type="text" class="input-tw" name="first_name" id="first_name" value="{{ old('first_name') }}" required pattern="[\p{L}\p{M}][\p{L}\p{M}\s.'’\-]*" title="Letters, spaces, apostrophes, periods and hyphens only" maxlength="255" placeholder="John">
                         </div>
 
                         <div>
                             <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5" for="middle_name">{{ __('auth.middle_name') }}</label>
-                            <input type="text" class="input-tw" name="middle_name" id="middle_name" value="{{ old('middle_name') }}" placeholder="A.">
+                            <input type="text" class="input-tw" name="middle_name" id="middle_name" value="{{ old('middle_name') }}" pattern="[\p{L}\p{M}][\p{L}\p{M}\s.'’\-]*" title="Letters, spaces, apostrophes, periods and hyphens only" maxlength="255" placeholder="A.">
                         </div>
 
                         <div>
                             <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5" for="last_name">
                                 {{ __('auth.last_name') }} <span class="text-rose-500">*</span>
                             </label>
-                            <input type="text" class="input-tw" name="last_name" id="last_name" value="{{ old('last_name') }}" required placeholder="Doe">
+                            <input type="text" class="input-tw" name="last_name" id="last_name" value="{{ old('last_name') }}" required pattern="[\p{L}\p{M}][\p{L}\p{M}\s.'’\-]*" title="Letters, spaces, apostrophes, periods and hyphens only" maxlength="255" placeholder="Doe">
                         </div>
 
                         <div>
                             <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5" for="suffix">{{ __('auth.suffix') }}</label>
-                            <input type="text" class="input-tw" name="suffix" id="suffix" value="{{ old('suffix') }}" placeholder="Jr., III">
+                            <input type="text" class="input-tw" name="suffix" id="suffix" value="{{ old('suffix') }}" maxlength="50" placeholder="Jr., III">
                         </div>
 
                         <div>
                             <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5" for="email">
                                 {{ __('profile.email_address') }} <span class="text-rose-500">*</span>
                             </label>
-                            <input type="email" class="input-tw" name="email" id="email" value="{{ old('email') }}" required placeholder="john.doe@example.com">
+                            <input type="email" class="input-tw" name="email" id="email" value="{{ old('email') }}" required maxlength="255" autocomplete="email" placeholder="john.doe@example.com">
                         </div>
 
                         <div>
                             <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5" for="phone">{{ __('auth.phone_number') }}</label>
-                            <input type="tel" class="input-tw" name="phone" id="phone" value="{{ old('phone') }}" placeholder="+1 (800) 555-0199">
+                            <input type="tel" class="input-tw" name="phone" id="phone" value="{{ old('phone') }}" maxlength="30" pattern="\+?[0-9\(\)\-.\s]{7,30}" title="Enter a valid phone number, e.g. +1 (800) 555-0199" placeholder="+1 (800) 555-0199">
                         </div>
 
                         <div class="sm:col-span-2">
                             <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5" for="password">
                                 {{ __('auth.create_password') }} <span class="text-rose-500">*</span>
                             </label>
-                            <input type="password" class="input-tw" name="password" id="password" minlength="6" required placeholder="Minimum 6 characters">
+                            <input type="password" class="input-tw" name="password" id="password" minlength="8" maxlength="255" required autocomplete="new-password" placeholder="Minimum 8 characters">
+                        </div>
+
+                        <div class="sm:col-span-2">
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5" for="password_confirmation">
+                                Confirm Password <span class="text-rose-500">*</span>
+                            </label>
+                            <input type="password" class="input-tw" name="password_confirmation" id="password_confirmation" minlength="8" maxlength="255" required autocomplete="new-password" placeholder="Re-enter your password">
                         </div>
 
                         <div class="sm:col-span-2">
@@ -215,7 +222,30 @@ document.addEventListener('DOMContentLoaded', () => {
     const nextBtn = document.getElementById('wizard-next-btn');
     const submitBtn = document.getElementById('wizard-submit-btn');
 
+    const passwordInput = document.getElementById('password');
+    const confirmInput = document.getElementById('password_confirmation');
+
+    function syncPasswordMatch() {
+        if (!passwordInput || !confirmInput) return;
+        confirmInput.setCustomValidity(
+            confirmInput.value !== '' && confirmInput.value !== passwordInput.value ? 'Passwords do not match.' : ''
+        );
+    }
+
+    if (passwordInput && confirmInput) {
+        passwordInput.addEventListener('input', syncPasswordMatch);
+        confirmInput.addEventListener('input', syncPasswordMatch);
+    }
+
+    // Required text fields must contain more than whitespace
+    wizardForm.querySelectorAll('input[type="text"][required], input[type="email"][required]').forEach(field => {
+        field.addEventListener('input', () => {
+            field.setCustomValidity(field.value.length > 0 && field.value.trim() === '' ? 'This field cannot be blank.' : '');
+        });
+    });
+
     function validateCurrentStep(step) {
+        syncPasswordMatch();
         const stepContainer = document.querySelector(`[data-wizard-step="${step}"]`);
         if (!stepContainer) return true;
 
@@ -303,6 +333,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (wizardForm) {
         wizardForm.addEventListener('submit', (e) => {
+            // Pressing Enter inside a field must advance the wizard, not submit a half-completed form
+            if (currentStep < totalSteps) {
+                e.preventDefault();
+                if (nextBtn) nextBtn.click();
+                return;
+            }
+
             if (submitBtn) {
                 submitBtn.disabled = true;
                 submitBtn.innerHTML = '<span class="inline-block animate-spin mr-2"><i class="bi bi-arrow-repeat"></i></span> Registering...';

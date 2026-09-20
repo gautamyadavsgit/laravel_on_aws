@@ -69,7 +69,7 @@
                         <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5" for="gross_annual_rent">
                             Gross Annual Rent ($) <span class="text-rose-500">*</span>
                         </label>
-                        <input class="input-tw" type="number" step="0.01" name="gross_annual_rent" id="gross_annual_rent" value="{{ $propertyMetrics->gross_annual_rent ?? old('gross_annual_rent', round($baseVal * 0.112, 2)) }}" required>
+                        <input class="input-tw" type="number" step="0.01" name="gross_annual_rent" min="0" max="9999999999.99" id="gross_annual_rent" value="{{ old('gross_annual_rent', $propertyMetrics->gross_annual_rent ?? round($baseVal * 0.112, 2)) }}" required>
                         <span class="text-[11px] text-slate-400">Total projected yearly rental revenue</span>
                     </div>
 
@@ -77,7 +77,7 @@
                         <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5" for="operating_expenses">
                             Annual Operating Expenses ($) <span class="text-rose-500">*</span>
                         </label>
-                        <input class="input-tw" type="number" step="0.01" name="operating_expenses" id="operating_expenses" value="{{ $propertyMetrics->operating_expenses ?? old('operating_expenses', round($baseVal * 0.112 * 0.23, 2)) }}" required>
+                        <input class="input-tw" type="number" step="0.01" name="operating_expenses" min="0" max="9999999999.99" id="operating_expenses" value="{{ old('operating_expenses', $propertyMetrics->operating_expenses ?? round($baseVal * 0.112 * 0.23, 2)) }}" required>
                         <span class="text-[11px] text-slate-400">Management, maintenance, cleaning & HOA</span>
                     </div>
 
@@ -85,7 +85,7 @@
                         <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5" for="net_operating_income">
                             Net Operating Income (NOI) ($)
                         </label>
-                        <input class="input-tw bg-slate-50 dark:bg-slate-800" type="number" step="0.01" name="net_operating_income" id="net_operating_income" value="{{ $propertyMetrics->net_operating_income ?? old('net_operating_income') }}" readonly>
+                        <input class="input-tw bg-slate-50 dark:bg-slate-800" type="number" step="0.01" name="net_operating_income" id="net_operating_income" value="{{ old('net_operating_income', $propertyMetrics->net_operating_income ?? '') }}" readonly>
                         <span class="text-[11px] text-slate-400">Gross Rent minus Operating Expenses</span>
                     </div>
 
@@ -93,7 +93,7 @@
                         <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5" for="cap_rate">
                             Cap Rate (%) <span class="text-rose-500">*</span>
                         </label>
-                        <input class="input-tw" type="number" step="0.01" name="cap_rate" id="cap_rate" value="{{ $propertyMetrics->cap_rate ?? old('cap_rate', 8.62) }}" required>
+                        <input class="input-tw" type="number" step="0.01" name="cap_rate" min="0" max="100" id="cap_rate" value="{{ old('cap_rate', $propertyMetrics->cap_rate ?? 8.62) }}" required>
                         <span class="text-[11px] text-slate-400">Annual NOI / Asset Value</span>
                     </div>
 
@@ -101,7 +101,7 @@
                         <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5" for="annual_cash_flow">
                             Net Distributable Cash Flow ($)
                         </label>
-                        <input class="input-tw" type="number" step="0.01" name="annual_cash_flow" id="annual_cash_flow" value="{{ $propertyMetrics->annual_cash_flow ?? old('annual_cash_flow') }}">
+                        <input class="input-tw" type="number" step="0.01" name="annual_cash_flow" min="0" max="9999999999.99" id="annual_cash_flow" value="{{ old('annual_cash_flow', $propertyMetrics->annual_cash_flow ?? '') }}">
                         <span class="text-[11px] text-slate-400">Net dividend distributed to shareholders</span>
                     </div>
 
@@ -109,7 +109,7 @@
                         <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5" for="cash_on_cash_return">
                             Cash-on-Cash Return (%)
                         </label>
-                        <input class="input-tw" type="number" step="0.01" name="cash_on_cash_return" id="cash_on_cash_return" value="{{ $propertyMetrics->cash_on_cash_return ?? old('cash_on_cash_return', 8.25) }}">
+                        <input class="input-tw" type="number" step="0.01" name="cash_on_cash_return" min="0" max="100" id="cash_on_cash_return" value="{{ old('cash_on_cash_return', $propertyMetrics->cash_on_cash_return ?? 8.25) }}">
                         <span class="text-[11px] text-slate-400">Annual net dividend yield %</span>
                     </div>
                 </div>
@@ -127,7 +127,7 @@
                         <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5" for="estimated_appreciation_rate">
                             Est. Annual Appreciation (%)
                         </label>
-                        <input class="input-tw" type="number" step="0.01" name="estimated_appreciation_rate" id="estimated_appreciation_rate" value="{{ $propertyMetrics->estimated_appreciation_rate ?? old('estimated_appreciation_rate', 5.20) }}">
+                        <input class="input-tw" type="number" step="0.01" name="estimated_appreciation_rate" min="0" max="100" id="estimated_appreciation_rate" value="{{ old('estimated_appreciation_rate', $propertyMetrics->estimated_appreciation_rate ?? 5.20) }}">
                         <span class="text-[11px] text-slate-400">Historical market CAGR benchmark</span>
                     </div>
 
@@ -135,7 +135,7 @@
                         <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5" for="projected_value_5yr">
                             5-Year Projected Value ($)
                         </label>
-                        <input class="input-tw" type="number" step="0.01" name="projected_value_5yr" id="projected_value_5yr" value="{{ $propertyMetrics->projected_value_5yr ?? old('projected_value_5yr') }}">
+                        <input class="input-tw" type="number" step="0.01" name="projected_value_5yr" min="0" max="999999999999.99" id="projected_value_5yr" value="{{ old('projected_value_5yr', $propertyMetrics->projected_value_5yr ?? '') }}">
                         <span class="text-[11px] text-slate-400">Compounded 5-year asset valuation</span>
                     </div>
 
@@ -143,7 +143,7 @@
                         <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5" for="projected_value_10yr">
                             10-Year Projected Value ($)
                         </label>
-                        <input class="input-tw" type="number" step="0.01" name="projected_value_10yr" id="projected_value_10yr" value="{{ $propertyMetrics->projected_value_10yr ?? old('projected_value_10yr') }}">
+                        <input class="input-tw" type="number" step="0.01" name="projected_value_10yr" min="0" max="999999999999.99" id="projected_value_10yr" value="{{ old('projected_value_10yr', $propertyMetrics->projected_value_10yr ?? '') }}">
                         <span class="text-[11px] text-slate-400">Compounded 10-year asset valuation</span>
                     </div>
 
@@ -151,7 +151,7 @@
                         <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5" for="projected_irr">
                             Projected 5-Yr IRR (%)
                         </label>
-                        <input class="input-tw" type="number" step="0.01" name="projected_irr" id="projected_irr" value="{{ $propertyMetrics->projected_irr ?? old('projected_irr', 14.62) }}">
+                        <input class="input-tw" type="number" step="0.01" name="projected_irr" min="0" max="100" id="projected_irr" value="{{ old('projected_irr', $propertyMetrics->projected_irr ?? 14.62) }}">
                         <span class="text-[11px] text-slate-400">Total internal rate of return</span>
                     </div>
                 </div>
@@ -169,7 +169,7 @@
                         <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5" for="annual_depreciation_deduction">
                             Annual Depreciation ($)
                         </label>
-                        <input class="input-tw" type="number" step="0.01" name="annual_depreciation_deduction" id="annual_depreciation_deduction" value="{{ $propertyMetrics->annual_depreciation_deduction ?? old('annual_depreciation_deduction') }}">
+                        <input class="input-tw" type="number" step="0.01" name="annual_depreciation_deduction" min="0" max="9999999999.99" id="annual_depreciation_deduction" value="{{ old('annual_depreciation_deduction', $propertyMetrics->annual_depreciation_deduction ?? '') }}">
                         <span class="text-[11px] text-slate-400">27.5-Year residential depreciation</span>
                     </div>
 
@@ -177,7 +177,7 @@
                         <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5" for="tax_savings_estimate">
                             Est. Annual Tax Savings ($)
                         </label>
-                        <input class="input-tw" type="number" step="0.01" name="tax_savings_estimate" id="tax_savings_estimate" value="{{ $propertyMetrics->tax_savings_estimate ?? old('tax_savings_estimate') }}">
+                        <input class="input-tw" type="number" step="0.01" name="tax_savings_estimate" min="0" max="9999999999.99" id="tax_savings_estimate" value="{{ old('tax_savings_estimate', $propertyMetrics->tax_savings_estimate ?? '') }}">
                         <span class="text-[11px] text-slate-400">Tax shield at 32% marginal bracket</span>
                     </div>
 
@@ -211,49 +211,49 @@
                         <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5" for="diversification_score">
                             Diversification Score (/10)
                         </label>
-                        <input class="input-tw" type="number" step="0.1" max="10" min="0" name="diversification_score" id="diversification_score" value="{{ $propertyMetrics->diversification_score ?? old('diversification_score', 8.8) }}">
+                        <input class="input-tw" type="number" step="0.1" max="10" min="0" name="diversification_score" id="diversification_score" value="{{ old('diversification_score', $propertyMetrics->diversification_score ?? 8.8) }}">
                     </div>
 
                     <div>
                         <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5" for="occupancy_rate_projected">
                             Projected Occupancy (%)
                         </label>
-                        <input class="input-tw" type="number" step="0.01" max="100" min="0" name="occupancy_rate_projected" id="occupancy_rate_projected" value="{{ $propertyMetrics->occupancy_rate_projected ?? old('occupancy_rate_projected', 86.50) }}">
+                        <input class="input-tw" type="number" step="0.01" max="100" min="0" name="occupancy_rate_projected" id="occupancy_rate_projected" value="{{ old('occupancy_rate_projected', $propertyMetrics->occupancy_rate_projected ?? 86.50) }}">
                     </div>
 
                     <div>
                         <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5" for="cash_flow_rating">
                             Cash Flow Score (0-100)
                         </label>
-                        <input class="input-tw" type="number" max="100" min="0" name="cash_flow_rating" id="cash_flow_rating" value="{{ $propertyMetrics->cash_flow_rating ?? old('cash_flow_rating', 92) }}">
+                        <input class="input-tw" type="number" max="100" min="0" name="cash_flow_rating" id="cash_flow_rating" value="{{ old('cash_flow_rating', $propertyMetrics->cash_flow_rating ?? 92) }}">
                     </div>
 
                     <div>
                         <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5" for="appreciation_rating">
                             Appreciation Score (0-100)
                         </label>
-                        <input class="input-tw" type="number" max="100" min="0" name="appreciation_rating" id="appreciation_rating" value="{{ $propertyMetrics->appreciation_rating ?? old('appreciation_rating', 88) }}">
+                        <input class="input-tw" type="number" max="100" min="0" name="appreciation_rating" id="appreciation_rating" value="{{ old('appreciation_rating', $propertyMetrics->appreciation_rating ?? 88) }}">
                     </div>
 
                     <div>
                         <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5" for="tax_benefit_rating">
                             Tax Advantage Score (0-100)
                         </label>
-                        <input class="input-tw" type="number" max="100" min="0" name="tax_benefit_rating" id="tax_benefit_rating" value="{{ $propertyMetrics->tax_benefit_rating ?? old('tax_benefit_rating', 94) }}">
+                        <input class="input-tw" type="number" max="100" min="0" name="tax_benefit_rating" id="tax_benefit_rating" value="{{ old('tax_benefit_rating', $propertyMetrics->tax_benefit_rating ?? 94) }}">
                     </div>
 
                     <div>
                         <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5" for="diversification_rating">
                             Diversification Score (0-100)
                         </label>
-                        <input class="input-tw" type="number" max="100" min="0" name="diversification_rating" id="diversification_rating" value="{{ $propertyMetrics->diversification_rating ?? old('diversification_rating', 90) }}">
+                        <input class="input-tw" type="number" max="100" min="0" name="diversification_rating" id="diversification_rating" value="{{ old('diversification_rating', $propertyMetrics->diversification_rating ?? 90) }}">
                     </div>
 
                     <div class="sm:col-span-2">
                         <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5" for="calculation_notes">
                             Underwriting & Analysis Notes
                         </label>
-                        <input class="input-tw" type="text" name="calculation_notes" id="calculation_notes" value="{{ $propertyMetrics->calculation_notes ?? old('calculation_notes', 'Auto-underwritten based on property valuation and historical regional vacation rental yield benchmarks.') }}" placeholder="Notes for investors">
+                        <input class="input-tw" type="text" name="calculation_notes" maxlength="2000" id="calculation_notes" value="{{ old('calculation_notes', $propertyMetrics->calculation_notes ?? 'Auto-underwritten based on property valuation and historical regional vacation rental yield benchmarks.') }}" placeholder="Notes for investors">
                     </div>
                 </div>
             </div>

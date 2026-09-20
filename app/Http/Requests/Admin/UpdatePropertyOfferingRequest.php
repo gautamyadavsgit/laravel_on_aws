@@ -18,16 +18,20 @@ class UpdatePropertyOfferingRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
+     * The offering columns are unsigned whole-dollar integers.
+     *
      * @return array<string, ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
+        $amount = ['required', 'integer', 'min:0', 'max:10000000000'];
+
         return [
-            'offering_purchase' => 'required|numeric',
-            'offering_build_cost' => 'required|numeric',
-            'offering_improvements' => 'required|numeric',
-            'offering_closing_cost' => 'required|numeric',
-            'offering_sourcing_fees' => 'required|numeric',
+            'offering_purchase' => $amount,
+            'offering_build_cost' => $amount,
+            'offering_improvements' => $amount,
+            'offering_closing_cost' => $amount,
+            'offering_sourcing_fees' => $amount,
         ];
     }
 }

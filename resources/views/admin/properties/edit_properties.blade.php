@@ -55,7 +55,7 @@
                     <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5" for="name">
                         Property Name / Title <span class="text-rose-500">*</span>
                     </label>
-                    <input class="input-tw" type="text" name="name" id="name" value="{{ $property->name ?? old('name') }}" placeholder="e.g. Smoky Mountains Alpine Luxury Lodge" required>
+                    <input class="input-tw" type="text" name="name" maxlength="255" id="name" value="{{ old('name', $property->name ?? '') }}" placeholder="e.g. Smoky Mountains Alpine Luxury Lodge" required>
                     <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-1">Full branded headline used throughout public listings and deed certificates.</p>
                 </div>
 
@@ -63,14 +63,14 @@
                     <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5" for="management_company">
                         Asset Management Company <span class="text-rose-500">*</span>
                     </label>
-                    <input class="input-tw" type="text" name="management_company" id="management_company" value="{{ $property->management_company ?? old('management_company') }}" placeholder="e.g. Robert Premier Hospitality Management LLC" required>
+                    <input class="input-tw" type="text" name="management_company" maxlength="255" id="management_company" value="{{ old('management_company', $property->management_company ?? '') }}" placeholder="e.g. Robert Premier Hospitality Management LLC" required>
                 </div>
 
                 <div class="md:col-span-2">
                     <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5" for="description">
                         Executive Summary & Description <span class="text-rose-500">*</span>
                     </label>
-                    <textarea class="textarea-tw" name="description" id="description" rows="5" required placeholder="Provide an in-depth summary of the real estate asset, vacation rental appeal, and architectural features...">{{ $property->description ?? old('description') }}</textarea>
+                    <textarea class="textarea-tw" name="description" maxlength="20000" id="description" rows="5" required placeholder="Provide an in-depth summary of the real estate asset, vacation rental appeal, and architectural features...">{{ old('description', $property->description ?? '') }}</textarea>
                 </div>
             </div>
 
@@ -86,7 +86,7 @@
                     <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
                         @foreach($property->propertyImage as $img)
                             <div class="relative group rounded-lg overflow-hidden border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-800 aspect-video flex items-center justify-center">
-                                <img src="{{ asset('storage/' . $img->property_image_value) }}" alt="Photo" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'100\' fill=\'%2364748b\'><rect width=\'100\' height=\'100\' fill=\'%23f1f5f9\'/><text x=\'50%\' y=\'50%\' font-size=\'10\' text-anchor=\'middle\' dy=\'.3em\'>Gallery Photo</text></svg>'">
+                                <img src="{{ \App\Support\Media::url($img->property_image_value) }}" alt="Photo" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'100\' fill=\'%2364748b\'><rect width=\'100\' height=\'100\' fill=\'%23f1f5f9\'/><text x=\'50%\' y=\'50%\' font-size=\'10\' text-anchor=\'middle\' dy=\'.3em\'>Gallery Photo</text></svg>'">
                             </div>
                         @endforeach
                     </div>
@@ -104,7 +104,7 @@
                         <div class="flex text-sm text-slate-600 dark:text-slate-400 justify-center">
                             <label for="property_images" class="relative cursor-pointer font-semibold text-indigo-600 dark:text-indigo-400 hover:text-indigo-500 focus-within:outline-none">
                                 <span>Click to select files</span>
-                                <input id="property_images" name="property_images[]" type="file" class="sr-only" multiple accept="image/*">
+                                <input id="property_images" name="property_images[]" type="file" class="sr-only" multiple accept="image/jpeg,image/png,image/gif,image/webp" data-max-kb="2048" data-allowed-types="image/jpeg,image/png,image/gif,image/webp" data-max-files="20">
                             </label>
                             <p class="pl-1">or drag and drop</p>
                         </div>

@@ -22,6 +22,32 @@ function updateThemeIcons() {
 document.addEventListener('DOMContentLoaded', () => {
   updateThemeIcons();
 
+  // Block double submits of POST forms (e.g. "Invest" interest button); validation failures leave the form usable
+  document.querySelectorAll('form').forEach(form => {
+    if ((form.getAttribute('method') || 'get').toLowerCase() !== 'post') return;
+
+    form.addEventListener('submit', (e) => {
+      if (form.dataset.submitting === '1') {
+        e.preventDefault();
+        return;
+      }
+      setTimeout(() => {
+        if (e.defaultPrevented) return;
+        form.dataset.submitting = '1';
+        form.querySelectorAll('[type="submit"]').forEach(b => { b.disabled = true; });
+      }, 0);
+    });
+  });
+
+  // Restored from the back/forward cache with buttons still disabled
+  window.addEventListener('pageshow', (e) => {
+    if (!e.persisted) return;
+    document.querySelectorAll('form').forEach(form => {
+      delete form.dataset.submitting;
+      form.querySelectorAll('[type="submit"]').forEach(b => { b.disabled = false; });
+    });
+  });
+
   // Favorite button toggle
   document.querySelectorAll('[data-favorite-btn]').forEach(btn => {
     btn.addEventListener('click', async (e) => {
@@ -29,6 +55,11 @@ document.addEventListener('DOMContentLoaded', () => {
       e.stopPropagation();
       const propertyId = btn.getAttribute('data-property-id');
       if (!propertyId) return;
+
+      // Ignore repeat clicks while a request for this property is in flight (a double-click would toggle twice)
+      const inFlight = document.querySelectorAll(`[data-favorite-btn][data-property-id="${propertyId}"]`);
+      if (btn.dataset.busy === '1') return;
+      inFlight.forEach(b => { b.dataset.busy = '1'; b.setAttribute('aria-busy', 'true'); });
 
       try {
         const response = await fetch(`/property/${propertyId}/favorite`, {
@@ -42,6 +73,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (response.status === 401 || response.redirected) {
           window.location.href = '/login';
+          return;
+        }
+
+        if (response.status === 419) {
+          window.alert('Your session has expired. The page will reload so you can try again.');
+          window.location.reload();
+          return;
+        }
+
+        if (response.status === 404) {
+          window.alert('This property is no longer available.');
+          return;
+        }
+
+        if (!response.ok) {
+          window.alert('We could not update your favorites right now. Please try again.');
           return;
         }
 
@@ -98,9 +145,36 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       } catch (error) {
         console.error('Error toggling favorite:', error);
+        window.alert('Network problem: your favorites were not updated. Please check your connection and try again.');
+      } finally {
+        inFlight.forEach(b => { delete b.dataset.busy; b.removeAttribute('aria-busy'); });
       }
     });
   });
+
+  // Property filter form: minimum price must not exceed maximum price
+  const filterForm = document.getElementById('propertiesFilterForm');
+  if (filterForm) {
+    const minPrice = filterForm.querySelector('[name="min_price"]');
+    const maxPrice = filterForm.querySelector('[name="max_price"]');
+
+    const syncPriceRange = () => {
+      if (!minPrice || !maxPrice) return;
+      const min = parseFloat(minPrice.value);
+      const max = parseFloat(maxPrice.value);
+      maxPrice.setCustomValidity(!isNaN(min) && !isNaN(max) && min > max ? 'Maximum price must be greater than or equal to the minimum price.' : '');
+    };
+
+    minPrice?.addEventListener('input', syncPriceRange);
+    maxPrice?.addEventListener('input', syncPriceRange);
+    filterForm.addEventListener('submit', (e) => {
+      syncPriceRange();
+      if (!filterForm.checkValidity()) {
+        e.preventDefault();
+        filterForm.reportValidity();
+      }
+    });
+  }
 
   // User dropdown toggle in header
   document.querySelectorAll('[data-user-menu-toggle]').forEach(toggle => {

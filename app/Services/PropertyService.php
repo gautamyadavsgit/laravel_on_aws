@@ -9,6 +9,7 @@ use App\Models\PropertyMetrics;
 use App\Models\PropertyModel;
 use App\Models\User;
 use App\Models\UserSearchLog;
+use Illuminate\Contracts\Cache\Repository;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
@@ -21,6 +22,53 @@ class PropertyService
      * Cache TTL in seconds (10 minutes)
      */
     protected const CACHE_TTL_SECONDS = 600;
+
+    /**
+     * Listing pages are cached per URL for a shorter window (5 minutes)
+     */
+    protected const LISTING_CACHE_TTL_SECONDS = 300;
+
+    /**
+     * Cache store used for all property caches (the `cache` table)
+     */
+    protected const CACHE_STORE = 'database';
+
+    /**
+     * Key holding the listing cache generation; changing it orphans every cached listing URL
+     */
+    protected const LISTING_VERSION_KEY = 'property_listing_version';
+
+    protected function cache(): Repository
+    {
+        return Cache::store(self::CACHE_STORE);
+    }
+
+    /**
+     * URL-based cache of a listing page: one entry per normalised URL (path + filters + page)
+     */
+    public function getCachedFilteredProperties(array $filters = [], int $perPage = 9): LengthAwarePaginator
+    {
+        // Array values (e.g. ?q[]=x) can't be keyed safely, so skip the cache for them
+        foreach ($filters as $value) {
+            if ($value !== null && ! is_scalar($value)) {
+                return $this->getFilteredProperties($filters, $perPage);
+            }
+        }
+
+        $params = array_filter($filters, fn ($v) => $v !== null && $v !== '');
+        ksort($params);
+        $params['page'] = max(1, (int) request()->query('page', 1));
+        $params['per_page'] = $perPage;
+
+        $version = $this->cache()->rememberForever(self::LISTING_VERSION_KEY, fn () => (string) microtime(true));
+        $cacheKey = 'property_listing_' . sha1($version . '|' . request()->url() . '?' . http_build_query($params));
+
+        return $this->cache()->remember(
+            $cacheKey,
+            self::LISTING_CACHE_TTL_SECONDS,
+            fn () => $this->getFilteredProperties($filters, $perPage)
+        );
+    }
 
     /**
      * Get paginated properties with dynamic multi-criteria filtering
@@ -275,7 +323,7 @@ class PropertyService
      */
     public function getFilterOptions(): array
     {
-        return Cache::remember('property_filter_options', self::CACHE_TTL_SECONDS, function () {
+        return $this->cache()->remember('property_filter_options', self::CACHE_TTL_SECONDS, function () {
             $cities = PropertyAddress::select('city')->distinct()->whereNotNull('city')->where('city', '!=', '')->pluck('city')->all();
             $states = PropertyAddress::select('state')->distinct()->whereNotNull('state')->where('state', '!=', '')->pluck('state')->all();
             $types = PropertyDetails::select('type')->distinct()->whereNotNull('type')->where('type', '!=', '')->pluck('type')->all();
@@ -289,13 +337,11 @@ class PropertyService
     }
 
     /**
-     * Get property by its slug with caching and eager-loaded relations
+     * Get property by its slug with per-property caching and eager-loaded relations
      */
     public function getPropertyBySlug(string $slug): ?PropertyModel
     {
-        $cacheKey = "property_slug_{$slug}";
-
-        return Cache::remember($cacheKey, self::CACHE_TTL_SECONDS, function () use ($slug) {
+        return $this->cache()->remember($this->detailCacheKey($slug), self::CACHE_TTL_SECONDS, function () use ($slug) {
             return PropertyModel::with([
                 'propertyImage',
                 'propertyFloorplan',
@@ -336,18 +382,24 @@ class PropertyService
     }
 
     /**
-     * Invalidate cached property pages and individual property caches
+     * Invalidate the property's own detail cache, plus every cached listing URL
+     * (the database store has no tags, so listings are orphaned by bumping the version)
      */
     public function clearPropertiesCache(?string $slug = null): void
     {
         if ($slug) {
-            Cache::forget("property_slug_{$slug}");
+            $this->cache()->forget($this->detailCacheKey($slug));
         }
 
-        Cache::forget('property_filter_options');
+        $this->cache()->forget('property_filter_options');
+        $this->cache()->forever(self::LISTING_VERSION_KEY, (string) microtime(true));
+    }
 
-        for ($page = 1; $page <= 20; $page++) {
-            Cache::forget("investor_properties_page_{$page}_limit_9");
-        }
+    /**
+     * Slugs come from the URL (and can be up to 255 chars), so hash them to keep the key within the cache table's key column
+     */
+    protected function detailCacheKey(string $slug): string
+    {
+        return 'property_detail_'.md5($slug);
     }
 }

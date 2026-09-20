@@ -59,39 +59,39 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div>
                     <label for="first_name" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">First Name <span class="text-rose-500">*</span></label>
-                    <input type="text" id="first_name" name="first_name" value="{{ old('first_name', $user->first_name) }}" class="input-tw @error('first_name') border-rose-500 @enderror" required />
+                    <input type="text" id="first_name" name="first_name" maxlength="255" value="{{ old('first_name', $user->first_name) }}" class="input-tw @error('first_name') border-rose-500 @enderror" required />
                     @error('first_name') <span class="text-rose-500 text-[11px]">{{ $message }}</span> @enderror
                 </div>
 
                 <div>
                     <label for="middile_name" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Middle Name</label>
-                    <input type="text" id="middile_name" name="middile_name" value="{{ old('middile_name', $user->middile_name) }}" class="input-tw" />
+                    <input type="text" id="middile_name" name="middile_name" maxlength="255" value="{{ old('middile_name', $user->middile_name) }}" class="input-tw" />
                 </div>
 
                 <div>
                     <label for="last_name" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Last Name</label>
-                    <input type="text" id="last_name" name="last_name" value="{{ old('last_name', $user->last_name) }}" class="input-tw @error('last_name') border-rose-500 @enderror" />
+                    <input type="text" id="last_name" name="last_name" maxlength="255" value="{{ old('last_name', $user->last_name) }}" class="input-tw @error('last_name') border-rose-500 @enderror" />
                     @error('last_name') <span class="text-rose-500 text-[11px]">{{ $message }}</span> @enderror
                 </div>
 
                 <div>
                     <label for="suffix" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Suffix</label>
-                    <input type="text" id="suffix" name="suffix" value="{{ old('suffix', $user->suffix) }}" class="input-tw" />
+                    <input type="text" id="suffix" name="suffix" maxlength="20" value="{{ old('suffix', $user->suffix) }}" class="input-tw" />
                 </div>
 
                 <div>
                     <label for="dob" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Date of Birth</label>
-                    <input type="date" id="dob" name="dob" value="{{ old('dob', $user->dob ? \Carbon\Carbon::parse($user->dob)->format('Y-m-d') : '') }}" class="input-tw" />
+                    <input type="date" id="dob" name="dob" min="1900-01-02" max="{{ now()->toDateString() }}" value="{{ old('dob', $user->dob ? \Carbon\Carbon::parse($user->dob)->format('Y-m-d') : '') }}" class="input-tw" />
                 </div>
 
                 <div>
                     <label for="social_security_number" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">SSN / Tax ID</label>
-                    <input type="text" id="social_security_number" name="social_security_number" value="{{ old('social_security_number', $user->social_security_number) }}" class="input-tw" />
+                    <input type="text" id="social_security_number" name="social_security_number" maxlength="50" pattern="(?:\d{3}|[Xx]{3})-?(?:\d{2}|[Xx]{2})-?\d{4}" title="Format: XXX-XX-XXXX (digits, or X for masked digits)" value="{{ old('social_security_number', $user->social_security_number) }}" class="input-tw" />
                 </div>
 
                 <div class="sm:col-span-2">
                     <label for="company_name" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Company / Entity Name</label>
-                    <input type="text" id="company_name" name="company_name" value="{{ old('company_name', $user->company_name) }}" class="input-tw" />
+                    <input type="text" id="company_name" name="company_name" maxlength="255" value="{{ old('company_name', $user->company_name) }}" class="input-tw" />
                 </div>
             </div>
         </div>
@@ -110,13 +110,13 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                     <label for="email" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Email Address <span class="text-rose-500">*</span></label>
-                    <input type="email" id="email" name="email" value="{{ old('email', $user->email) }}" class="input-tw @error('email') border-rose-500 @enderror" required />
+                    <input type="email" id="email" name="email" maxlength="255" value="{{ old('email', $user->email) }}" class="input-tw @error('email') border-rose-500 @enderror" required />
                     @error('email') <span class="text-rose-500 text-[11px]">{{ $message }}</span> @enderror
                 </div>
 
                 <div>
                     <label for="password" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Password <span class="text-slate-400 font-normal">(Leave blank to keep unchanged)</span></label>
-                    <input type="password" id="password" name="password" class="input-tw @error('password') border-rose-500 @enderror" placeholder="••••••••" />
+                    <input type="password" id="password" name="password" minlength="8" maxlength="255" autocomplete="new-password" class="input-tw @error('password') border-rose-500 @enderror" placeholder="••••••••" />
                     @error('password') <span class="text-rose-500 text-[11px]">{{ $message }}</span> @enderror
                 </div>
             </div>
@@ -156,17 +156,17 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                     <label for="phone" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Primary Phone</label>
-                    <input type="text" id="phone" name="phone" value="{{ old('phone', $user->phone) }}" class="input-tw" />
+                    <input type="text" id="phone" name="phone" maxlength="30" pattern="\+?[0-9\(\)\-.\s]{7,30}" title="Enter a valid phone number, e.g. +1 (555) 000-0000" value="{{ old('phone', $user->phone) }}" class="input-tw" />
                 </div>
 
                 <div>
                     <label for="alternate_phone" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Alternate Phone</label>
-                    <input type="text" id="alternate_phone" name="alternate_phone" value="{{ old('alternate_phone', $user->alternate_phone) }}" class="input-tw" />
+                    <input type="text" id="alternate_phone" name="alternate_phone" maxlength="30" pattern="\+?[0-9\(\)\-.\s]{7,30}" title="Enter a valid phone number, e.g. +1 (555) 000-0000" value="{{ old('alternate_phone', $user->alternate_phone) }}" class="input-tw" />
                 </div>
 
                 <div class="sm:col-span-2">
                     <label for="address" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Address</label>
-                    <textarea id="address" name="address" rows="2" class="textarea-tw">{{ old('address', $user->address) }}</textarea>
+                    <textarea id="address" name="address" maxlength="1000" rows="2" class="textarea-tw">{{ old('address', $user->address) }}</textarea>
                 </div>
             </div>
         </div>

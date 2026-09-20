@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Models\PropertyModel;
 use App\Services\PropertyMetricsService;
+use App\Services\PropertyService;
 use Illuminate\Console\Command;
 
 class RecalculatePropertyMetricsCommand extends Command
@@ -53,6 +54,9 @@ class RecalculatePropertyMetricsCommand extends Command
         } else {
             $processedCount = PropertyMetricsService::recalculateAll();
         }
+
+        // Cap rate / cash flow feed listing filters and sorting, so drop cached listing pages
+        app(PropertyService::class)->clearPropertiesCache($property->slug ?? null);
 
         $duration = round(microtime(true) - $startTime, 2);
 

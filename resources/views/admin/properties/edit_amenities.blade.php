@@ -41,7 +41,7 @@
                 <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5" for="property_amenities">
                     Amenities List (Comma Separated) <span class="text-rose-500">*</span>
                 </label>
-                <textarea class="textarea-tw" required name="property_amenities" id="property_amenities" rows="5" placeholder="e.g. Heated Infinity Pool, Private Mountain View Deck, Cedar Hot Tub, Outdoor Stone Firepit, High-Speed Starlink WiFi, Tesla Level 2 EV Charger, Game Room with Billiards, Gourmet Chef Kitchen, Radiant Floor Heating">{{ isset($propertyAmenities) && count($propertyAmenities) > 0 ? implode(', ', $propertyAmenities->pluck('property_amenities')->toArray()) : ($propertyAmenities[0]->property_amenities ?? old('property_amenities')) }}</textarea>
+                <textarea class="textarea-tw" required maxlength="10000" name="property_amenities" id="property_amenities" rows="5" placeholder="e.g. Heated Infinity Pool, Private Mountain View Deck, Cedar Hot Tub, Outdoor Stone Firepit, High-Speed Starlink WiFi, Tesla Level 2 EV Charger, Game Room with Billiards, Gourmet Chef Kitchen, Radiant Floor Heating">{{ old('property_amenities') !== null ? implode(', ', (array) old('property_amenities')) : (isset($propertyAmenities) && count($propertyAmenities) > 0 ? implode(', ', $propertyAmenities->pluck('property_amenities')->toArray()) : '') }}</textarea>
                 <p class="text-xs text-slate-500 dark:text-slate-400 mt-2">
                     <i class="bi bi-info-circle text-indigo-500"></i> Enter tags separated by commas. Each item will automatically be formatted as a styled badge on the investor portal.
                 </p>

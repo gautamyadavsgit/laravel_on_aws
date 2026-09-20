@@ -172,25 +172,27 @@
 
                             <!-- Actions -->
                             <td class="px-6 py-4 text-right pr-6">
-                                <div class="inline-flex items-center gap-1.5">
+                                <div class="flex items-center justify-end gap-2">
                                     <!-- View Button -->
-                                    <a href="{{ route('admin.users.show', $user->id) }}" class="p-1.5 rounded-lg text-slate-600 hover:text-indigo-600 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-indigo-400 dark:hover:bg-slate-800 transition" title="View Profile">
-                                        <i class="bi bi-eye text-base"></i>
+                                    <a href="{{ route('admin.users.show', $user->id) }}" class="px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs font-semibold hover:bg-slate-50 dark:hover:bg-slate-700 transition flex items-center gap-1.5 shadow-sm" title="View User Profile">
+                                        <i class="bi bi-eye text-indigo-600 dark:text-indigo-400"></i>
+                                        <span>View</span>
                                     </a>
 
                                     <!-- Edit Button -->
-                                    <a href="{{ route('admin.users.edit', $user->id) }}" class="p-1.5 rounded-lg text-slate-600 hover:text-amber-600 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-amber-400 dark:hover:bg-slate-800 transition" title="Edit User">
-                                        <i class="bi bi-pencil-square text-base"></i>
+                                    <a href="{{ route('admin.users.edit', $user->id) }}" class="px-3 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold transition flex items-center gap-1.5 shadow-sm" title="Edit User">
+                                        <i class="bi bi-pencil-square"></i>
+                                        <span>Edit</span>
                                     </a>
 
                                     <!-- Delete Button Trigger -->
                                     <button 
                                         type="button" 
                                         onclick="openDeleteModal('{{ $user->id }}', '{{ addslashes($user->first_name . ' ' . $user->last_name) }}')"
-                                        class="p-1.5 rounded-lg text-slate-600 hover:text-rose-600 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-rose-400 dark:hover:bg-slate-800 transition" 
+                                        class="p-2 rounded-lg border border-rose-200 dark:border-rose-900 bg-rose-50 dark:bg-rose-950/50 text-rose-600 dark:text-rose-400 hover:bg-rose-100 dark:hover:bg-rose-900/60 transition" 
                                         title="Delete User"
                                     >
-                                        <i class="bi bi-trash text-base"></i>
+                                        <i class="bi bi-trash text-xs"></i>
                                     </button>
                                 </div>
                             </td>

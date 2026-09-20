@@ -34,28 +34,43 @@ class UserManagementController extends Controller
             'experienceLevel',
         ]);
 
-        // Search by keyword (name, email, phone)
-        if ($search = $request->input('search')) {
-            $query->where(function ($q) use ($search) {
-                $q->where('first_name', 'like', "%{$search}%")
-                    ->orWhere('last_name', 'like', "%{$search}%")
-                    ->orWhere('email', 'like', "%{$search}%")
-                    ->orWhere('phone', 'like', "%{$search}%")
-                    ->orWhere('company_name', 'like', "%{$search}%");
+        // Only plain strings are meaningful filters; arrays / junk are dropped (and removed from the query
+        // string so the view and pagination links never see them)
+        $search = $request->query('search');
+        $search = is_string($search) && trim($search) !== '' ? mb_substr(trim($search), 0, 100) : null;
+
+        $status = $request->query('status');
+        $status = in_array($status, ['verified', 'unverified'], true) ? $status : null;
+
+        $accreditation = $request->query('accreditation');
+        $accreditation = is_string($accreditation) && ctype_digit($accreditation) && strlen($accreditation) <= 10 ? $accreditation : null;
+
+        $page = $request->query('page');
+        $page = is_string($page) && ctype_digit($page) && (int) $page >= 1 && strlen($page) <= 6 ? $page : null;
+
+        $request->query->replace(array_filter(compact('search', 'status', 'accreditation', 'page'), fn ($v) => $v !== null));
+
+        // Search by keyword (name, email, phone); LIKE wildcards typed by the admin are matched literally
+        if ($search !== null) {
+            $like = '%'.addcslashes($search, '%_\\').'%';
+            $query->where(function ($q) use ($like) {
+                $q->where('first_name', 'like', $like)
+                    ->orWhere('last_name', 'like', $like)
+                    ->orWhere('email', 'like', $like)
+                    ->orWhere('phone', 'like', $like)
+                    ->orWhere('company_name', 'like', $like);
             });
         }
 
         // Filter by verification status
-        if ($status = $request->input('status')) {
-            if ($status === 'verified') {
-                $query->whereNotNull('email_verified_at');
-            } elseif ($status === 'unverified') {
-                $query->whereNull('email_verified_at');
-            }
+        if ($status === 'verified') {
+            $query->whereNotNull('email_verified_at');
+        } elseif ($status === 'unverified') {
+            $query->whereNull('email_verified_at');
         }
 
         // Filter by accreditation status
-        if ($accreditation = $request->input('accreditation')) {
+        if ($accreditation !== null) {
             $query->where('accreditation_status', $accreditation);
         }
 

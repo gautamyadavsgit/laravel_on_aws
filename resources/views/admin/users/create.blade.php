@@ -53,39 +53,39 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div>
                     <label for="first_name" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">First Name <span class="text-rose-500">*</span></label>
-                    <input type="text" id="first_name" name="first_name" value="{{ old('first_name') }}" class="input-tw @error('first_name') border-rose-500 @enderror" required placeholder="e.g. Alexander" />
+                    <input type="text" id="first_name" name="first_name" maxlength="255" value="{{ old('first_name') }}" class="input-tw @error('first_name') border-rose-500 @enderror" required placeholder="e.g. Alexander" />
                     @error('first_name') <span class="text-rose-500 text-[11px]">{{ $message }}</span> @enderror
                 </div>
 
                 <div>
                     <label for="middile_name" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Middle Name</label>
-                    <input type="text" id="middile_name" name="middile_name" value="{{ old('middile_name') }}" class="input-tw" placeholder="e.g. James" />
+                    <input type="text" id="middile_name" name="middile_name" maxlength="255" value="{{ old('middile_name') }}" class="input-tw" placeholder="e.g. James" />
                 </div>
 
                 <div>
                     <label for="last_name" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Last Name</label>
-                    <input type="text" id="last_name" name="last_name" value="{{ old('last_name') }}" class="input-tw @error('last_name') border-rose-500 @enderror" placeholder="e.g. Wright" />
+                    <input type="text" id="last_name" name="last_name" maxlength="255" value="{{ old('last_name') }}" class="input-tw @error('last_name') border-rose-500 @enderror" placeholder="e.g. Wright" />
                     @error('last_name') <span class="text-rose-500 text-[11px]">{{ $message }}</span> @enderror
                 </div>
 
                 <div>
                     <label for="suffix" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Suffix</label>
-                    <input type="text" id="suffix" name="suffix" value="{{ old('suffix') }}" class="input-tw" placeholder="e.g. Jr., III" />
+                    <input type="text" id="suffix" name="suffix" maxlength="20" value="{{ old('suffix') }}" class="input-tw" placeholder="e.g. Jr., III" />
                 </div>
 
                 <div>
                     <label for="dob" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Date of Birth</label>
-                    <input type="date" id="dob" name="dob" value="{{ old('dob') }}" class="input-tw" />
+                    <input type="date" id="dob" name="dob" min="1900-01-02" max="{{ now()->toDateString() }}" value="{{ old('dob') }}" class="input-tw" />
                 </div>
 
                 <div>
                     <label for="social_security_number" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">SSN / Tax ID</label>
-                    <input type="text" id="social_security_number" name="social_security_number" value="{{ old('social_security_number') }}" class="input-tw" placeholder="XXX-XX-XXXX" />
+                    <input type="text" id="social_security_number" name="social_security_number" maxlength="50" pattern="(?:\d{3}|[Xx]{3})-?(?:\d{2}|[Xx]{2})-?\d{4}" title="Format: XXX-XX-XXXX (digits, or X for masked digits)" value="{{ old('social_security_number') }}" class="input-tw" placeholder="XXX-XX-XXXX" />
                 </div>
 
                 <div class="sm:col-span-2">
                     <label for="company_name" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Company / Entity Name</label>
-                    <input type="text" id="company_name" name="company_name" value="{{ old('company_name') }}" class="input-tw" placeholder="e.g. Wright Capital Investments LLC" />
+                    <input type="text" id="company_name" name="company_name" maxlength="255" value="{{ old('company_name') }}" class="input-tw" placeholder="e.g. Wright Capital Investments LLC" />
                 </div>
             </div>
         </div>
@@ -104,13 +104,13 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                     <label for="email" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Email Address <span class="text-rose-500">*</span></label>
-                    <input type="email" id="email" name="email" value="{{ old('email') }}" class="input-tw @error('email') border-rose-500 @enderror" required placeholder="investor@example.com" />
+                    <input type="email" id="email" name="email" maxlength="255" value="{{ old('email') }}" class="input-tw @error('email') border-rose-500 @enderror" required placeholder="investor@example.com" />
                     @error('email') <span class="text-rose-500 text-[11px]">{{ $message }}</span> @enderror
                 </div>
 
                 <div>
                     <label for="password" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Password <span class="text-rose-500">*</span></label>
-                    <input type="password" id="password" name="password" class="input-tw @error('password') border-rose-500 @enderror" required placeholder="Minimum 8 characters" />
+                    <input type="password" id="password" name="password" minlength="8" maxlength="255" autocomplete="new-password" class="input-tw @error('password') border-rose-500 @enderror" required placeholder="Minimum 8 characters" />
                     @error('password') <span class="text-rose-500 text-[11px]">{{ $message }}</span> @enderror
                 </div>
             </div>
@@ -147,17 +147,17 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                     <label for="phone" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Primary Phone</label>
-                    <input type="text" id="phone" name="phone" value="{{ old('phone') }}" class="input-tw" placeholder="+1 (555) 000-0000" />
+                    <input type="text" id="phone" name="phone" maxlength="30" pattern="\+?[0-9\(\)\-.\s]{7,30}" title="Enter a valid phone number, e.g. +1 (555) 000-0000" value="{{ old('phone') }}" class="input-tw" placeholder="+1 (555) 000-0000" />
                 </div>
 
                 <div>
                     <label for="alternate_phone" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Alternate Phone</label>
-                    <input type="text" id="alternate_phone" name="alternate_phone" value="{{ old('alternate_phone') }}" class="input-tw" placeholder="+1 (555) 111-2222" />
+                    <input type="text" id="alternate_phone" name="alternate_phone" maxlength="30" pattern="\+?[0-9\(\)\-.\s]{7,30}" title="Enter a valid phone number, e.g. +1 (555) 000-0000" value="{{ old('alternate_phone') }}" class="input-tw" placeholder="+1 (555) 111-2222" />
                 </div>
 
                 <div class="sm:col-span-2">
                     <label for="address" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Address</label>
-                    <textarea id="address" name="address" rows="2" class="textarea-tw" placeholder="Street address, City, State, ZIP">{{ old('address') }}</textarea>
+                    <textarea id="address" name="address" maxlength="1000" rows="2" class="textarea-tw" placeholder="Street address, City, State, ZIP">{{ old('address') }}</textarea>
                 </div>
             </div>
         </div>
