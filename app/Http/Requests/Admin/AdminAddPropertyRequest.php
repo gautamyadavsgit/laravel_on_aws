@@ -2,8 +2,10 @@
 
 namespace App\Http\Requests\Admin;
 
+use App\Enums\PropertyAvailability;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
 
 class AdminAddPropertyRequest extends FormRequest
@@ -28,7 +30,7 @@ class AdminAddPropertyRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'availability' => ['required', 'string', 'in:Available,Not Available'],
+            'availability' => ['required', Rule::enum(PropertyAvailability::class)],
             'name' => ['required', 'string', 'max:255'],
             'description' => ['required', 'string', 'max:20000'],
             'management_company' => ['required', 'string', 'max:255'],

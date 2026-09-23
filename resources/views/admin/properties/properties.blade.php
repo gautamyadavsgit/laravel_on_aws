@@ -101,17 +101,13 @@
 
                             <!-- Availability Status -->
                             <td class="px-6 py-5">
-                                @if (strtolower($prop->availability) === 'available')
+                                @if ($prop->availability === \App\Enums\PropertyAvailability::Available)
                                     <span class="badge-tw badge-success-tw text-xs py-1 px-3">
-                                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Available
-                                    </span>
-                                @elseif (str_contains(strtolower($prop->availability), 'active'))
-                                    <span class="badge-tw badge-info-tw text-xs py-1 px-3">
-                                        <i class="bi bi-clock-history"></i> {{ $prop->availability }}
+                                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> {{ $prop->availability->label() }}
                                     </span>
                                 @else
                                     <span class="badge-tw badge-warning-tw text-xs py-1 px-3">
-                                        {{ $prop->availability ?? 'Listed' }}
+                                        {{ $prop->availability?->label() ?? 'Listed' }}
                                     </span>
                                 @endif
                             </td>

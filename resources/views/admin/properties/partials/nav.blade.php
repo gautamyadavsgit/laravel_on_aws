@@ -19,13 +19,13 @@
                     </h1>
                     <span class="badge-tw badge-info-tw">ID #{{ $propId }}</span>
                     @if(isset($propModel->availability))
-                        @if($propModel->availability === 'Available')
+                        @if($propModel->availability === \App\Enums\PropertyAvailability::Available)
                             <span class="badge-tw badge-success-tw flex items-center gap-1">
                                 <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Available
                             </span>
                         @else
                             <span class="badge-tw badge-warning-tw flex items-center gap-1">
-                                <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span> {{ $propModel->availability }}
+                                <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span> {{ $propModel->availability->label() }}
                             </span>
                         @endif
                     @endif

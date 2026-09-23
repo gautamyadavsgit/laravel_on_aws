@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\Models\Admins;
+use App\Models\Admin;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Tests\TestCase;
 
@@ -10,7 +10,7 @@ class PropertyPaginationTest extends TestCase
 {
     public function test_admin_properties_screen_is_paginated(): void
     {
-        $admin = Admins::first() ?? Admins::factory()->create();
+        $admin = Admin::first() ?? Admin::factory()->create();
 
         $response = $this->actingAs($admin, 'admin')->get(route('manage-property.index'));
 

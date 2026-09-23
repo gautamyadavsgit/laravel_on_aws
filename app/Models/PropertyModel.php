@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\PropertyAvailability;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -25,6 +26,13 @@ class PropertyModel extends Model
         'admin_id',
         'availability',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'availability' => PropertyAvailability::class,
+        ];
+    }
 
     /**
      * Model boot lifecycle events
@@ -57,7 +65,7 @@ class PropertyModel extends Model
         $slug = $baseSlug;
         $counter = 2;
 
-        while (static::where('slug', $slug)->when($ignoreId, fn ($q) => $q->where('id', '!=', $ignoreId))->exists()) {
+        while (static::withTrashed()->where('slug', $slug)->when($ignoreId, fn ($q) => $q->where('id', '!=', $ignoreId))->exists()) {
             $slug = "{$baseSlug}-{$counter}";
             $counter++;
         }

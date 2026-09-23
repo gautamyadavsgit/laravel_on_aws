@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\Admins;
+use App\Models\Admin;
 use App\Models\PropertyAddress;
 use App\Models\PropertyDetails;
 use App\Models\PropertyDocumentModel;
@@ -17,7 +17,7 @@ class PropertyDataFactory extends Factory
 
     public function definition(): array
     {
-        $admin = Admins::first();
+        $admin = Admin::first();
         $adminId = $admin ? $admin->id : 1;
 
         $propertyNames = [

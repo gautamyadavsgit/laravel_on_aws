@@ -28,18 +28,13 @@ class PropertyService
     protected const LISTING_CACHE_TTL_SECONDS = 300;
 
     /**
-     * Cache store used for all property caches (the `cache` table)
-     */
-    protected const CACHE_STORE = 'database';
-
-    /**
      * Key holding the listing cache generation; changing it orphans every cached listing URL
      */
     protected const LISTING_VERSION_KEY = 'property_listing_version';
 
     protected function cache(): Repository
     {
-        return Cache::store(self::CACHE_STORE);
+        return Cache::store();
     }
 
     /**
@@ -168,14 +163,6 @@ class PropertyService
         }
 
         $paginator = $query->paginate($perPage)->withQueryString();
-
-        // Ensure all loaded properties have a slug
-        foreach ($paginator->items() as $prop) {
-            if (empty($prop->slug) && ! empty($prop->name)) {
-                $prop->slug = PropertyModel::generateUniqueSlug($prop->name, $prop->id);
-                $prop->saveQuietly();
-            }
-        }
 
         return $paginator;
     }
@@ -329,11 +316,6 @@ class PropertyService
         ]);
 
         $property = $id ? $query->find($id) : $query->first();
-
-        if ($property && empty($property->slug) && ! empty($property->name)) {
-            $property->slug = PropertyModel::generateUniqueSlug($property->name, $property->id);
-            $property->saveQuietly();
-        }
 
         return $property;
     }

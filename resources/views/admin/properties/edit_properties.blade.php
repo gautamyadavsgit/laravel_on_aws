@@ -45,8 +45,8 @@
                         Availability Status <span class="text-rose-500">*</span>
                     </label>
                     <select class="select-tw" name="availability" id="availability" required>
-                        <option value="Available" {{ ($property->availability ?? '') == 'Available' ? 'selected' : '' }}>Available for Fractional Investment</option>
-                        <option value="Not Available" {{ ($property->availability ?? '') == 'Not Available' ? 'selected' : '' }}>Not Available (Sold Out / Closed)</option>
+                        <option value="Available" {{ $property->availability === \App\Enums\PropertyAvailability::Available ? 'selected' : '' }}>Available for Fractional Investment</option>
+                        <option value="Not Available" {{ $property->availability === \App\Enums\PropertyAvailability::NotAvailable ? 'selected' : '' }}>Not Available (Sold Out / Closed)</option>
                     </select>
                     <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-1">Controls visibility and active investment status in the investor portal.</p>
                 </div>

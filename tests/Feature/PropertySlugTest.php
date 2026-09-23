@@ -5,49 +5,60 @@ namespace Tests\Feature;
 use App\Models\Admin;
 use App\Models\PropertyModel;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 
 class PropertySlugTest extends TestCase
 {
     use DatabaseTransactions;
 
+    protected function makeProperty(string $name): PropertyModel
+    {
+        $admin = Admin::first() ?? Admin::factory()->create();
+
+        return PropertyModel::create([
+            'name' => $name,
+            'description' => 'Test description.',
+            'management_company' => 'Test Co',
+            'admin_id' => $admin->id,
+            'availability' => 'Available',
+        ]);
+    }
+
     public function test_property_single_page_resolves_by_slug(): void
     {
-        $property = PropertyModel::first();
-        if (! $property) {
-            $property = PropertyModel::create([
-                'name' => 'Blue Ridge Luxury Chalet',
-                'description' => 'A premier luxury cabin nestled in the mountains.',
-                'management_company' => 'Blue Ridge Asset Management',
-                'admin_id' => 1,
-                'availability' => 'Available',
-            ]);
-        }
+        $property = $this->makeProperty('Blue Ridge Luxury Chalet');
 
         $this->assertNotEmpty($property->slug);
 
-        $response = $this->get('/property/'.$property->slug);
-        $response->assertStatus(200);
-        $response->assertViewHas('featuredProperty');
+        $this->get('/property/'.$property->slug)
+            ->assertOk()
+            ->assertViewHas('featuredProperty');
     }
 
     public function test_legacy_property_single_page_redirects_to_canonical_slug(): void
     {
-        $property = PropertyModel::first();
-        if ($property) {
-            $response = $this->get('/property_singlepage?id='.$property->id);
-            $response->assertRedirect('/property/'.$property->slug);
-        }
+        $property = $this->makeProperty('Legacy Redirect Estate');
+
+        $this->get('/property_singlepage?id='.$property->id)
+            ->assertRedirect('/property/'.$property->slug);
+    }
+
+    public function test_slug_of_a_deleted_property_is_not_reused(): void
+    {
+        $first = $this->makeProperty('Reused Name Estate');
+        $slug = $first->slug;
+        $first->delete();
+
+        $second = $this->makeProperty('Reused Name Estate');
+
+        $this->assertNotSame($slug, $second->slug);
     }
 
     public function test_each_slug_renders_its_own_property_and_only_real_images(): void
     {
-        $admin = Admin::first() ?? Admin::create(['username' => 'slug-test', 'email' => 'slug-test@example.com', 'password' => Hash::make('password123')]);
-
-        $withImage = PropertyModel::create(['name' => 'Slug Test Alpha', 'description' => 'Test description.', 'management_company' => 'Test Co', 'admin_id' => $admin->id, 'availability' => 'Available']);
+        $withImage = $this->makeProperty('Slug Test Alpha');
         $withImage->propertyImage()->create(['property_image_key' => 'property_image', 'property_image_value' => 'property_images/alpha.png']);
-        $withoutImage = PropertyModel::create(['name' => 'Slug Test Beta', 'description' => 'Test description.', 'management_company' => 'Test Co', 'admin_id' => $admin->id, 'availability' => 'Available']);
+        $withoutImage = $this->makeProperty('Slug Test Beta');
 
         $this->get('/property/'.$withImage->slug)
             ->assertOk()

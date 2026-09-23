@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Admins;
+use App\Models\Admin;
 use App\Models\PropertyAddress;
 use App\Models\PropertyDetails;
 use App\Models\PropertyDocumentModel;
@@ -21,7 +21,7 @@ class PropertySeeder extends Seeder
         // 1. Ensure all local sample images, and PDFs exist
         ImageSeederHelper::ensureSeedAssets();
 
-        $admin = Admins::first();
+        $admin = Admin::first();
         $adminId = $admin ? $admin->id : 1;
 
         $curatedProperties = [

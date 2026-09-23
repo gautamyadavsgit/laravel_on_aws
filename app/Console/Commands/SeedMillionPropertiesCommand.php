@@ -2,10 +2,11 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Admins;
+use App\Models\Admin;
 use Database\Seeders\ImageSeederHelper;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class SeedMillionPropertiesCommand extends Command
 {
@@ -40,7 +41,7 @@ class SeedMillionPropertiesCommand extends Command
         ImageSeederHelper::ensureSeedAssets();
 
         // Ensure admin user exists
-        $admin = Admins::first();
+        $admin = Admin::first();
         $adminId = $admin ? $admin->id : 1;
 
         // Disable query log to prevent memory leaks during large iterations
@@ -90,9 +91,12 @@ class SeedMillionPropertiesCommand extends Command
                 $prefix = $propertyPrefixes[$uniqueIdx % count($propertyPrefixes)];
                 $type = $propertyTypes[$uniqueIdx % count($propertyTypes)];
 
+                $name = "{$prefix} {$type} #{$uniqueIdx}";
+
                 $propertiesBatch[] = [
                     'admin_id' => $adminId,
-                    'name' => "{$prefix} {$type} #{$uniqueIdx}",
+                    'name' => $name,
+                    'slug' => Str::slug($name),
                     'availability' => ($uniqueIdx % 5 === 0) ? 'Not Available' : (($uniqueIdx % 3 === 0) ? 'Available' : 'Available'),
                     'description' => "Institutional-grade fractional investment property #{$uniqueIdx} located in prime tourist corridor with verified annual yield and professional management.",
                     'management_company' => 'Gautam Asset Management LLC',
