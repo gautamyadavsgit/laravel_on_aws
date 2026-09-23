@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\Property;
 use App\Models\User;
 use App\Models\UserSearchLog;
+use App\Services\PropertyRecommendationService;
 use App\Services\PropertyService;
 use Illuminate\Support\Str;
 use Tests\DatabaseTestCase;
@@ -99,7 +100,7 @@ class PropertyServiceTest extends DatabaseTestCase
             'results_count' => 1,
         ]);
 
-        $recommendations = app(PropertyService::class)->getPersonalizedRecommendations($user, 3);
+        $recommendations = app(PropertyRecommendationService::class)->recommend($user, 3);
 
         $this->assertLessThanOrEqual(3, $recommendations->count());
         $this->assertTrue($recommendations->contains('id', $match->id));

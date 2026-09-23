@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ListPropertiesRequest;
 use App\Models\Property;
+use App\Services\PropertyRecommendationService;
 use App\Services\PropertyService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -11,7 +12,10 @@ use Illuminate\View\View;
 
 class PropertyController extends Controller
 {
-    public function __construct(private readonly PropertyService $propertyService) {}
+    public function __construct(
+        private readonly PropertyService $propertyService,
+        private readonly PropertyRecommendationService $recommendations,
+    ) {}
 
     /**
      * Browse properties with multi-criteria filtering and personalized recommendations.
@@ -25,13 +29,13 @@ class PropertyController extends Controller
         request()->query->replace($filters + array_filter(['page' => $request->page()]));
 
         $properties = $this->propertyService->getCachedFilteredProperties($filters, 9);
-        $this->propertyService->logUserSearch($filters, $properties->total());
+        $this->recommendations->logSearch($filters, $properties->total());
 
         return view('frontend.properties.index', [
             'properties' => $properties,
             'filters' => $filters,
             'filterOptions' => $this->propertyService->getFilterOptions(),
-            'recommendations' => $this->propertyService->getPersonalizedRecommendations(auth()->user(), 3),
+            'recommendations' => $this->recommendations->recommend(auth()->user(), 3),
             'favoriteIds' => auth()->user()?->favoritePropertyIds() ?? [],
         ]);
     }
