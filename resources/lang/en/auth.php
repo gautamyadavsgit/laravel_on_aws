@@ -2,15 +2,11 @@
 
 return [
     // Registration
-    'register_title' => 'Investor Registration',
-    'register_description' => 'Create your investor account',
-    'already_have_account' => 'Already have an account?',
     'agree_terms' => 'I agree to the Terms and Conditions',
 
     // Login
     'login_title' => 'Investor Login',
     'login_description' => 'Access your fractional deed portfolio and dividend reports.',
-    'dont_have_account' => "Don't have an account?",
     'forgot_password' => 'Forgot password?',
     'remember_me' => 'Keep me logged in',
     'sign_in' => 'Sign In to Account',
@@ -20,25 +16,6 @@ return [
     'admin_question' => 'Are you an administrator?',
     'admin_portal' => 'Admin Portal',
     'password' => 'Password',
-
-    // Password Reset
-    'reset_password' => 'Reset Password',
-    'forgot_password_title' => 'Forgot Password',
-    'reset_password_email' => 'Send Password Reset Link',
-    'reset_password_form' => 'Set New Password',
-
-    // Email Verification
-    'verify_email' => 'Verify Email Address',
-    'email_verification_sent' => 'Verification email has been sent',
-    'resend_verification' => 'Resend Verification Email',
-    'verified' => 'Email verified',
-
-    // Authentication Messages
-    'login_success' => 'Logged in successfully',
-    'logout_success' => 'Logged out successfully',
-    'registration_success' => 'Registration successful! Please verify your email.',
-    'invalid_credentials' => 'Invalid email or password',
-    'account_not_verified' => 'Please verify your email address first',
 
     // Registration Form Steps
     'step_credentials' => 'Credentials',
@@ -56,7 +33,6 @@ return [
     'middle_name' => 'Middle Name',
     'last_name' => 'Last Name',
     'suffix' => 'Suffix',
-    'email_address' => 'Email Address',
     'phone_number' => 'Phone Number',
     'create_password' => 'Create Account Password',
     'referral_source' => 'How did you hear about Gautam REI?',
@@ -85,8 +61,6 @@ return [
 
     // Terms & Buttons
     'agree_terms_full' => 'I have read and agree to the Terms of Service & Privacy Policy.',
-    'terms_of_service' => 'Terms of Service',
-    'privacy_policy' => 'Privacy Policy',
     'previous' => 'Previous',
     'next_step' => 'Next Step',
     'complete_registration' => 'Complete Registration',

@@ -1,7 +1,6 @@
 <?php
 
 return [
-    'dashboard_title' => 'Investor Dashboard',
     'welcome_back' => 'Welcome back',
     'investor_portal' => 'Investor Portal',
 
@@ -27,7 +26,4 @@ return [
     'no_favorites' => 'You have not favorited any properties yet.',
     'favorited' => 'Favorited',
     'location_na' => 'Location N/A',
-
-    // Profile Link
-    'edit_profile' => 'Edit Profile',
 ];

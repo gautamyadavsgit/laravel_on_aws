@@ -1,50 +1,9 @@
 <?php
 
 return [
-    // Admin Dashboard
-    'admin_dashboard' => 'Admin Dashboard',
-    'admin_panel' => 'Admin Panel',
-    'dashboard_overview' => 'Dashboard Overview',
-
-    // User Management
-    'user_management' => 'User Management',
-    'all_users' => 'All Users',
-    'total_users' => 'Total Users',
-    'active_investors' => 'Active Investors',
-    'pending_verification' => 'Pending Verification',
-    'user_detail' => 'User Detail',
-    'investor_name' => 'Investor Name',
-    'investor_email' => 'Email',
-    'verification_status' => 'Verification Status',
-    'interested_properties' => 'Interested Properties',
 
     // Property Management
-    'property_management' => 'Manage Properties',
-    'all_properties' => 'All Properties',
     'add_property' => 'Add Property',
-    'edit_property' => 'Edit Property',
-    'delete_property' => 'Delete Property',
-    'property_details' => 'Property Details',
-    'edit_address' => 'Edit Address',
-    'edit_details' => 'Edit Details',
-    'edit_offerings' => 'Edit Offerings',
-    'edit_documents' => 'Edit Documents',
-
-    // Table Headers
-    'table_property_name' => 'Property Name',
-    'table_location' => 'Location',
-    'table_value' => 'Value',
-    'table_status' => 'Status',
-    'table_actions' => 'Actions',
-    'table_view' => 'View',
-    'table_edit' => 'Edit',
-    'table_delete' => 'Delete',
-
-    // Filters & Search
-    'search_users' => 'Search Users',
-    'search_properties' => 'Search Properties',
-    'filter_by_status' => 'Filter by Status',
-    'filter_by_date' => 'Filter by Date',
 
     // Dashboard Specific
     'dashboard_title' => 'Dashboard Overview',
@@ -69,10 +28,4 @@ return [
     'class_dark_mode' => 'Class Dark Mode',
     'bootstrap_status' => 'Bootstrap',
     'zero_dependency' => '0% Dependency',
-
-    // Confirmations
-    'confirm_delete_user' => 'Are you sure you want to delete this user?',
-    'confirm_delete_property' => 'Are you sure you want to delete this property?',
-    'user_deleted' => 'User deleted successfully',
-    'property_deleted' => 'Property deleted successfully',
 ];
