@@ -153,6 +153,9 @@ class AuditNegativePathTest extends TestCase
 
     public function test_registration_rejects_invalid_input(): void
     {
+        // Route throttling has its own test; this one submits many payloads back to back.
+        $this->withoutMiddleware(\Illuminate\Routing\Middleware\ThrottleRequests::class);
+
         $existing = $this->investor();
 
         $cases = [

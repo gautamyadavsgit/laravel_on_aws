@@ -34,21 +34,21 @@ Route::get('/property_singlepage', [CustomerController::class, 'property_singlep
 // Customer / Investor Authentication (Laravel Breeze Flow)
 Route::middleware('guest')->group(function () {
     Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
-    Route::post('/register', [RegisteredUserController::class, 'store'])->name('register.post');
+    Route::post('/register', [RegisteredUserController::class, 'store'])->middleware('throttle:10,1')->name('register.post');
 
     Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login');
     Route::post('/login', [AuthenticatedSessionController::class, 'store'])->name('login.post');
 
     Route::get('/forgot-password', [PasswordResetLinkController::class, 'create'])->name('password.request');
-    Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])->name('password.email');
+    Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])->middleware('throttle:6,1')->name('password.email');
 
     Route::get('/reset-password/{token}', [NewPasswordController::class, 'create'])->name('password.reset');
-    Route::post('/reset-password', [NewPasswordController::class, 'store'])->name('password.update');
+    Route::post('/reset-password', [NewPasswordController::class, 'store'])->middleware('throttle:6,1')->name('password.update');
 });
 
 Route::view('/investment-interest', 'frontend.investment_interest')->name('investment.interest');
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'throttle:60,1'])->group(function () {
     Route::get('/dashboard', [\App\Http\Controllers\UserDashboardController::class, 'dashboard'])->name('user.dashboard');
     Route::get('/profile', [\App\Http\Controllers\UserDashboardController::class, 'profile'])->name('user.profile');
     Route::post('/investment-interest/{propertyId}', [\App\Http\Controllers\PropertyInterestController::class, 'store'])->whereNumber('propertyId')->name('investment.submit');
@@ -58,11 +58,11 @@ Route::middleware('auth')->group(function () {
 });
 
 // Authenticated Routes
-Route::match(['get', 'post'], '/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
+Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 
 // Email Verification
 Route::get('/verify-email/{token}', VerifyEmailController::class)->name('verification.verify.token');
-Route::post('/resend-verification', [EmailVerificationNotificationController::class, 'store'])->name('verification.resend');
+Route::post('/resend-verification', [EmailVerificationNotificationController::class, 'store'])->middleware('throttle:6,1')->name('verification.resend');
 
 // Admin Authentication & Management
 Route::prefix('/admin')->group(function () {
@@ -70,7 +70,7 @@ Route::prefix('/admin')->group(function () {
     Route::post('/login', [AdminController::class, 'login'])->name('admin.login.post');
 
     Route::middleware('admin.access')->group(function () {
-        Route::get('/logout', [AdminController::class, 'logout'])->name('admin.logout');
+        Route::post('/logout', [AdminController::class, 'logout'])->name('admin.logout');
         Route::get('/dashboard', [DashboardController::class, 'viewDashboard'])->name('admin.dashboard');
         Route::resource('users', UserManagementController::class)->names('admin.users');
 

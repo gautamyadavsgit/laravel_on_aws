@@ -52,10 +52,13 @@
         <div>
             <span class="px-3 text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">Security</span>
             <div class="mt-2 space-y-1">
-                <a href="{{ route('admin.logout') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-rose-600 hover:bg-rose-50 dark:text-rose-400 dark:hover:bg-rose-950/40 transition">
+                <form method="POST" action="{{ route('admin.logout') }}">
+@csrf
+<button type="submit" class="w-full text-left flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-rose-600 hover:bg-rose-50 dark:text-rose-400 dark:hover:bg-rose-950/40 transition">
                     <i class="bi bi-box-arrow-right text-base"></i>
                     <span>Logout</span>
-                </a>
+                </button>
+</form>
             </div>
         </div>
     </div>
@@ -105,9 +108,12 @@
                         <i class="bi bi-people"></i> Users
                     </a>
                     <div class="my-1 border-t border-slate-100 dark:border-slate-800"></div>
-                    <a href="{{ route('admin.logout') }}" class="flex items-center gap-2.5 px-4 py-2 text-sm text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition">
+                    <form method="POST" action="{{ route('admin.logout') }}">
+@csrf
+<button type="submit" class="w-full text-left flex items-center gap-2.5 px-4 py-2 text-sm text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition">
                         <i class="bi bi-box-arrow-right"></i> Logout
-                    </a>
+                    </button>
+</form>
                 </div>
             </div>
         </div>

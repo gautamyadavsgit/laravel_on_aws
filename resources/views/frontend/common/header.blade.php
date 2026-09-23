@@ -82,10 +82,13 @@
                                     {{ __('navigation.profile') }}
                                 </a>
                                 <div class="border-t border-slate-200 dark:border-slate-700"></div>
-                                <a href="{{ route('logout') }}" class="flex items-center gap-2 px-4 py-3 text-sm font-medium text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40">
+                                <form method="POST" action="{{ route('logout') }}">
+@csrf
+<button type="submit" class="w-full text-left flex items-center gap-2 px-4 py-3 text-sm font-medium text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40">
                                     <i class="bi bi-box-arrow-right"></i>
                                     {{ __('common.btn_logout') }}
-                                </a>
+                                </button>
+</form>
                             </div>
                         </div>
                     </div>
@@ -129,9 +132,12 @@
                     <a href="{{ route('user.profile') }}" class="w-full inline-flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-200 text-sm font-semibold hover:bg-slate-100 dark:hover:bg-slate-800">
                         <i class="bi bi-person-gear"></i> {{ __('navigation.profile') }}
                     </a>
-                    <a href="{{ route('logout') }}" class="w-full inline-flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl border border-rose-200 dark:border-rose-900 text-rose-600 dark:text-rose-400 text-sm font-semibold hover:bg-rose-50 dark:hover:bg-rose-950/40">
+                    <form method="POST" action="{{ route('logout') }}">
+@csrf
+<button type="submit" class="w-full inline-flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl border border-rose-200 dark:border-rose-900 text-rose-600 dark:text-rose-400 text-sm font-semibold hover:bg-rose-50 dark:hover:bg-rose-950/40">
                         <i class="bi bi-box-arrow-right"></i> {{ __('common.btn_logout') }}
-                    </a>
+                    </button>
+</form>
                 </div>
             @else
                 <a href="{{ route('register') }}" class="block px-3 py-2 rounded-lg text-base font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 {{ request()->routeIs('register') ? 'text-indigo-600 dark:text-indigo-400 font-semibold' : '' }}">{{ __('navigation.investor_registration') }}</a>
