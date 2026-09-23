@@ -2,8 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\Models\Admin;
-use App\Models\PropertyModel;
+use App\Models\Property;
 use App\Models\User;
 use App\Models\UserSearchLog;
 use App\Services\PropertyService;
@@ -24,41 +23,12 @@ class PropertyServiceTest extends TestCase
         $this->tag = 'PSvc'.Str::random(8);
     }
 
-    protected function makeProperty(string $suffix, array $details = [], array $address = []): PropertyModel
+    protected function makeProperty(string $suffix, array $details = [], array $address = []): Property
     {
-        $property = PropertyModel::create([
-            'name' => "{$this->tag} {$suffix}",
-            'description' => 'Service test property.',
-            'management_company' => 'Service Test Co',
-            'admin_id' => (Admin::first() ?? Admin::factory()->create())->id,
-            'availability' => 'Available',
-        ]);
-
-        $property->details()->create(array_merge([
-            'type' => 'Cabin',
-            'bedrooms' => 3,
-            'baths' => 2,
-            'half_baths' => 0,
-            'sleeps' => 6,
-            'garages' => 1,
-            'square_feets' => 2000,
-            'stories' => '2',
-            'units' => 1,
-            'lot_size' => 1,
-            'year_built' => 2020,
-            'zoning' => 'R-1',
-            'value' => 500000,
-        ], $details));
-
-        $property->address()->create(array_merge([
-            'address_1' => '1 Test Road',
-            'address_2' => 'Suite 1',
-            'city' => 'Testville',
-            'state' => 'TN',
-            'zip' => '37738',
-        ], $address));
-
-        return $property;
+        return Property::factory()
+            ->withDetails(array_merge(['type' => 'Cabin', 'bedrooms' => 3, 'baths' => 2, 'value' => 500000], $details))
+            ->withAddress(array_merge(['city' => 'Testville', 'state' => 'TN', 'zip' => '37738'], $address))
+            ->create(['name' => "{$this->tag} {$suffix}"]);
     }
 
     /** @return list<string> property names (without the test tag) in result order */
@@ -67,7 +37,7 @@ class PropertyServiceTest extends TestCase
         $result = app(PropertyService::class)->getFilteredProperties($filters + ['q' => $this->tag], 50);
 
         return collect($result->items())
-            ->map(fn (PropertyModel $property) => trim(Str::after($property->name, $this->tag)))
+            ->map(fn (Property $property) => trim(Str::after($property->name, $this->tag)))
             ->all();
     }
 
@@ -142,12 +112,13 @@ class PropertyServiceTest extends TestCase
     public function test_property_detail_cache_is_cleared_on_demand(): void
     {
         $property = $this->makeProperty('cached');
+        $originalDescription = $property->description;
         $service = app(PropertyService::class);
 
         $this->assertSame($property->id, $service->getPropertyBySlug($property->slug)->id);
 
         $property->update(['description' => 'Changed description']);
-        $this->assertSame('Service test property.', $service->getPropertyBySlug($property->slug)->description);
+        $this->assertSame($originalDescription, $service->getPropertyBySlug($property->slug)->description);
 
         $service->clearPropertiesCache($property->slug);
         $this->assertSame('Changed description', $service->getPropertyBySlug($property->slug)->description);

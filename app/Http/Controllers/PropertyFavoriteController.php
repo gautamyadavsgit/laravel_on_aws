@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Property;
 use App\Models\PropertyFavorite;
-use App\Models\PropertyModel;
 use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -17,7 +17,7 @@ class PropertyFavoriteController extends Controller
     {
         $user = $request->user();
 
-        $property = PropertyModel::find($propertyId);
+        $property = Property::find($propertyId);
         if (! $property) {
             return response()->json([
                 'success' => false,

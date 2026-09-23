@@ -34,48 +34,49 @@
             <span class="badge-tw badge-info-tw hidden sm:inline-flex">Step 4 of 5</span>
         </div>
 
-        <form action="{{ route('admin.manage-property.update-property-offerings', ['id' => $property_id]) }}" method="POST" enctype="multipart/form-data" class="p-6 space-y-6">
+        <form action="{{ route('admin.properties.offering.update', $property) }}" method="POST" enctype="multipart/form-data" class="p-6 space-y-6">
             @csrf
+            @method('PUT')
 
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
                 <div>
                     <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5" for="offering_purchase">
                         Purchase Price ($) <span class="text-rose-500">*</span>
                     </label>
-                    <input class="input-tw" value="{{ old('offering_purchase', $propertyOffering->offering_purchase ?? '') }}" type="number" name="offering_purchase" min="0" max="10000000000" step="1" id="offering_purchase" placeholder="650000" required>
+                    <input class="input-tw" value="{{ old('offering_purchase', $property->offering->offering_purchase ?? '') }}" type="number" name="offering_purchase" min="0" max="10000000000" step="1" id="offering_purchase" placeholder="650000" required>
                 </div>
 
                 <div>
                     <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5" for="offering_build_cost">
                         Build / Renovation Costs ($)
                     </label>
-                    <input class="input-tw" type="number" value="{{ old('offering_build_cost', $propertyOffering->offering_build_cost ?? '') }}" name="offering_build_cost" min="0" max="10000000000" step="1" id="offering_build_cost" placeholder="45000" required>
+                    <input class="input-tw" type="number" value="{{ old('offering_build_cost', $property->offering->offering_build_cost ?? '') }}" name="offering_build_cost" min="0" max="10000000000" step="1" id="offering_build_cost" placeholder="45000" required>
                 </div>
 
                 <div>
                     <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5" for="offering_improvements">
                         Capital Improvements ($)
                     </label>
-                    <input class="input-tw" value="{{ old('offering_improvements', $propertyOffering->offering_improvements ?? '') }}" type="number" name="offering_improvements" min="0" max="10000000000" step="1" id="offering_improvements" placeholder="25000" required>
+                    <input class="input-tw" value="{{ old('offering_improvements', $property->offering->offering_improvements ?? '') }}" type="number" name="offering_improvements" min="0" max="10000000000" step="1" id="offering_improvements" placeholder="25000" required>
                 </div>
 
                 <div>
                     <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5" for="offering_closing_cost">
                         Closing & Escrow Costs ($)
                     </label>
-                    <input class="input-tw" value="{{ old('offering_closing_cost', $propertyOffering->offering_closing_cost ?? '') }}" type="number" name="offering_closing_cost" min="0" max="10000000000" step="1" id="offering_closing_cost" placeholder="14000" required>
+                    <input class="input-tw" value="{{ old('offering_closing_cost', $property->offering->offering_closing_cost ?? '') }}" type="number" name="offering_closing_cost" min="0" max="10000000000" step="1" id="offering_closing_cost" placeholder="14000" required>
                 </div>
 
                 <div class="sm:col-span-2">
                     <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5" for="offering_sourcing_fees">
                         Acquisition & Deal Sourcing Fees ($)
                     </label>
-                    <input class="input-tw" value="{{ old('offering_sourcing_fees', $propertyOffering->offering_sourcing_fees ?? '') }}" type="number" name="offering_sourcing_fees" min="0" max="10000000000" step="1" id="offering_sourcing_fees" placeholder="18000" required>
+                    <input class="input-tw" value="{{ old('offering_sourcing_fees', $property->offering->offering_sourcing_fees ?? '') }}" type="number" name="offering_sourcing_fees" min="0" max="10000000000" step="1" id="offering_sourcing_fees" placeholder="18000" required>
                 </div>
             </div>
 
             <div class="border-t border-slate-200 dark:border-slate-800 pt-5 flex flex-col sm:flex-row items-center justify-between gap-3">
-                <a href="{{ route('admin.manage-property.edit-details', ['id' => $property_id]) }}" class="btn-secondary-tw w-full sm:w-auto text-center order-2 sm:order-1">
+                <a href="{{ route('admin.properties.details.edit', $property) }}" class="btn-secondary-tw w-full sm:w-auto text-center order-2 sm:order-1">
                     <i class="bi bi-arrow-left"></i> Previous Step
                 </a>
                 <div class="flex items-center gap-2.5 w-full sm:w-auto order-1 sm:order-2">

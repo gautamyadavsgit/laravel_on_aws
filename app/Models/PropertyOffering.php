@@ -23,14 +23,6 @@ class PropertyOffering extends Model
 
     public function property(): BelongsTo
     {
-        return $this->belongsTo(PropertyModel::class, 'property_id');
-    }
-
-    /**
-     * Backward compatibility alias.
-     */
-    public function propertyModel(): BelongsTo
-    {
-        return $this->property();
+        return $this->belongsTo(Property::class, 'property_id');
     }
 }

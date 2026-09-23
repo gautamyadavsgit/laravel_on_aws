@@ -3,9 +3,9 @@
 namespace Tests\Feature;
 
 use App\Models\Admin;
+use App\Models\Property;
 use App\Models\PropertyFavorite;
 use App\Models\PropertyInterest;
-use App\Models\PropertyModel;
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Http\UploadedFile;
@@ -64,15 +64,9 @@ class AuditNegativePathTest extends TestCase
         ], $overrides));
     }
 
-    protected function property(array $overrides = []): PropertyModel
+    protected function property(array $overrides = []): Property
     {
-        return PropertyModel::create(array_merge([
-            'name' => 'Audit Chalet '.Str::random(6),
-            'description' => 'Audit description',
-            'management_company' => 'Audit Mgmt',
-            'admin_id' => $this->admin()->id,
-            'availability' => 'Available',
-        ], $overrides));
+        return Property::factory()->create($overrides);
     }
 
     // ------------------------------------------------------------------
@@ -365,14 +359,14 @@ class AuditNegativePathTest extends TestCase
             '/admin/users/create',
             "/admin/users/{$investor->id}",
             "/admin/users/{$investor->id}/edit",
-            '/admin/manage-property',
-            '/admin/manage-property/create',
-            "/admin/manage-property/{$property->id}",
-            "/admin/manage-property/{$property->id}/edit",
-            "/admin/manage-property/edit-address/{$property->id}",
-            "/admin/manage-property/edit-details/{$property->id}",
-            "/admin/manage-property/edit-property-offerings/{$property->id}",
-            "/admin/manage-property/edit-property-documents/{$property->id}",
+            '/admin/properties',
+            '/admin/properties/create',
+            "/admin/properties/{$property->id}",
+            "/admin/properties/{$property->id}/edit",
+            "/admin/properties/{$property->id}/address",
+            "/admin/properties/{$property->id}/details",
+            "/admin/properties/{$property->id}/offering",
+            "/admin/properties/{$property->id}/documents",
         ];
 
         foreach ([null, $investor] as $actor) {
@@ -386,10 +380,10 @@ class AuditNegativePathTest extends TestCase
             ['post', '/admin/users', ['first_name' => 'X', 'email' => 'x@example.com', 'password' => 'password123']],
             ['put', "/admin/users/{$investor->id}", ['first_name' => 'Hacked', 'email' => $investor->email]],
             ['delete', "/admin/users/{$investor->id}", []],
-            ['post', '/admin/manage-property', ['name' => 'x']],
-            ['put', "/admin/manage-property/{$property->id}", ['name' => 'Hacked']],
-            ['delete', "/admin/manage-property/{$property->id}", []],
-            ['post', "/admin/manage-property/update-address/{$property->id}", ['city' => 'x']],
+            ['post', '/admin/properties', ['name' => 'x']],
+            ['put', "/admin/properties/{$property->id}", ['name' => 'Hacked']],
+            ['delete', "/admin/properties/{$property->id}", []],
+            ['put', "/admin/properties/{$property->id}/address", ['city' => 'x']],
         ];
 
         foreach ($posts as [$method, $url, $body]) {
@@ -445,10 +439,10 @@ class AuditNegativePathTest extends TestCase
     {
         $payload = $this->validPropertyPayload();
 
-        $response = $this->actingAs($this->admin(), 'admin')->post('/admin/manage-property', $payload);
+        $response = $this->actingAs($this->admin(), 'admin')->post('/admin/properties', $payload);
 
-        $property = PropertyModel::where('name', $payload['name'])->firstOrFail();
-        $response->assertRedirect(route('admin.manage-property.edit-address', ['id' => $property->id]));
+        $property = Property::where('name', $payload['name'])->firstOrFail();
+        $response->assertRedirect(route('admin.properties.address.edit', $property));
         $this->assertCount(1, $property->images);
     }
 
@@ -479,12 +473,12 @@ class AuditNegativePathTest extends TestCase
                 }
             }
 
-            $before = PropertyModel::count();
-            $this->actingAs($admin, 'admin')->from('/admin/manage-property/create')
-                ->post('/admin/manage-property', $payload)
-                ->assertRedirect('/admin/manage-property/create')
+            $before = Property::count();
+            $this->actingAs($admin, 'admin')->from('/admin/properties/create')
+                ->post('/admin/properties', $payload)
+                ->assertRedirect('/admin/properties/create')
                 ->assertSessionHasErrors($errorKeys);
-            $this->assertSame($before, PropertyModel::count(), "case: {$label} created a record");
+            $this->assertSame($before, Property::count(), "case: {$label} created a record");
         }
     }
 
@@ -492,13 +486,13 @@ class AuditNegativePathTest extends TestCase
     {
         $property = $this->property();
 
-        $this->actingAs($this->admin(), 'admin')->post("/admin/manage-property/update-address/{$property->id}", [
+        $this->actingAs($this->admin(), 'admin')->put("/admin/properties/{$property->id}/address", [
             'address_1' => '12 Mountain Rd',
             'address_2' => '',
             'city' => 'Gatlinburg',
             'state' => 'TN',
             'zip' => '37738',
-        ])->assertRedirect(route('admin.manage-property.edit-details', ['id' => $property->id]));
+        ])->assertRedirect(route('admin.properties.details.edit', $property));
 
         $this->assertDatabaseHas('property_address', ['property_id' => $property->id, 'city' => 'Gatlinburg', 'address_2' => null]);
     }
@@ -522,7 +516,7 @@ class AuditNegativePathTest extends TestCase
         foreach ($cases as $label => [$overrides, $errorKeys]) {
             $payload = $overrides === [] ? [] : array_merge($valid, $overrides);
             $this->actingAs($admin, 'admin')->from('/x')
-                ->post("/admin/manage-property/update-address/{$property->id}", $payload)
+                ->put("/admin/properties/{$property->id}/address", $payload)
                 ->assertSessionHasErrors($errorKeys);
         }
     }
@@ -551,8 +545,8 @@ class AuditNegativePathTest extends TestCase
         $property = $this->property();
 
         $this->actingAs($this->admin(), 'admin')
-            ->post("/admin/manage-property/update-details/{$property->id}", $this->validDetails())
-            ->assertRedirect(route('admin.manage-property.edit-property-offerings', ['id' => $property->id]));
+            ->put("/admin/properties/{$property->id}/details", $this->validDetails())
+            ->assertRedirect(route('admin.properties.offering.edit', $property));
 
         $this->assertDatabaseHas('property_details', ['property_id' => $property->id, 'bedrooms' => 4, 'value' => 850000, 'zoning' => 'R-1']);
     }
@@ -586,12 +580,12 @@ class AuditNegativePathTest extends TestCase
         foreach ($cases as $label => $override) {
             $field = array_key_first($override);
             $this->actingAs($admin, 'admin')->from('/x')
-                ->post("/admin/manage-property/update-details/{$property->id}", $this->validDetails($override))
+                ->put("/admin/properties/{$property->id}/details", $this->validDetails($override))
                 ->assertSessionHasErrors($field);
         }
 
         $this->actingAs($admin, 'admin')->from('/x')
-            ->post("/admin/manage-property/update-details/{$property->id}", [])
+            ->put("/admin/properties/{$property->id}/details", [])
             ->assertSessionHasErrors(['type', 'bedrooms', 'value']);
     }
 
@@ -608,12 +602,12 @@ class AuditNegativePathTest extends TestCase
         ];
 
         $this->actingAs($admin, 'admin')
-            ->post("/admin/manage-property/update-property-offerings/{$property->id}", $valid)
-            ->assertRedirect(route('admin.manage-property.edit-property-documents', ['id' => $property->id]));
+            ->put("/admin/properties/{$property->id}/offering", $valid)
+            ->assertRedirect(route('admin.properties.documents.edit', $property));
 
         foreach (['offering_purchase' => -1, 'offering_build_cost' => 1.5, 'offering_closing_cost' => '99999999999999999999999', 'offering_sourcing_fees' => 'abc'] as $field => $value) {
             $this->actingAs($admin, 'admin')->from('/x')
-                ->post("/admin/manage-property/update-property-offerings/{$property->id}", array_merge($valid, [$field => $value]))
+                ->put("/admin/properties/{$property->id}/offering", array_merge($valid, [$field => $value]))
                 ->assertSessionHasErrors($field);
         }
     }
@@ -624,7 +618,7 @@ class AuditNegativePathTest extends TestCase
         $admin = $this->admin();
 
         $this->actingAs($admin, 'admin')->from('/x')
-            ->post("/admin/manage-property/update-property-documents/{$property->id}", [
+            ->put("/admin/properties/{$property->id}/documents", [
                 'document_1' => UploadedFile::fake()->image('doc.jpg'),
                 'Documents_Master_Deed' => $this->realUpload('deed.pdf', '<?php echo 1;'),
                 'Documents_Deed_Example' => UploadedFile::fake()->create('big.pdf', 5000, 'application/pdf'),
@@ -637,16 +631,16 @@ class AuditNegativePathTest extends TestCase
         $property = $this->property();
 
         $this->actingAs($admin, 'admin')->from('/x')
-            ->put("/admin/manage-property/{$property->id}", ['availability' => 'Nope', 'name' => '', 'description' => '', 'management_company' => ''])
+            ->put("/admin/properties/{$property->id}", ['availability' => 'Nope', 'name' => '', 'description' => '', 'management_company' => ''])
             ->assertSessionHasErrors(['availability', 'name', 'description', 'management_company']);
 
-        $this->actingAs($admin, 'admin')->put('/admin/manage-property/99999999', [
+        $this->actingAs($admin, 'admin')->put('/admin/properties/99999999', [
             'availability' => 'Available', 'name' => 'x', 'description' => 'x', 'management_company' => 'x',
         ])->assertNotFound();
 
-        $this->actingAs($admin, 'admin')->delete('/admin/manage-property/99999999')->assertNotFound();
-        $this->actingAs($admin, 'admin')->get('/admin/manage-property/abc')->assertNotFound();
-        $this->actingAs($admin, 'admin')->get('/admin/manage-property/edit-address/99999999')->assertNotFound();
+        $this->actingAs($admin, 'admin')->delete('/admin/properties/99999999')->assertNotFound();
+        $this->actingAs($admin, 'admin')->get('/admin/properties/abc')->assertNotFound();
+        $this->actingAs($admin, 'admin')->get('/admin/properties/99999999/address')->assertNotFound();
         $this->actingAs($admin, 'admin')->get('/admin/users/99999999')->assertNotFound();
     }
 
@@ -654,7 +648,7 @@ class AuditNegativePathTest extends TestCase
     {
         $property = $this->property();
 
-        $this->actingAs($this->admin(), 'admin')->delete("/admin/manage-property/{$property->id}")
+        $this->actingAs($this->admin(), 'admin')->delete("/admin/properties/{$property->id}")
             ->assertRedirect();
 
         $this->assertSoftDeleted('properties', ['id' => $property->id]);
@@ -803,28 +797,28 @@ class AuditNegativePathTest extends TestCase
         $admin = $this->admin();
         $property = $this->property();
 
-        foreach (['edit-address', 'edit-details', 'edit-property-offerings', 'edit-property-documents'] as $step) {
-            $this->actingAs($admin, 'admin')->get("/admin/manage-property/{$step}/{$property->id}")->assertOk();
+        foreach (['address', 'details', 'offering', 'documents'] as $step) {
+            $this->actingAs($admin, 'admin')->get("/admin/properties/{$property->id}/{$step}")->assertOk();
         }
 
-        $this->actingAs($admin, 'admin')->get("/admin/manage-property/{$property->id}")->assertOk();
-        $this->actingAs($admin, 'admin')->get("/admin/manage-property/{$property->id}/edit")->assertOk();
-        $this->actingAs($admin, 'admin')->get('/admin/manage-property/create')->assertOk();
-        $this->actingAs($admin, 'admin')->get('/admin/manage-property')->assertOk();
+        $this->actingAs($admin, 'admin')->get("/admin/properties/{$property->id}")->assertOk();
+        $this->actingAs($admin, 'admin')->get("/admin/properties/{$property->id}/edit")->assertOk();
+        $this->actingAs($admin, 'admin')->get('/admin/properties/create')->assertOk();
+        $this->actingAs($admin, 'admin')->get('/admin/properties')->assertOk();
     }
 
     public function test_failed_details_submission_redisplays_what_the_admin_typed(): void
     {
         $admin = $this->admin();
         $property = $this->property();
-        $url = "/admin/manage-property/edit-details/{$property->id}";
+        $url = "/admin/properties/{$property->id}/details";
 
         $this->actingAs($admin, 'admin')
-            ->post("/admin/manage-property/update-details/{$property->id}", $this->validDetails())
+            ->put("/admin/properties/{$property->id}/details", $this->validDetails())
             ->assertSessionHasNoErrors();
 
         $this->actingAs($admin, 'admin')->from($url)
-            ->post("/admin/manage-property/update-details/{$property->id}", $this->validDetails(['bedrooms' => -7, 'zoning' => 'TYPED-ZONE']))
+            ->put("/admin/properties/{$property->id}/details", $this->validDetails(['bedrooms' => -7, 'zoning' => 'TYPED-ZONE']))
             ->assertRedirect($url);
 
         $this->actingAs($admin, 'admin')->get($url)
@@ -860,7 +854,7 @@ class AuditNegativePathTest extends TestCase
     {
         $this->property(['name' => "Bob's \"Lodge\" </script><b>x</b>"]);
 
-        $html = $this->actingAs($this->admin(), 'admin')->get('/admin/manage-property')->assertOk()->getContent();
+        $html = $this->actingAs($this->admin(), 'admin')->get('/admin/properties')->assertOk()->getContent();
 
         $this->assertStringNotContainsString('</script><b>x</b>', $html);
     }

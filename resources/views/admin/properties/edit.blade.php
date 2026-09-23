@@ -34,7 +34,7 @@
             <span class="badge-tw badge-info-tw hidden sm:inline-flex">Step 1 of 5</span>
         </div>
 
-        <form action="{{ route('manage-property.update', ['manage_property' => $property_id]) }}" method="POST" enctype="multipart/form-data" class="p-6 space-y-6">
+        <form action="{{ route('admin.properties.update', $property) }}" method="POST" enctype="multipart/form-data" class="p-6 space-y-6">
             @csrf
             @method('PUT')
 
@@ -115,7 +115,7 @@
 
             <!-- Action Buttons -->
             <div class="border-t border-slate-200 dark:border-slate-800 pt-5 flex flex-col sm:flex-row items-center justify-between gap-3">
-                <a href="{{ route('manage-property.index') }}" class="btn-secondary-tw w-full sm:w-auto text-center order-2 sm:order-1">
+                <a href="{{ route('admin.properties.index') }}" class="btn-secondary-tw w-full sm:w-auto text-center order-2 sm:order-1">
                     <i class="bi bi-x-lg"></i> Cancel
                 </a>
                 <div class="flex items-center gap-2.5 w-full sm:w-auto order-1 sm:order-2">

@@ -7,33 +7,25 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Storage;
 
-class PropertyDocumentModel extends Model
+class PropertyImage extends Model
 {
     use HasFactory;
 
-    protected $table = 'properties_document';
+    protected $table = 'property_images';
 
     protected $fillable = [
         'property_id',
-        'document_key',
-        'document_value',
+        'property_image_key',
+        'property_image_value',
     ];
 
     public function getUrlAttribute(): string
     {
-        return Storage::url($this->document_value);
+        return Storage::url($this->property_image_value);
     }
 
     public function property(): BelongsTo
     {
-        return $this->belongsTo(PropertyModel::class, 'property_id');
-    }
-
-    /**
-     * Backward compatibility alias.
-     */
-    public function propertyModel(): BelongsTo
-    {
-        return $this->property();
+        return $this->belongsTo(Property::class, 'property_id');
     }
 }

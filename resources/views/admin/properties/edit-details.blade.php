@@ -34,104 +34,105 @@
             <span class="badge-tw badge-info-tw hidden sm:inline-flex">Step 3 of 5</span>
         </div>
 
-        <form action="{{ route('admin.manage-property.update-details', ['id' => $property_id]) }}" method="POST" enctype="multipart/form-data" class="p-6 space-y-6">
+        <form action="{{ route('admin.properties.details.update', $property) }}" method="POST" enctype="multipart/form-data" class="p-6 space-y-6">
             @csrf
+            @method('PUT')
 
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
                 <div>
                     <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5" for="type">
                         Property Architecture / Type
                     </label>
-                    <input class="input-tw" type="text" name="type" required maxlength="255" id="type" value="{{ old('type', $propertyDetails['type'] ?? '') }}" placeholder="e.g. Single Family Luxury Cabin">
+                    <input class="input-tw" type="text" name="type" required maxlength="255" id="type" value="{{ old('type', $property->details['type'] ?? '') }}" placeholder="e.g. Single Family Luxury Cabin">
                 </div>
 
                 <div>
                     <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5" for="bedrooms">
                         Bedrooms
                     </label>
-                    <input class="input-tw" type="number" name="bedrooms" required min="0" max="1000" step="1" id="bedrooms" value="{{ old('bedrooms', $propertyDetails['bedrooms'] ?? '') }}" placeholder="4">
+                    <input class="input-tw" type="number" name="bedrooms" required min="0" max="1000" step="1" id="bedrooms" value="{{ old('bedrooms', $property->details['bedrooms'] ?? '') }}" placeholder="4">
                 </div>
 
                 <div>
                     <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5" for="baths">
                         Full Bathrooms
                     </label>
-                    <input class="input-tw" type="number" name="baths" required min="0" max="1000" step="1" id="baths" value="{{ old('baths', $propertyDetails['baths'] ?? '') }}" placeholder="3">
+                    <input class="input-tw" type="number" name="baths" required min="0" max="1000" step="1" id="baths" value="{{ old('baths', $property->details['baths'] ?? '') }}" placeholder="3">
                 </div>
 
                 <div>
                     <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5" for="half_baths">
                         Half Baths
                     </label>
-                    <input class="input-tw" type="number" name="half_baths" required min="0" max="1000" step="1" id="half_baths" value="{{ old('half_baths', $propertyDetails['half_baths'] ?? '') }}" placeholder="1">
+                    <input class="input-tw" type="number" name="half_baths" required min="0" max="1000" step="1" id="half_baths" value="{{ old('half_baths', $property->details['half_baths'] ?? '') }}" placeholder="1">
                 </div>
 
                 <div>
                     <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5" for="sleeps">
                         Sleeps (Guest Capacity)
                     </label>
-                    <input class="input-tw" type="number" name="sleeps" required min="0" max="1000" step="1" id="sleeps" value="{{ old('sleeps', $propertyDetails['sleeps'] ?? '') }}" placeholder="10">
+                    <input class="input-tw" type="number" name="sleeps" required min="0" max="1000" step="1" id="sleeps" value="{{ old('sleeps', $property->details['sleeps'] ?? '') }}" placeholder="10">
                 </div>
 
                 <div>
                     <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5" for="garages">
                         Garage Spaces
                     </label>
-                    <input class="input-tw" type="number" name="garages" required min="0" max="1000" step="1" id="garages" value="{{ old('garages', $propertyDetails['garages'] ?? '') }}" placeholder="2">
+                    <input class="input-tw" type="number" name="garages" required min="0" max="1000" step="1" id="garages" value="{{ old('garages', $property->details['garages'] ?? '') }}" placeholder="2">
                 </div>
 
                 <div>
                     <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5" for="square_feets">
                         Living Area (SqFt)
                     </label>
-                    <input class="input-tw" type="number" name="square_feets" required min="0" max="100000000" step="1" id="square_feets" value="{{ old('square_feets', $propertyDetails['square_feets'] ?? '') }}" placeholder="3200">
+                    <input class="input-tw" type="number" name="square_feets" required min="0" max="100000000" step="1" id="square_feets" value="{{ old('square_feets', $property->details['square_feets'] ?? '') }}" placeholder="3200">
                 </div>
 
                 <div>
                     <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5" for="units">
                         Total Units
                     </label>
-                    <input class="input-tw" type="number" name="units" required min="1" max="10000" step="1" id="units" value="{{ old('units', $propertyDetails['units'] ?? '') }}" placeholder="1">
+                    <input class="input-tw" type="number" name="units" required min="1" max="10000" step="1" id="units" value="{{ old('units', $property->details['units'] ?? '') }}" placeholder="1">
                 </div>
 
                 <div>
                     <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5" for="lot_size">
                         Lot Size (SqFt)
                     </label>
-                    <input class="input-tw" type="number" name="lot_size" required min="0" max="999999.99" step="0.01" id="lot_size" value="{{ old('lot_size', $propertyDetails['lot_size'] ?? '') }}" placeholder="15000">
+                    <input class="input-tw" type="number" name="lot_size" required min="0" max="999999.99" step="0.01" id="lot_size" value="{{ old('lot_size', $property->details['lot_size'] ?? '') }}" placeholder="15000">
                 </div>
 
                 <div>
                     <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5" for="year_built">
                         Year Built
                     </label>
-                    <input class="input-tw" type="number" name="year_built" required min="1800" max="{{ date('Y') + 5 }}" step="1" id="year_built" value="{{ old('year_built', $propertyDetails['year_built'] ?? '') }}" placeholder="2022">
+                    <input class="input-tw" type="number" name="year_built" required min="1800" max="{{ date('Y') + 5 }}" step="1" id="year_built" value="{{ old('year_built', $property->details['year_built'] ?? '') }}" placeholder="2022">
                 </div>
 
                 <div>
                     <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5" for="zoning">
                         Zoning Code
                     </label>
-                    <input class="input-tw" type="text" name="zoning" required maxlength="255" id="zoning" value="{{ old('zoning', $propertyDetails['zoning'] ?? '') }}" placeholder="R-1">
+                    <input class="input-tw" type="text" name="zoning" required maxlength="255" id="zoning" value="{{ old('zoning', $property->details['zoning'] ?? '') }}" placeholder="R-1">
                 </div>
 
                 <div>
                     <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5" for="value">
                         Appraised Value ($)
                     </label>
-                    <input class="input-tw" type="number" name="value" required min="0" max="1000000000" step="1" id="value" value="{{ old('value', $propertyDetails['value'] ?? '') }}" placeholder="850000">
+                    <input class="input-tw" type="number" name="value" required min="0" max="1000000000" step="1" id="value" value="{{ old('value', $property->details['value'] ?? '') }}" placeholder="850000">
                 </div>
 
                 <div class="sm:col-span-2 md:col-span-3">
                     <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5" for="stories">
                         Stories & Structural Architecture Notes
                     </label>
-                    <textarea class="textarea-tw" name="stories" required maxlength="255" id="stories" rows="2" placeholder="e.g. 2-story custom timber construction with panoramic deck and stone fireplace">{{ old('stories', $propertyDetails['stories'] ?? '') }}</textarea>
+                    <textarea class="textarea-tw" name="stories" required maxlength="255" id="stories" rows="2" placeholder="e.g. 2-story custom timber construction with panoramic deck and stone fireplace">{{ old('stories', $property->details['stories'] ?? '') }}</textarea>
                 </div>
             </div>
 
             <div class="border-t border-slate-200 dark:border-slate-800 pt-5 flex flex-col sm:flex-row items-center justify-between gap-3">
-                <a href="{{ route('admin.manage-property.edit-address', ['id' => $property_id]) }}" class="btn-secondary-tw w-full sm:w-auto text-center order-2 sm:order-1">
+                <a href="{{ route('admin.properties.address.edit', $property) }}" class="btn-secondary-tw w-full sm:w-auto text-center order-2 sm:order-1">
                     <i class="bi bi-arrow-left"></i> Previous Step
                 </a>
                 <div class="flex items-center gap-2.5 w-full sm:w-auto order-1 sm:order-2">

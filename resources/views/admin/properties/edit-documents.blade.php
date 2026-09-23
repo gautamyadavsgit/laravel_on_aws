@@ -34,8 +34,9 @@
             <span class="badge-tw badge-info-tw hidden sm:inline-flex">Step 5 of 5</span>
         </div>
 
-        <form action="{{ route('admin.manage-property.update-property-documents', ['id' => $property_id]) }}" method="POST" enctype="multipart/form-data" class="p-6 space-y-6">
+        <form action="{{ route('admin.properties.documents.update', $property) }}" method="POST" enctype="multipart/form-data" class="p-6 space-y-6">
             @csrf
+            @method('PUT')
 
             <!-- Upload Grid -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -96,7 +97,7 @@
 
             <!-- Complete Action Buttons -->
             <div class="border-t border-slate-200 dark:border-slate-800 pt-5 flex flex-col sm:flex-row items-center justify-between gap-3">
-                <a href="{{ route('admin.manage-property.edit-property-offerings', ['id' => $property_id]) }}" class="btn-secondary-tw w-full sm:w-auto text-center order-2 sm:order-1">
+                <a href="{{ route('admin.properties.offering.edit', $property) }}" class="btn-secondary-tw w-full sm:w-auto text-center order-2 sm:order-1">
                     <i class="bi bi-arrow-left"></i> Previous Step
                 </a>
                 <div class="flex items-center gap-2.5 w-full sm:w-auto order-1 sm:order-2">

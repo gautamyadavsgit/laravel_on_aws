@@ -3,9 +3,9 @@
 namespace Tests\Feature;
 
 use App\Models\Admin;
+use App\Models\Property;
 use App\Models\PropertyFavorite;
 use App\Models\PropertyInterest;
-use App\Models\PropertyModel;
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Hash;
@@ -36,7 +36,7 @@ class SoftDeletedPropertyTest extends TestCase
             'password' => Hash::make('password123'),
         ]);
 
-        $this->property = PropertyModel::create([
+        $this->property = Property::create([
             'name' => 'Soon Deleted '.Str::random(6),
             'description' => 'x',
             'management_company' => 'x',
@@ -53,7 +53,7 @@ class SoftDeletedPropertyTest extends TestCase
 
     protected User $user;
 
-    protected PropertyModel $property;
+    protected Property $property;
 
     protected Admin $admin;
 

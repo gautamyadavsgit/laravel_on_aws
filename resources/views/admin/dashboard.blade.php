@@ -9,10 +9,10 @@
         <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">{{ __('admin.dashboard_welcome') }}</p>
     </div>
     <div class="flex items-center gap-3">
-        <a href="{{ route('manage-property.create') }}" class="btn-primary-tw">
+        <a href="{{ route('admin.properties.create') }}" class="btn-primary-tw">
             <i class="bi bi-plus-lg"></i> {{ __('admin.add_new_property') }}
         </a>
-        <a href="{{ route('manage-property.index') }}" class="btn-secondary-tw">
+        <a href="{{ route('admin.properties.index') }}" class="btn-secondary-tw">
             <i class="bi bi-building"></i> {{ __('admin.view_all_properties') }}
         </a>
     </div>
@@ -71,7 +71,7 @@
                         <h3 class="font-bold text-slate-900 dark:text-white text-sm">{{ __('admin.manage_properties') }}</h3>
                         <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{{ __('admin.manage_properties_desc') }}</p>
                     </div>
-                    <a href="{{ route('manage-property.index') }}" class="btn-primary-tw text-xs py-2 px-3 shrink-0">
+                    <a href="{{ route('admin.properties.index') }}" class="btn-primary-tw text-xs py-2 px-3 shrink-0">
                         {{ __('common.open') }} <i class="bi bi-arrow-right"></i>
                     </a>
                 </div>
@@ -81,7 +81,7 @@
                         <h3 class="font-bold text-slate-900 dark:text-white text-sm">{{ __('admin.add_property') }}</h3>
                         <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{{ __('admin.add_property_desc') }}</p>
                     </div>
-                    <a href="{{ route('manage-property.create') }}" class="btn-primary-tw text-xs py-2 px-3 shrink-0">
+                    <a href="{{ route('admin.properties.create') }}" class="btn-primary-tw text-xs py-2 px-3 shrink-0">
                         {{ __('common.create') }} <i class="bi bi-plus-lg"></i>
                     </a>
                 </div>

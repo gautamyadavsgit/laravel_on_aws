@@ -24,6 +24,6 @@ class PropertyFavorite extends Model
 
     public function property(): BelongsTo
     {
-        return $this->belongsTo(PropertyModel::class, 'property_id');
+        return $this->belongsTo(Property::class, 'property_id');
     }
 }

@@ -20,7 +20,7 @@
             </div>
         </div>
         <div class="flex items-center gap-3">
-            <a href="{{ route('manage-property.create') }}" class="btn-primary-tw shadow-sm py-2.5 px-4 text-sm font-semibold flex items-center gap-2">
+            <a href="{{ route('admin.properties.create') }}" class="btn-primary-tw shadow-sm py-2.5 px-4 text-sm font-semibold flex items-center gap-2">
                 <i class="bi bi-plus-lg text-base"></i> Add New Property
             </a>
         </div>
@@ -39,7 +39,7 @@
 
             <div class="flex items-center gap-3">
                 <span class="badge-tw badge-info-tw py-1.5 px-3 text-xs font-semibold whitespace-nowrap">
-                    <i class="bi bi-layers-fill"></i> {{ number_format($property->total()) }} Properties Listed
+                    <i class="bi bi-layers-fill"></i> {{ number_format($properties->total()) }} Properties Listed
                 </span>
                 <span class="text-xs text-slate-500 dark:text-slate-400 hidden sm:inline bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-3 py-1.5 rounded-lg font-medium">
                     Click "Expand Details" to view all sub-modules
@@ -61,7 +61,7 @@
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100 dark:divide-slate-800/80">
-                    @forelse ($property as $prop)
+                    @forelse ($properties as $prop)
                         @php
                             $thumb = $prop->images->first();
                             $addr = $prop->address;
@@ -89,7 +89,7 @@
                                         @endif
                                     </div>
                                     <div class="min-w-0">
-                                        <a href="{{ route('manage-property.edit', ['manage_property' => $prop->id]) }}" class="font-bold text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition text-base block truncate">
+                                        <a href="{{ route('admin.properties.edit', $prop) }}" class="font-bold text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition text-base block truncate">
                                             {{ $prop->name }}
                                         </a>
                                         <p class="text-xs text-slate-500 dark:text-slate-400 truncate mt-0.5">
@@ -158,7 +158,7 @@
                                     </button>
 
                                     <!-- Edit Full Property Button -->
-                                    <a href="{{ route('manage-property.edit', ['manage_property' => $prop->id]) }}" class="px-3 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold transition flex items-center gap-1.5 shadow-sm" title="Edit Primary Property & Stages">
+                                    <a href="{{ route('admin.properties.edit', $prop) }}" class="px-3 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold transition flex items-center gap-1.5 shadow-sm" title="Edit Primary Property & Stages">
                                         <i class="bi bi-pencil-square"></i>
                                         <span>Edit</span>
                                     </a>
@@ -173,7 +173,7 @@
                                         <i class="bi bi-trash text-xs"></i>
                                     </button>
 
-                                    <form id="delete-form-{{ $prop->id }}" action="{{ route('manage-property.destroy', ['manage_property' => $prop->id]) }}" method="POST" class="hidden">
+                                    <form id="delete-form-{{ $prop->id }}" action="{{ route('admin.properties.destroy', $prop) }}" method="POST" class="hidden">
                                         @csrf
                                         @method('DELETE')
                                     </form>
@@ -191,7 +191,7 @@
                                             <h3 class="text-xs font-bold uppercase tracking-wider text-slate-800 dark:text-slate-200 flex items-center gap-2">
                                                 <i class="bi bi-sliders text-indigo-600 dark:text-indigo-400"></i> Structural Specs
                                             </h3>
-                                            <a href="{{ route('admin.manage-property.edit-details', ['id' => $prop->id]) }}" class="text-xs text-indigo-600 dark:text-indigo-400 hover:underline font-semibold flex items-center gap-1">
+                                            <a href="{{ route('admin.properties.details.edit', $prop) }}" class="text-xs text-indigo-600 dark:text-indigo-400 hover:underline font-semibold flex items-center gap-1">
                                                 <i class="bi bi-pencil"></i> Edit Specs
                                             </a>
                                         </div>
@@ -234,7 +234,7 @@
                                             <h3 class="text-xs font-bold uppercase tracking-wider text-slate-800 dark:text-slate-200 flex items-center gap-2">
                                                 <i class="bi bi-tag text-emerald-600 dark:text-emerald-400"></i> Capital Offering & Valuation
                                             </h3>
-                                            <a href="{{ route('admin.manage-property.edit-property-offerings', ['id' => $prop->id]) }}" class="text-xs text-indigo-600 dark:text-indigo-400 hover:underline font-semibold flex items-center gap-1">
+                                            <a href="{{ route('admin.properties.offering.edit', $prop) }}" class="text-xs text-indigo-600 dark:text-indigo-400 hover:underline font-semibold flex items-center gap-1">
                                                 <i class="bi bi-pencil"></i> Edit Offering
                                             </a>
                                         </div>
@@ -287,25 +287,25 @@
 
                                         <div class="grid grid-cols-2 gap-2 text-xs">
                                             <!-- 1. Primary -->
-                                            <a href="{{ route('manage-property.edit', ['manage_property' => $prop->id]) }}" class="p-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/60 hover:border-indigo-500 hover:text-indigo-600 dark:hover:text-indigo-400 transition flex items-center gap-2">
+                                            <a href="{{ route('admin.properties.edit', $prop) }}" class="p-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/60 hover:border-indigo-500 hover:text-indigo-600 dark:hover:text-indigo-400 transition flex items-center gap-2">
                                                 <i class="bi bi-building text-indigo-500"></i>
                                                 <span class="font-medium">1. Primary Details</span>
                                             </a>
 
                                             <!-- 2. Address -->
-                                            <a href="{{ route('admin.manage-property.edit-address', ['id' => $prop->id]) }}" class="p-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/60 hover:border-indigo-500 hover:text-indigo-600 dark:hover:text-indigo-400 transition flex items-center gap-2">
+                                            <a href="{{ route('admin.properties.address.edit', $prop) }}" class="p-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/60 hover:border-indigo-500 hover:text-indigo-600 dark:hover:text-indigo-400 transition flex items-center gap-2">
                                                 <i class="bi bi-geo-alt text-rose-500"></i>
                                                 <span class="font-medium">2. Address Location</span>
                                             </a>
 
                                             <!-- 3. Specs -->
-                                            <a href="{{ route('admin.manage-property.edit-details', ['id' => $prop->id]) }}" class="p-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/60 hover:border-indigo-500 hover:text-indigo-600 dark:hover:text-indigo-400 transition flex items-center gap-2">
+                                            <a href="{{ route('admin.properties.details.edit', $prop) }}" class="p-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/60 hover:border-indigo-500 hover:text-indigo-600 dark:hover:text-indigo-400 transition flex items-center gap-2">
                                                 <i class="bi bi-sliders text-amber-500"></i>
                                                 <span class="font-medium">3. Specifications</span>
                                             </a>
 
                                             <!-- 4. Offerings -->
-                                            <a href="{{ route('admin.manage-property.edit-property-offerings', ['id' => $prop->id]) }}" class="p-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/60 hover:border-indigo-500 hover:text-indigo-600 dark:hover:text-indigo-400 transition flex items-center gap-2">
+                                            <a href="{{ route('admin.properties.offering.edit', $prop) }}" class="p-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/60 hover:border-indigo-500 hover:text-indigo-600 dark:hover:text-indigo-400 transition flex items-center gap-2">
                                                 <i class="bi bi-tag text-emerald-500"></i>
                                                 <span class="font-medium">4. Offerings</span>
                                             </a>
@@ -313,7 +313,7 @@
 
                                         <!-- 5. Legal Documents Action Link -->
                                         <div class="pt-2 border-t border-slate-100 dark:border-slate-700/60">
-                                            <a href="{{ route('admin.manage-property.edit-property-documents', ['id' => $prop->id]) }}" class="w-full p-2.5 rounded-lg border border-indigo-200 dark:border-indigo-900 bg-indigo-50 dark:bg-indigo-950/40 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 text-indigo-700 dark:text-indigo-300 transition flex items-center justify-between text-xs font-semibold">
+                                            <a href="{{ route('admin.properties.documents.edit', $prop) }}" class="w-full p-2.5 rounded-lg border border-indigo-200 dark:border-indigo-900 bg-indigo-50 dark:bg-indigo-950/40 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 text-indigo-700 dark:text-indigo-300 transition flex items-center justify-between text-xs font-semibold">
                                                 <div class="flex items-center gap-2">
                                                     <i class="bi bi-file-earmark-pdf-fill text-rose-500"></i>
                                                     <span>5. Legal Documentation & Disclosures</span>
@@ -334,7 +334,7 @@
                                     </div>
                                     <h3 class="text-base font-bold text-slate-800 dark:text-slate-200">No Properties Found</h3>
                                     <p class="text-xs text-slate-500">Your portfolio is currently empty. Get started by creating your first fractional property listing.</p>
-                                    <a href="{{ route('manage-property.create') }}" class="btn-primary-tw text-xs py-2 px-4 inline-flex items-center gap-1.5 mt-2">
+                                    <a href="{{ route('admin.properties.create') }}" class="btn-primary-tw text-xs py-2 px-4 inline-flex items-center gap-1.5 mt-2">
                                         <i class="bi bi-plus-lg"></i> Create Property
                                     </a>
                                 </div>
@@ -346,13 +346,13 @@
         </div>
 
         <!-- Pagination & Summary Footer -->
-        @if ($property->hasPages() || $property->total() > 0)
+        @if ($properties->hasPages() || $properties->total() > 0)
             <div class="px-6 py-4 border-t border-slate-100 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-900/60 flex flex-col sm:flex-row items-center justify-between gap-4">
                 <div class="text-xs text-slate-500 dark:text-slate-400">
-                    Showing <strong class="font-semibold text-slate-800 dark:text-slate-200">{{ $property->firstItem() ?? 0 }}</strong> to <strong class="font-semibold text-slate-800 dark:text-slate-200">{{ $property->lastItem() ?? 0 }}</strong> of <strong class="font-semibold text-slate-800 dark:text-slate-200">{{ number_format($property->total()) }}</strong> total assets
+                    Showing <strong class="font-semibold text-slate-800 dark:text-slate-200">{{ $properties->firstItem() ?? 0 }}</strong> to <strong class="font-semibold text-slate-800 dark:text-slate-200">{{ $properties->lastItem() ?? 0 }}</strong> of <strong class="font-semibold text-slate-800 dark:text-slate-200">{{ number_format($properties->total()) }}</strong> total assets
                 </div>
                 <div class="pagination-container">
-                    {{ $property->onEachSide(2)->links() }}
+                    {{ $properties->links() }}
                 </div>
             </div>
         @endif

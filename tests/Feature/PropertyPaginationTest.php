@@ -12,12 +12,12 @@ class PropertyPaginationTest extends TestCase
     {
         $admin = Admin::first() ?? Admin::factory()->create();
 
-        $response = $this->actingAs($admin, 'admin')->get(route('manage-property.index'));
+        $response = $this->actingAs($admin, 'admin')->get(route('admin.properties.index'));
 
         $response->assertStatus(200);
-        $response->assertViewHas('property');
+        $response->assertViewHas('properties');
 
-        $paginator = $response->viewData('property');
+        $paginator = $response->viewData('properties');
         $this->assertInstanceOf(LengthAwarePaginator::class, $paginator);
         $this->assertEquals(15, $paginator->perPage());
     }

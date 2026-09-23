@@ -3,11 +3,11 @@
 namespace Database\Seeders;
 
 use App\Models\Admin;
+use App\Models\Property;
 use App\Models\PropertyAddress;
-use App\Models\PropertyDetails;
-use App\Models\PropertyDocumentModel;
-use App\Models\PropertyImageModel;
-use App\Models\PropertyModel;
+use App\Models\PropertyDetail;
+use App\Models\PropertyDocument;
+use App\Models\PropertyImage;
 use App\Models\PropertyOffering;
 use Illuminate\Database\Seeder;
 
@@ -280,7 +280,7 @@ class PropertySeeder extends Seeder
         ];
 
         foreach ($curatedProperties as $index => $propData) {
-            $property = PropertyModel::updateOrCreate(
+            $property = Property::updateOrCreate(
                 ['name' => $propData['name']],
                 [
                     'admin_id' => $adminId,
@@ -299,9 +299,9 @@ class PropertySeeder extends Seeder
             );
 
             // 2. Images (3 images per property)
-            PropertyImageModel::where('property_id', $propId)->delete();
+            PropertyImage::where('property_id', $propId)->delete();
             foreach ($propData['images'] as $imgUrl) {
-                PropertyImageModel::create([
+                PropertyImage::create([
                     'property_id' => $propId,
                     'property_image_key' => 'property_image',
                     'property_image_value' => $imgUrl,
@@ -309,7 +309,7 @@ class PropertySeeder extends Seeder
             }
 
             // 4. Details
-            PropertyDetails::updateOrCreate(
+            PropertyDetail::updateOrCreate(
                 ['property_id' => $propId],
                 $propData['details']
             );
@@ -328,7 +328,7 @@ class PropertySeeder extends Seeder
             );
 
             // 9. Legal Documents (6 PDF files)
-            PropertyDocumentModel::where('property_id', $propId)->delete();
+            PropertyDocument::where('property_id', $propId)->delete();
             $docList = [
                 'Documents_Master_Deed' => 'property_documents/master_deed_1.pdf',
                 'Documents_Expence_Calculations' => 'property_documents/expense_statement_4.pdf',
@@ -339,7 +339,7 @@ class PropertySeeder extends Seeder
             ];
 
             foreach ($docList as $docKey => $docFile) {
-                PropertyDocumentModel::create([
+                PropertyDocument::create([
                     'property_id' => $propId,
                     'document_key' => $docKey,
                     'document_value' => $docFile,

@@ -2,15 +2,15 @@
 
 namespace Database\Factories;
 
-use App\Models\PropertyDetails;
+use App\Models\PropertyDetail;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends Factory<PropertyDetails>
+ * @extends Factory<PropertyDetail>
  */
-class PropertyDetailsFactory extends Factory
+class PropertyDetailFactory extends Factory
 {
-    protected $model = PropertyDetails::class;
+    protected $model = PropertyDetail::class;
 
     public function definition(): array
     {

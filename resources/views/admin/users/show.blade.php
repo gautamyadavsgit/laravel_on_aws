@@ -229,7 +229,7 @@
                             </td>
                             <td class="px-6 py-4 text-right pr-6">
                                 @if($property)
-                                    <a href="{{ route('manage-property.show', $property->id) }}" class="inline-flex items-center gap-1 text-xs text-indigo-600 hover:text-indigo-700 dark:text-indigo-400 font-semibold" target="_blank">
+                                    <a href="{{ route('admin.properties.show', $property) }}" class="inline-flex items-center gap-1 text-xs text-indigo-600 hover:text-indigo-700 dark:text-indigo-400 font-semibold" target="_blank">
                                         <span>View Property</span>
                                         <i class="bi bi-box-arrow-up-right text-[10px]"></i>
                                     </a>
@@ -273,7 +273,7 @@
                             </div>
                         </div>
                         @if($favProperty)
-                            <a href="{{ route('manage-property.show', $favProperty->id) }}" class="p-1.5 rounded-lg text-slate-400 hover:text-indigo-600 transition" title="View Property">
+                            <a href="{{ route('admin.properties.show', $favProperty) }}" class="p-1.5 rounded-lg text-slate-400 hover:text-indigo-600 transition" title="View Property">
                                 <i class="bi bi-arrow-right"></i>
                             </a>
                         @endif

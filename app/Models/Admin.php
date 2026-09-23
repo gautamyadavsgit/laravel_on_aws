@@ -31,6 +31,6 @@ class Admin extends Model implements Authenticatable
      */
     public function properties(): HasMany
     {
-        return $this->hasMany(PropertyModel::class, 'admin_id');
+        return $this->hasMany(Property::class, 'admin_id');
     }
 }

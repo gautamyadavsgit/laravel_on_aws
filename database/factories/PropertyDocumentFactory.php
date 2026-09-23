@@ -2,15 +2,15 @@
 
 namespace Database\Factories;
 
-use App\Models\PropertyDocumentModel;
+use App\Models\PropertyDocument;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends Factory<PropertyDocumentModel>
+ * @extends Factory<PropertyDocument>
  */
-class PropertyDocumentModelFactory extends Factory
+class PropertyDocumentFactory extends Factory
 {
-    protected $model = PropertyDocumentModel::class;
+    protected $model = PropertyDocument::class;
 
     public function definition(): array
     {

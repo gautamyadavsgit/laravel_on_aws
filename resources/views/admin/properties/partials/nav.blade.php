@@ -41,7 +41,7 @@
                 <i class="bi bi-box-arrow-up-right"></i>
                 <span class="hidden sm:inline">Preview Live</span>
             </a>
-            <a href="{{ route('manage-property.index') }}" class="btn-secondary-tw text-xs py-2 px-3 flex items-center gap-1.5">
+            <a href="{{ route('admin.properties.index') }}" class="btn-secondary-tw text-xs py-2 px-3 flex items-center gap-1.5">
                 <i class="bi bi-arrow-left"></i>
                 <span>All Properties</span>
             </a>
@@ -52,8 +52,8 @@
     <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-1.5 shadow-sm overflow-x-auto">
         <nav class="flex items-center gap-1 min-w-max" aria-label="Property Edit Stages">
             <!-- 1. Primary -->
-            <a href="{{ route('manage-property.edit', ['manage_property' => $propId]) }}" 
-               class="flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold transition {{ $currentRoute === 'manage-property.edit' ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800' }}">
+            <a href="{{ route('admin.properties.edit', $property) }}" 
+               class="flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold transition {{ $currentRoute === 'admin.properties.edit' ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800' }}">
                 <i class="bi bi-building"></i>
                 <span>1. Primary</span>
             </a>
@@ -61,8 +61,8 @@
             <i class="bi bi-chevron-right text-slate-300 dark:text-slate-700 text-xs"></i>
 
             <!-- 2. Address -->
-            <a href="{{ route('admin.manage-property.edit-address', ['id' => $propId]) }}" 
-               class="flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold transition {{ $currentRoute === 'admin.manage-property.edit-address' ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800' }}">
+            <a href="{{ route('admin.properties.address.edit', $propId) }}" 
+               class="flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold transition {{ $currentRoute === 'admin.properties.address.edit' ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800' }}">
                 <i class="bi bi-geo-alt"></i>
                 <span>2. Address</span>
             </a>
@@ -70,8 +70,8 @@
             <i class="bi bi-chevron-right text-slate-300 dark:text-slate-700 text-xs"></i>
 
             <!-- 3. Specs -->
-            <a href="{{ route('admin.manage-property.edit-details', ['id' => $propId]) }}" 
-               class="flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold transition {{ $currentRoute === 'admin.manage-property.edit-details' ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800' }}">
+            <a href="{{ route('admin.properties.details.edit', $propId) }}" 
+               class="flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold transition {{ $currentRoute === 'admin.properties.details.edit' ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800' }}">
                 <i class="bi bi-sliders"></i>
                 <span>3. Specs</span>
             </a>
@@ -79,8 +79,8 @@
             <i class="bi bi-chevron-right text-slate-300 dark:text-slate-700 text-xs"></i>
 
             <!-- 4. Offerings -->
-            <a href="{{ route('admin.manage-property.edit-property-offerings', ['id' => $propId]) }}" 
-               class="flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold transition {{ $currentRoute === 'admin.manage-property.edit-property-offerings' ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800' }}">
+            <a href="{{ route('admin.properties.offering.edit', $propId) }}" 
+               class="flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold transition {{ $currentRoute === 'admin.properties.offering.edit' ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800' }}">
                 <i class="bi bi-tag"></i>
                 <span>4. Offerings</span>
             </a>
@@ -88,8 +88,8 @@
             <i class="bi bi-chevron-right text-slate-300 dark:text-slate-700 text-xs"></i>
 
             <!-- 5. Documents -->
-            <a href="{{ route('admin.manage-property.edit-property-documents', ['id' => $propId]) }}" 
-               class="flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold transition {{ $currentRoute === 'admin.manage-property.edit-property-documents' ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800' }}">
+            <a href="{{ route('admin.properties.documents.edit', $propId) }}" 
+               class="flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold transition {{ $currentRoute === 'admin.properties.documents.edit' ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800' }}">
                 <i class="bi bi-file-earmark-pdf"></i>
                 <span>5. Documents</span>
             </a>

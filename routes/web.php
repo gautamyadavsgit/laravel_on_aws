@@ -2,7 +2,11 @@
 
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\DashboardController;
-use App\Http\Controllers\Admin\ManagePropertyController;
+use App\Http\Controllers\Admin\PropertyAddressController;
+use App\Http\Controllers\Admin\PropertyController;
+use App\Http\Controllers\Admin\PropertyDetailController;
+use App\Http\Controllers\Admin\PropertyDocumentController;
+use App\Http\Controllers\Admin\PropertyOfferingController;
 use App\Http\Controllers\Admin\UserManagementController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\EmailVerificationNotificationController;
@@ -77,21 +81,20 @@ Route::prefix('/admin')->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'viewDashboard'])->name('admin.dashboard');
         Route::resource('users', UserManagementController::class)->names('admin.users');
 
-        // Manage Property Routes
-        Route::resource('manage-property', ManagePropertyController::class);
+        Route::resource('properties', PropertyController::class)->names('admin.properties');
 
-        Route::prefix('/manage-property')->group(function () {
-            Route::get('/edit-address/{id}', [ManagePropertyController::class, 'editAddress'])->name('admin.manage-property.edit-address');
-            Route::post('/update-address/{id}', [ManagePropertyController::class, 'updateAddress'])->name('admin.manage-property.update-address');
+        Route::prefix('properties/{property}')->name('admin.properties.')->group(function () {
+            Route::get('address', [PropertyAddressController::class, 'edit'])->name('address.edit');
+            Route::put('address', [PropertyAddressController::class, 'update'])->name('address.update');
 
-            Route::get('/edit-details/{id}', [ManagePropertyController::class, 'editDetails'])->name('admin.manage-property.edit-details');
-            Route::post('/update-details/{id}', [ManagePropertyController::class, 'updateDetails'])->name('admin.manage-property.update-details');
+            Route::get('details', [PropertyDetailController::class, 'edit'])->name('details.edit');
+            Route::put('details', [PropertyDetailController::class, 'update'])->name('details.update');
 
-            Route::get('/edit-property-offerings/{id}', [ManagePropertyController::class, 'editOfferings'])->name('admin.manage-property.edit-property-offerings');
-            Route::post('/update-property-offerings/{id}', [ManagePropertyController::class, 'updateOfferings'])->name('admin.manage-property.update-property-offerings');
+            Route::get('offering', [PropertyOfferingController::class, 'edit'])->name('offering.edit');
+            Route::put('offering', [PropertyOfferingController::class, 'update'])->name('offering.update');
 
-            Route::get('/edit-property-documents/{id}', [ManagePropertyController::class, 'editDocuments'])->name('admin.manage-property.edit-property-documents');
-            Route::post('/update-property-documents/{id}', [ManagePropertyController::class, 'updateDocuments'])->name('admin.manage-property.update-property-documents');
+            Route::get('documents', [PropertyDocumentController::class, 'edit'])->name('documents.edit');
+            Route::put('documents', [PropertyDocumentController::class, 'update'])->name('documents.update');
         });
     });
 });

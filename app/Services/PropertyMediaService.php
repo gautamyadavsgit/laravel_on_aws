@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Models\PropertyModel;
+use App\Models\Property;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 
@@ -13,7 +13,7 @@ class PropertyMediaService
      *
      * @param  UploadedFile[]  $files
      */
-    public function uploadPropertyImages(PropertyModel $property, array $files): void
+    public function uploadPropertyImages(Property $property, array $files): void
     {
         $records = [];
 
@@ -35,7 +35,7 @@ class PropertyMediaService
     /**
      * Upload and sync property documents
      */
-    public function uploadDocuments(PropertyModel $property, array $fileInputs, array $filteredData): void
+    public function uploadDocuments(Property $property, array $fileInputs, array $filteredData): void
     {
         $propertyDocumentModel = $property->documents;
         $newData = [];

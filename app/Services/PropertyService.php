@@ -2,9 +2,9 @@
 
 namespace App\Services;
 
+use App\Models\Property;
 use App\Models\PropertyAddress;
-use App\Models\PropertyDetails;
-use App\Models\PropertyModel;
+use App\Models\PropertyDetail;
 use App\Models\User;
 use App\Models\UserSearchLog;
 use Illuminate\Contracts\Cache\Repository;
@@ -68,7 +68,7 @@ class PropertyService
      */
     public function getFilteredProperties(array $filters = [], int $perPage = 9): LengthAwarePaginator
     {
-        $query = PropertyModel::with([
+        $query = Property::with([
             'images',
             'address',
             'details',
@@ -229,7 +229,7 @@ class PropertyService
         $preferredLocations = $recentSearches->pluck('location')->filter()->values()->all();
         $preferredTypes = $recentSearches->pluck('property_type')->filter()->values()->all();
 
-        $query = PropertyModel::with(['images', 'address', 'details']);
+        $query = Property::with(['images', 'address', 'details']);
 
         if (! empty($preferredLocations)) {
             $query->whereHas('address', function ($q) use ($preferredLocations) {
@@ -247,7 +247,7 @@ class PropertyService
         // Fallback: If not enough results, fill with the newest properties
         if ($recommendations->count() < $limit) {
             $existingIds = $recommendations->pluck('id')->all();
-            $fallback = PropertyModel::with(['images', 'address', 'details'])
+            $fallback = Property::with(['images', 'address', 'details'])
                 ->whereNotIn('id', $existingIds)
                 ->latest()
                 ->take($limit - $recommendations->count())
@@ -267,7 +267,7 @@ class PropertyService
         return $this->cache()->remember('property_filter_options', self::CACHE_TTL_SECONDS, function () {
             $cities = PropertyAddress::select('city')->distinct()->whereNotNull('city')->where('city', '!=', '')->pluck('city')->all();
             $states = PropertyAddress::select('state')->distinct()->whereNotNull('state')->where('state', '!=', '')->pluck('state')->all();
-            $types = PropertyDetails::select('type')->distinct()->whereNotNull('type')->where('type', '!=', '')->pluck('type')->all();
+            $types = PropertyDetail::select('type')->distinct()->whereNotNull('type')->where('type', '!=', '')->pluck('type')->all();
 
             return [
                 'cities' => array_values(array_filter($cities)),
@@ -280,10 +280,10 @@ class PropertyService
     /**
      * Get property by its slug with per-property caching and eager-loaded relations
      */
-    public function getPropertyBySlug(string $slug): ?PropertyModel
+    public function getPropertyBySlug(string $slug): ?Property
     {
         return $this->cache()->remember($this->detailCacheKey($slug), self::CACHE_TTL_SECONDS, function () use ($slug) {
-            return PropertyModel::with([
+            return Property::with([
                 'images',
                 'documents',
                 'address',
@@ -297,9 +297,9 @@ class PropertyService
     /**
      * Get property by ID or return first featured property
      */
-    public function getPropertyById(?string $id = null): ?PropertyModel
+    public function getPropertyById(?string $id = null): ?Property
     {
-        $query = PropertyModel::with([
+        $query = Property::with([
             'images',
             'documents',
             'address',

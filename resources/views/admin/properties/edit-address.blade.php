@@ -34,22 +34,23 @@
             <span class="badge-tw badge-info-tw hidden sm:inline-flex">Step 2 of 5</span>
         </div>
 
-        <form action="{{ route('admin.manage-property.update-address', ['id' => $property_id]) }}" method="POST" enctype="multipart/form-data" class="p-6 space-y-6">
+        <form action="{{ route('admin.properties.address.update', $property) }}" method="POST" enctype="multipart/form-data" class="p-6 space-y-6">
             @csrf
+            @method('PUT')
 
             <div class="space-y-4">
                 <div>
                     <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5" for="address_1">
                         Address Line 1 <span class="text-rose-500">*</span>
                     </label>
-                    <textarea class="textarea-tw" name="address_1" maxlength="255" id="address_1" rows="2" required placeholder="Street address, P.O. box">{{ old('address_1', $propertyAddress['address_1'] ?? '') }}</textarea>
+                    <textarea class="textarea-tw" name="address_1" maxlength="255" id="address_1" rows="2" required placeholder="Street address, P.O. box">{{ old('address_1', $property->address['address_1'] ?? '') }}</textarea>
                 </div>
 
                 <div>
                     <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5" for="address_2">
                         Address Line 2 (Optional)
                     </label>
-                    <textarea class="textarea-tw" name="address_2" maxlength="255" id="address_2" rows="2" placeholder="Apartment, suite, unit, building, floor, etc.">{{ old('address_2', $propertyAddress['address_2'] ?? '') }}</textarea>
+                    <textarea class="textarea-tw" name="address_2" maxlength="255" id="address_2" rows="2" placeholder="Apartment, suite, unit, building, floor, etc.">{{ old('address_2', $property->address['address_2'] ?? '') }}</textarea>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -57,27 +58,27 @@
                         <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5" for="city">
                             City <span class="text-rose-500">*</span>
                         </label>
-                        <input class="input-tw" type="text" name="city" maxlength="112" id="city" value="{{ old('city', $propertyAddress['city'] ?? '') }}" placeholder="City name" required>
+                        <input class="input-tw" type="text" name="city" maxlength="112" id="city" value="{{ old('city', $property->address['city'] ?? '') }}" placeholder="City name" required>
                     </div>
 
                     <div>
                         <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5" for="state">
                             State / Province <span class="text-rose-500">*</span>
                         </label>
-                        <input class="input-tw" type="text" name="state" maxlength="112" id="state" value="{{ old('state', $propertyAddress['state'] ?? '') }}" placeholder="e.g. TN, CO, FL" required>
+                        <input class="input-tw" type="text" name="state" maxlength="112" id="state" value="{{ old('state', $property->address['state'] ?? '') }}" placeholder="e.g. TN, CO, FL" required>
                     </div>
 
                     <div>
                         <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5" for="zip">
                             Postal / Zip Code <span class="text-rose-500">*</span>
                         </label>
-                        <input class="input-tw" type="text" name="zip" maxlength="20" pattern="[A-Za-z0-9][A-Za-z0-9 \-]*" title="Letters, numbers, spaces and hyphens only" id="zip" value="{{ old('zip', $propertyAddress['zip'] ?? '') }}" placeholder="e.g. 37738" required>
+                        <input class="input-tw" type="text" name="zip" maxlength="20" pattern="[A-Za-z0-9][A-Za-z0-9 \-]*" title="Letters, numbers, spaces and hyphens only" id="zip" value="{{ old('zip', $property->address['zip'] ?? '') }}" placeholder="e.g. 37738" required>
                     </div>
                 </div>
             </div>
 
             <div class="border-t border-slate-200 dark:border-slate-800 pt-5 flex flex-col sm:flex-row items-center justify-between gap-3">
-                <a href="{{ route('manage-property.edit', ['manage_property' => $property_id]) }}" class="btn-secondary-tw w-full sm:w-auto text-center order-2 sm:order-1">
+                <a href="{{ route('admin.properties.edit', $property) }}" class="btn-secondary-tw w-full sm:w-auto text-center order-2 sm:order-1">
                     <i class="bi bi-arrow-left"></i> Previous Step
                 </a>
                 <div class="flex items-center gap-2.5 w-full sm:w-auto order-1 sm:order-2">

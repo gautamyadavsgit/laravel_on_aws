@@ -2,8 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\Models\Admin;
-use App\Models\PropertyModel;
+use App\Models\Property;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
@@ -11,17 +10,9 @@ class PropertySlugTest extends TestCase
 {
     use DatabaseTransactions;
 
-    protected function makeProperty(string $name): PropertyModel
+    protected function makeProperty(string $name): Property
     {
-        $admin = Admin::first() ?? Admin::factory()->create();
-
-        return PropertyModel::create([
-            'name' => $name,
-            'description' => 'Test description.',
-            'management_company' => 'Test Co',
-            'admin_id' => $admin->id,
-            'availability' => 'Available',
-        ]);
+        return Property::factory()->create(['name' => $name]);
     }
 
     public function test_property_single_page_resolves_by_slug(): void

@@ -2,15 +2,15 @@
 
 namespace Database\Factories;
 
-use App\Models\PropertyImageModel;
+use App\Models\PropertyImage;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends Factory<PropertyImageModel>
+ * @extends Factory<PropertyImage>
  */
-class PropertyImageModelFactory extends Factory
+class PropertyImageFactory extends Factory
 {
-    protected $model = PropertyImageModel::class;
+    protected $model = PropertyImage::class;
 
     public function definition(): array
     {

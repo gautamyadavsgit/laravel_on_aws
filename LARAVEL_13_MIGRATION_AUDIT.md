@@ -53,8 +53,8 @@ Audit date: 2026-09-23. Read-only: no application code was changed for this docu
 
 ### 3.4 Structure and naming
 1. Duplicate model `Admin` and `Admins` (`Admins` is an alias still used by seeders, one factory and a console command). Consolidate on `Admin`.
-2. Model names `PropertyModel`, `PropertyImageModel`, `PropertyDocumentModel` deviate from Laravel naming (`Property`, `PropertyImage`, `PropertyDocument`). Renaming touches most of the codebase; low value, high churn. **Recommend leaving.**
-3. Duplicate relation aliases on `PropertyModel` (`images/propertyImage`, `details/propertyDetails`, `address/propertyAddress`, `offering/propertyOffering`, `documents/propertyDocumentModel`). Pick one set.
+2. Model names `Property`, `PropertyImage`, `PropertyDocument` deviate from Laravel naming (`Property`, `PropertyImage`, `PropertyDocument`). Renaming touches most of the codebase; low value, high churn. **Recommend leaving.**
+3. Duplicate relation aliases on `Property` (`images/propertyImage`, `details/propertyDetails`, `address/propertyAddress`, `offering/propertyOffering`, `documents/propertyDocumentModel`). Pick one set.
 4. Route names/URLs mix styles: `/property_singlepage`, `property_singlepage` route name, `CustomerController::property_singlepage` (snake_case method), `investor` action behind `/invest`. Legacy `/property_singlepage?id=` redirects to the slug URL and is covered by a test.
 5. Admin wizard routes use `{id}` strings and manual `findOrFail` instead of route model binding; the resource routes use `string $id` too.
 6. `Route::view('/investment-interest', ...)` and other routes use fully-qualified controller class names inline instead of imports.
@@ -103,7 +103,7 @@ Audit date: 2026-09-23. Read-only: no application code was changed for this docu
 
 ## 5. Decisions needed from the owner
 1. Logout via POST only breaks any `<a href="/logout">` links; OK to change links to forms?
-2. Keep the model names `PropertyModel` etc., or accept a large rename?
+2. Keep the model names `Property` etc., or accept a large rename?
 3. Add `declare(strict_types=1)` repo-wide?
 4. Private S3 images: keep 403 for now, or move to signed URLs/CloudFront?
 5. Add Larastan (new dev dependency)?
@@ -117,6 +117,6 @@ Owner decisions: no real data (old migrations may be edited), logout may change 
 
 **Also done later:** `users.dob` date cast with rendering tests; Larastan level 5 added (`phpstan.neon`, no baseline, zero errors) after adding return types/generics to model relations and fixing real findings; `composer test|lint|analyse` scripts.
 
-**Deliberately not done:** renaming `PropertyModel`/`PropertyImageModel`/`PropertyDocumentModel`; `declare(strict_types=1)`; route model binding for the admin wizard (renaming `{id}` touches every `route()` call and test for little gain); signed S3 URLs; removing the unused Sanctum stub and `laravel/sail`/`guzzle` (need an owner decision).
+**Deliberately not done:** renaming `Property`/`PropertyImage`/`PropertyDocument`; `declare(strict_types=1)`; route model binding for the admin wizard (renaming `{id}` touches every `route()` call and test for little gain); signed S3 URLs; removing the unused Sanctum stub and `laravel/sail`/`guzzle` (need an owner decision).
 
 **Local follow-ups:** your `.env` still uses `BROADCAST_DRIVER` (harmless, default is `null`) and needs `php artisan migrate:fresh --seed` because migrations were edited; clear the cache table afterwards (`php artisan cache:clear`) since relation names changed.

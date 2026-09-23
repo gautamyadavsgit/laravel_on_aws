@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 
-class PropertyModel extends Model
+class Property extends Model
 {
     use HasFactory;
     use SoftDeletes;
@@ -39,13 +39,13 @@ class PropertyModel extends Model
      */
     protected static function booted(): void
     {
-        static::creating(function (PropertyModel $property) {
+        static::creating(function (Property $property) {
             if (empty($property->slug) && ! empty($property->name)) {
                 $property->slug = static::generateUniqueSlug($property->name);
             }
         });
 
-        static::updating(function (PropertyModel $property) {
+        static::updating(function (Property $property) {
             if (empty($property->slug) && ! empty($property->name)) {
                 $property->slug = static::generateUniqueSlug($property->name, $property->id);
             }
@@ -110,16 +110,16 @@ class PropertyModel extends Model
         return $this->hasOne(PropertyAddress::class, 'property_id');
     }
 
-    /** @return HasMany<PropertyImageModel, $this> */
+    /** @return HasMany<PropertyImage, $this> */
     public function images(): HasMany
     {
-        return $this->hasMany(PropertyImageModel::class, 'property_id');
+        return $this->hasMany(PropertyImage::class, 'property_id');
     }
 
-    /** @return HasOne<PropertyDetails, $this> */
+    /** @return HasOne<PropertyDetail, $this> */
     public function details(): HasOne
     {
-        return $this->hasOne(PropertyDetails::class, 'property_id');
+        return $this->hasOne(PropertyDetail::class, 'property_id');
     }
 
     /** @return HasOne<PropertyOffering, $this> */
@@ -128,9 +128,9 @@ class PropertyModel extends Model
         return $this->hasOne(PropertyOffering::class, 'property_id');
     }
 
-    /** @return HasMany<PropertyDocumentModel, $this> */
+    /** @return HasMany<PropertyDocument, $this> */
     public function documents(): HasMany
     {
-        return $this->hasMany(PropertyDocumentModel::class, 'property_id');
+        return $this->hasMany(PropertyDocument::class, 'property_id');
     }
 }

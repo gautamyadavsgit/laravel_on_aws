@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\PropertyModel;
+use App\Models\Property;
 use App\Services\PropertyService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -81,7 +81,7 @@ class CustomerController extends Controller
         return $this->renderSinglePage($featuredProperty);
     }
 
-    protected function renderSinglePage(PropertyModel $property): View
+    protected function renderSinglePage(Property $property): View
     {
         return view('frontend.property_singlepage', [
             'featuredProperty' => $property,

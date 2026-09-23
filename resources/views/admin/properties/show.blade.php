@@ -9,10 +9,10 @@
         <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Detailed media and documentation overview for property #{{ $property->id }}.</p>
     </div>
     <div class="flex items-center gap-3">
-        <a href="{{ route('manage-property.edit', ['manage_property' => $property->id]) }}" class="btn-primary-tw">
+        <a href="{{ route('admin.properties.edit', $property) }}" class="btn-primary-tw">
             <i class="bi bi-pencil"></i> Edit Property
         </a>
-        <a href="{{ route('manage-property.index') }}" class="btn-secondary-tw">
+        <a href="{{ route('admin.properties.index') }}" class="btn-secondary-tw">
             <i class="bi bi-arrow-left"></i> Back to List
         </a>
     </div>

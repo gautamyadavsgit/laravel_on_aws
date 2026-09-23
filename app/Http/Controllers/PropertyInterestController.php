@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Property;
 use App\Models\PropertyInterest;
-use App\Models\PropertyModel;
 use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -15,7 +15,7 @@ class PropertyInterestController extends Controller
      */
     public function store(Request $request, string $propertyId): RedirectResponse
     {
-        $property = PropertyModel::findOrFail($propertyId);
+        $property = Property::findOrFail($propertyId);
 
         try {
             // firstOrCreate so a repeat submission never resets a status the admin team already advanced

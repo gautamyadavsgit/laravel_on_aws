@@ -24,7 +24,7 @@
             </div>
 
             <!-- Quick Actions -->
-            <a href="{{ route('manage-property.index') }}" class="btn-secondary-tw text-xs py-2 px-3 flex items-center gap-1.5">
+            <a href="{{ route('admin.properties.index') }}" class="btn-secondary-tw text-xs py-2 px-3 flex items-center gap-1.5">
                 <i class="bi bi-arrow-left"></i>
                 <span>Back to Properties</span>
             </a>
@@ -77,7 +77,7 @@
             <span class="badge-tw badge-info-tw hidden sm:inline-flex">Step 1 of 5</span>
         </div>
 
-        <form action="{{ route('manage-property.store') }}" method="POST" enctype="multipart/form-data" class="p-6 space-y-6">
+        <form action="{{ route('admin.properties.store') }}" method="POST" enctype="multipart/form-data" class="p-6 space-y-6">
             @csrf
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -126,7 +126,7 @@
                 <button type="submit" class="btn-primary-tw">
                     <i class="bi bi-check-lg text-base"></i> Create & Proceed to Address <i class="bi bi-arrow-right"></i>
                 </button>
-                <a href="{{ route('manage-property.index') }}" class="btn-secondary-tw">
+                <a href="{{ route('admin.properties.index') }}" class="btn-secondary-tw">
                     Cancel
                 </a>
             </div>

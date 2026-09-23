@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class PropertyDetails extends Model
+class PropertyDetail extends Model
 {
     use HasFactory;
 
@@ -31,14 +31,6 @@ class PropertyDetails extends Model
 
     public function property(): BelongsTo
     {
-        return $this->belongsTo(PropertyModel::class, 'property_id');
-    }
-
-    /**
-     * Backward compatibility alias.
-     */
-    public function propertyModel(): BelongsTo
-    {
-        return $this->property();
+        return $this->belongsTo(Property::class, 'property_id');
     }
 }
