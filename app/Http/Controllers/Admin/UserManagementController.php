@@ -27,12 +27,8 @@ class UserManagementController extends Controller
      */
     public function index(Request $request): View
     {
-        $query = User::with([
-            'propertyInterests.property.address',
-            'propertyInterests.property.details',
-            'accreditationStatus',
-            'experienceLevel',
-        ]);
+        $query = User::with(['accreditationStatus', 'experienceLevel'])
+            ->withCount('propertyInterests');
 
         // Only plain strings are meaningful filters; arrays / junk are dropped (and removed from the query
         // string so the view and pagination links never see them)

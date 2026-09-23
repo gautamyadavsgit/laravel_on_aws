@@ -160,10 +160,10 @@
 
                             <!-- Interested Properties -->
                             <td class="px-6 py-4">
-                                @php $interestCount = $user->propertyInterests->count(); @endphp
+                                @php $interestCount = $user->property_interests_count; @endphp
                                 @if($interestCount > 0)
                                     <span class="badge-tw badge-info-tw text-xs py-1 px-2">
-                                        <i class="bi bi-building"></i> {{ $interestCount }} property{{ $interestCount > 1 ? 'ies' : '' }}
+                                        <i class="bi bi-building"></i> {{ $interestCount }} {{ \Illuminate\Support\Str::plural('property', $interestCount) }}
                                     </span>
                                 @else
                                     <span class="text-xs text-slate-400 italic">None</span>
