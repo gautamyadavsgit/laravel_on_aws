@@ -2,16 +2,11 @@
 
 namespace Tests\Feature;
 
-use App\Models\Admin;
 use App\Models\User;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Illuminate\Support\Facades\Hash;
-use Tests\TestCase;
+use Tests\DatabaseTestCase;
 
-class LogoutAndThrottleTest extends TestCase
+class LogoutAndThrottleTest extends DatabaseTestCase
 {
-    use DatabaseTransactions;
-
     public function test_investor_logout_requires_post(): void
     {
         $user = User::factory()->create();
@@ -25,7 +20,7 @@ class LogoutAndThrottleTest extends TestCase
 
     public function test_admin_logout_requires_post(): void
     {
-        $admin = Admin::first() ?? Admin::create(['username' => 'logout-test', 'email' => 'logout-test@example.com', 'password' => Hash::make('password123')]);
+        $admin = $this->admin();
 
         $this->actingAs($admin, 'admin')->get('/admin/logout')->assertStatus(405);
         $this->assertAuthenticatedAs($admin, 'admin');

@@ -36,12 +36,12 @@ class RegistrationService
     /**
      * Register a new investor user
      */
-    public function register(array $data): User
+    public function register(array $validated): User
     {
-        $expId = $this->experienceMap[$data['experience'] ?? 'beginner'] ?? 1;
-        $refId = $this->referralMap[$data['referral'] ?? 'search'] ?? 1;
+        $expId = $this->experienceMap[$validated['experience'] ?? 'beginner'] ?? 1;
+        $refId = $this->referralMap[$validated['referral'] ?? 'search'] ?? 1;
 
-        $goals = (array) ($data['goals'] ?? []);
+        $goals = (array) ($validated['goals'] ?? []);
         $goalId = 1;
         if (in_array('appreciation', $goals)) {
             $goalId = 2;
@@ -55,15 +55,15 @@ class RegistrationService
         $verifyUrl = route('verification.verify.token', ['token' => $token]);
 
         // The account and its default alert preferences are created together or not at all
-        $user = DB::transaction(function () use ($data, $token, $verifyUrl, $refId, $expId, $goalId) {
+        $user = DB::transaction(function () use ($validated, $token, $verifyUrl, $refId, $expId, $goalId) {
             $user = User::create([
-                'first_name' => $data['first_name'],
-                'middile_name' => $data['middle_name'] ?? null,
-                'last_name' => $data['last_name'],
-                'suffix' => $data['suffix'] ?? null,
-                'email' => $data['email'],
-                'password' => Hash::make($data['password']),
-                'phone' => $data['phone'] ?? null,
+                'first_name' => $validated['first_name'],
+                'middile_name' => $validated['middle_name'] ?? null,
+                'last_name' => $validated['last_name'],
+                'suffix' => $validated['suffix'] ?? null,
+                'email' => $validated['email'],
+                'password' => Hash::make($validated['password']),
+                'phone' => $validated['phone'] ?? null,
                 'verification_token' => $token,
                 'verification_link' => $verifyUrl,
                 'hear_about_us' => $refId,

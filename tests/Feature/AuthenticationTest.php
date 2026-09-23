@@ -2,10 +2,9 @@
 
 namespace Tests\Feature;
 
-use App\Models\User;
-use Tests\TestCase;
+use Tests\DatabaseTestCase;
 
-class AuthTest extends TestCase
+class AuthenticationTest extends DatabaseTestCase
 {
     public function test_login_screen_can_be_rendered(): void
     {
@@ -27,15 +26,7 @@ class AuthTest extends TestCase
 
     public function test_users_can_authenticate_using_the_login_screen(): void
     {
-        $user = User::first();
-        if (! $user) {
-            $user = User::create([
-                'first_name' => 'Test',
-                'last_name' => 'Investor',
-                'email' => 'test_investor_auth@example.com',
-                'password' => bcrypt('password123'),
-            ]);
-        }
+        $user = $this->investor();
 
         $response = $this->post('/login', [
             'email' => $user->email,
@@ -48,15 +39,7 @@ class AuthTest extends TestCase
 
     public function test_after_login_users_are_redirected_to_the_investment_interest_page_when_requested(): void
     {
-        $user = User::first();
-        if (! $user) {
-            $user = User::create([
-                'first_name' => 'Test',
-                'last_name' => 'Investor',
-                'email' => 'test_investor_interest@example.com',
-                'password' => bcrypt('password123'),
-            ]);
-        }
+        $user = $this->investor();
 
         $response = $this->post('/login?redirect=investment_interest', [
             'email' => $user->email,

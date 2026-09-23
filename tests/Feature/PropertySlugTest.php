@@ -3,13 +3,10 @@
 namespace Tests\Feature;
 
 use App\Models\Property;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Tests\TestCase;
+use Tests\DatabaseTestCase;
 
-class PropertySlugTest extends TestCase
+class PropertySlugTest extends DatabaseTestCase
 {
-    use DatabaseTransactions;
-
     protected function makeProperty(string $name): Property
     {
         return Property::factory()->create(['name' => $name]);

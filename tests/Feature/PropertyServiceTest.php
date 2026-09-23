@@ -6,14 +6,11 @@ use App\Models\Property;
 use App\Models\User;
 use App\Models\UserSearchLog;
 use App\Services\PropertyService;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Str;
-use Tests\TestCase;
+use Tests\DatabaseTestCase;
 
-class PropertyServiceTest extends TestCase
+class PropertyServiceTest extends DatabaseTestCase
 {
-    use DatabaseTransactions;
-
     protected string $tag;
 
     protected function setUp(): void

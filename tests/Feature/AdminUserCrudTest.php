@@ -2,28 +2,13 @@
 
 namespace Tests\Feature;
 
-use App\Models\Admin;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-use Tests\TestCase;
+use Tests\DatabaseTestCase;
 
-class AdminUserCrudTest extends TestCase
+class AdminUserCrudTest extends DatabaseTestCase
 {
-    protected function getOrCreateAdmin(): Admin
-    {
-        $admin = Admin::first();
-        if (! $admin) {
-            $admin = Admin::create([
-                'name' => 'Test Admin',
-                'email' => 'admin_test_'.Str::random(5).'@example.com',
-                'password' => Hash::make('password123'),
-            ]);
-        }
-
-        return $admin;
-    }
-
     public function test_guest_cannot_access_admin_user_crud(): void
     {
         $response = $this->get('/admin/users');
@@ -32,7 +17,7 @@ class AdminUserCrudTest extends TestCase
 
     public function test_admin_can_view_user_list(): void
     {
-        $admin = $this->getOrCreateAdmin();
+        $admin = $this->admin();
 
         $response = $this->actingAs($admin, 'admin')->get('/admin/users');
 
@@ -42,7 +27,7 @@ class AdminUserCrudTest extends TestCase
 
     public function test_admin_can_search_and_filter_users(): void
     {
-        $admin = $this->getOrCreateAdmin();
+        $admin = $this->admin();
         $email = 'searchable_'.Str::random(6).'@example.com';
 
         User::create([
@@ -61,7 +46,7 @@ class AdminUserCrudTest extends TestCase
 
     public function test_admin_can_view_create_user_form(): void
     {
-        $admin = $this->getOrCreateAdmin();
+        $admin = $this->admin();
 
         $response = $this->actingAs($admin, 'admin')->get('/admin/users/create');
 
@@ -71,7 +56,7 @@ class AdminUserCrudTest extends TestCase
 
     public function test_admin_can_create_user(): void
     {
-        $admin = $this->getOrCreateAdmin();
+        $admin = $this->admin();
         $email = 'new_user_'.Str::random(8).'@example.com';
 
         $response = $this->actingAs($admin, 'admin')->post('/admin/users', [
@@ -100,7 +85,7 @@ class AdminUserCrudTest extends TestCase
 
     public function test_admin_can_view_user_details(): void
     {
-        $admin = $this->getOrCreateAdmin();
+        $admin = $this->admin();
         $user = User::create([
             'first_name' => 'Showcase',
             'last_name' => 'Investor',
@@ -116,7 +101,7 @@ class AdminUserCrudTest extends TestCase
 
     public function test_admin_can_view_edit_user_form(): void
     {
-        $admin = $this->getOrCreateAdmin();
+        $admin = $this->admin();
         $user = User::create([
             'first_name' => 'Editable',
             'last_name' => 'User',
@@ -132,7 +117,7 @@ class AdminUserCrudTest extends TestCase
 
     public function test_admin_can_update_user(): void
     {
-        $admin = $this->getOrCreateAdmin();
+        $admin = $this->admin();
         $user = User::create([
             'first_name' => 'InitialName',
             'last_name' => 'InitialLast',
@@ -162,7 +147,7 @@ class AdminUserCrudTest extends TestCase
 
     public function test_admin_can_delete_user(): void
     {
-        $admin = $this->getOrCreateAdmin();
+        $admin = $this->admin();
         $user = User::create([
             'first_name' => 'ToDelete',
             'last_name' => 'User',

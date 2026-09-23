@@ -37,9 +37,9 @@ class PropertyController extends Controller
 
     public function store(StorePropertyRequest $request): RedirectResponse
     {
-        $data = Arr::except($request->validated(), ['property_images']);
-        $data['admin_id'] = auth('admin')->id();
-        $property = Property::create($data);
+        $attributes = Arr::except($request->validated(), ['property_images']);
+        $attributes['admin_id'] = auth('admin')->id();
+        $property = Property::create($attributes);
 
         if ($request->hasFile('property_images')) {
             $this->mediaService->uploadPropertyImages($property, (array) $request->file('property_images'));

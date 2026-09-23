@@ -7,48 +7,25 @@ use App\Models\Property;
 use App\Models\PropertyFavorite;
 use App\Models\PropertyInterest;
 use App\Models\User;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
-use Tests\TestCase;
+use Tests\DatabaseTestCase;
 
 /**
  * Properties are soft deleted, but investors' favorites / interests keep pointing at them.
  */
-class SoftDeletedPropertyTest extends TestCase
+class SoftDeletedPropertyTest extends DatabaseTestCase
 {
-    use DatabaseTransactions;
-
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->user = User::create([
-            'first_name' => 'Trash',
-            'last_name' => 'Tester',
-            'email' => 'trash_'.Str::random(8).'@example.com',
-            'password' => Hash::make('password123'),
-        ]);
-
-        $admin = Admin::first() ?? Admin::create([
-            'username' => 'trash_admin',
-            'email' => 'trash_admin_'.Str::random(6).'@example.com',
-            'password' => Hash::make('password123'),
-        ]);
-
-        $this->property = Property::create([
-            'name' => 'Soon Deleted '.Str::random(6),
-            'description' => 'x',
-            'management_company' => 'x',
-            'admin_id' => $admin->id,
-            'availability' => 'Available',
-        ]);
+        $this->user = $this->investor();
+        $this->admin = $this->admin();
+        $this->property = $this->property();
 
         PropertyFavorite::create(['user_id' => $this->user->id, 'property_id' => $this->property->id]);
         PropertyInterest::create(['user_id' => $this->user->id, 'property_id' => $this->property->id, 'status' => 'new']);
 
         $this->property->delete();
-        $this->admin = $admin;
     }
 
     protected User $user;

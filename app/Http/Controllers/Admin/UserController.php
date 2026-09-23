@@ -94,18 +94,18 @@ class UserController extends Controller
      */
     public function store(StoreUserRequest $request): RedirectResponse
     {
-        $data = $request->validated();
+        $attributes = $request->validated();
 
-        $data['password'] = Hash::make($data['password']);
+        $attributes['password'] = Hash::make($attributes['password']);
 
-        if (! empty($data['email_verified'])) {
-            $data['email_verified_at'] = now();
+        if (! empty($attributes['email_verified'])) {
+            $attributes['email_verified_at'] = now();
         } else {
-            $data['email_verified_at'] = null;
+            $attributes['email_verified_at'] = null;
         }
-        unset($data['email_verified']);
+        unset($attributes['email_verified']);
 
-        $user = User::create($data);
+        $user = User::create($attributes);
 
         return redirect()->route('admin.users.show', $user->id)
             ->with('success', "User '{$user->name}' created successfully.");
@@ -154,26 +154,26 @@ class UserController extends Controller
      */
     public function update(UpdateUserRequest $request, User $user): RedirectResponse
     {
-        $data = $request->validated();
+        $attributes = $request->validated();
 
         // Handle password update
-        if (! empty($data['password'])) {
-            $data['password'] = Hash::make($data['password']);
+        if (! empty($attributes['password'])) {
+            $attributes['password'] = Hash::make($attributes['password']);
         } else {
-            unset($data['password']);
+            unset($attributes['password']);
         }
 
         // Handle email verification toggle
-        if (isset($data['email_verified'])) {
-            if ($data['email_verified'] && ! $user->email_verified_at) {
-                $data['email_verified_at'] = now();
-            } elseif (! $data['email_verified']) {
-                $data['email_verified_at'] = null;
+        if (isset($attributes['email_verified'])) {
+            if ($attributes['email_verified'] && ! $user->email_verified_at) {
+                $attributes['email_verified_at'] = now();
+            } elseif (! $attributes['email_verified']) {
+                $attributes['email_verified_at'] = null;
             }
-            unset($data['email_verified']);
+            unset($attributes['email_verified']);
         }
 
-        $user->update($data);
+        $user->update($attributes);
 
         return redirect()->route('admin.users.show', $user->id)
             ->with('success', "User '{$user->name}' updated successfully.");

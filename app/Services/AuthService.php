@@ -42,10 +42,10 @@ class AuthService
     /**
      * Reset user password
      */
-    public function resetPassword(array $data): string
+    public function resetPassword(array $credentials): string
     {
         return Password::reset(
-            $data,
+            $credentials,
             function (User $user, string $password) {
                 $user->forceFill([
                     'password' => Hash::make($password),
