@@ -83,7 +83,7 @@
                 <div class="flex items-center justify-between gap-3 border-b border-slate-100/80 dark:border-slate-800/80 pb-2">
                     <span class="text-slate-400">Date of Birth</span>
                     <span class="font-medium text-slate-900 dark:text-white">
-                        {{ $user->dob ? \Carbon\Carbon::parse($user->dob)->format('M d, Y') : 'N/A' }}
+                        {{ $user->dob?->format('M d, Y') ?? 'N/A' }}
                     </span>
                 </div>
 

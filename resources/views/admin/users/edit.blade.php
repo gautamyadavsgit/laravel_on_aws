@@ -81,7 +81,7 @@
 
                 <div>
                     <label for="dob" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Date of Birth</label>
-                    <input type="date" id="dob" name="dob" min="1900-01-02" max="{{ now()->toDateString() }}" value="{{ old('dob', $user->dob ? \Carbon\Carbon::parse($user->dob)->format('Y-m-d') : '') }}" class="input-tw" />
+                    <input type="date" id="dob" name="dob" min="1900-01-02" max="{{ now()->toDateString() }}" value="{{ old('dob', $user->dob?->format('Y-m-d')) }}" class="input-tw" />
                 </div>
 
                 <div>
