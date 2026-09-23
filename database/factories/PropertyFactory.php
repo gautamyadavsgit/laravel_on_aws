@@ -25,11 +25,6 @@ class PropertyFactory extends Factory
         ];
     }
 
-    public function unavailable(): static
-    {
-        return $this->state(['availability' => PropertyAvailability::NotAvailable]);
-    }
-
     public function withAddress(array $attributes = []): static
     {
         return $this->has(PropertyAddressFactory::new($attributes), 'address');
@@ -38,25 +33,5 @@ class PropertyFactory extends Factory
     public function withDetails(array $attributes = []): static
     {
         return $this->has(PropertyDetailFactory::new($attributes), 'details');
-    }
-
-    public function withOffering(array $attributes = []): static
-    {
-        return $this->has(PropertyOfferingFactory::new($attributes), 'offering');
-    }
-
-    public function withImages(int $count = 3): static
-    {
-        return $this->has(PropertyImageFactory::new()->count($count), 'images');
-    }
-
-    public function withDocuments(int $count = 3): static
-    {
-        return $this->has(PropertyDocumentFactory::new()->count($count), 'documents');
-    }
-
-    public function complete(): static
-    {
-        return $this->withAddress()->withDetails()->withOffering()->withImages()->withDocuments();
     }
 }
