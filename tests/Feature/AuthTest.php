@@ -43,7 +43,7 @@ class AuthTest extends TestCase
         ]);
 
         $this->assertAuthenticated();
-        $response->assertRedirect(route('properties'));
+        $response->assertRedirect(route('properties.index'));
     }
 
     public function test_after_login_users_are_redirected_to_the_investment_interest_page_when_requested(): void

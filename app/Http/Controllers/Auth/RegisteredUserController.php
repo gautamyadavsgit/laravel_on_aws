@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Auth\InvestorRegisterRequest;
+use App\Http\Requests\Auth\RegisterRequest;
 use App\Services\RegistrationService;
 use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Http\RedirectResponse;
@@ -25,16 +25,16 @@ class RegisteredUserController extends Controller
     public function create(): View|RedirectResponse
     {
         if (Auth::guard('web')->check()) {
-            return redirect()->route(request('redirect') === 'investment_interest' ? 'investment.interest' : 'properties');
+            return redirect()->route(request('redirect') === 'investment_interest' ? 'investment.interest' : 'properties.index');
         }
 
-        return view('register');
+        return view('auth.register');
     }
 
     /**
      * Handle an incoming registration request.
      */
-    public function store(InvestorRegisterRequest $request): RedirectResponse
+    public function store(RegisterRequest $request): RedirectResponse
     {
         $validated = $request->validated();
 
@@ -47,7 +47,7 @@ class RegisteredUserController extends Controller
 
         $request->session()->regenerate();
 
-        $redirectTo = $request->input('redirect') === 'investment_interest' ? 'investment.interest' : 'properties';
+        $redirectTo = $request->input('redirect') === 'investment_interest' ? 'investment.interest' : 'properties.index';
 
         return redirect()->route($redirectTo)->with(
             'success',

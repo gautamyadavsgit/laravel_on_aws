@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\Admin;
-use Database\Seeders\ImageSeederHelper;
+use Database\Seeders\SeedAssetGenerator;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -38,7 +38,7 @@ class SeedMillionPropertiesCommand extends Command
         $this->info('===================================================================');
 
         // Ensure physical sample images & storage link exist
-        ImageSeederHelper::ensureSeedAssets();
+        SeedAssetGenerator::ensureSeedAssets();
 
         // Ensure admin user exists
         $admin = Admin::first();

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Auth\InvestorLoginRequest;
+use App\Http\Requests\Auth\LoginRequest;
 use App\Services\AuthService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -26,7 +26,7 @@ class AuthenticatedSessionController extends Controller
     public function create(): View|RedirectResponse
     {
         if (Auth::guard('web')->check()) {
-            return redirect()->route(request('redirect') === 'investment_interest' ? 'investment.interest' : 'properties');
+            return redirect()->route(request('redirect') === 'investment_interest' ? 'investment.interest' : 'properties.index');
         }
 
         return view('auth.login');
@@ -35,7 +35,7 @@ class AuthenticatedSessionController extends Controller
     /**
      * Handle an incoming authentication request.
      */
-    public function store(InvestorLoginRequest $request): RedirectResponse
+    public function store(LoginRequest $request): RedirectResponse
     {
         $request->ensureIsNotRateLimited();
 
@@ -46,7 +46,7 @@ class AuthenticatedSessionController extends Controller
             RateLimiter::clear($request->throttleKey());
             $request->session()->regenerate();
 
-            $redirectTo = $request->input('redirect') === 'investment_interest' ? 'investment.interest' : 'properties';
+            $redirectTo = $request->input('redirect') === 'investment_interest' ? 'investment.interest' : 'properties.index';
 
             return redirect()->route($redirectTo)->with(
                 'success',

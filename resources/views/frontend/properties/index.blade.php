@@ -71,7 +71,7 @@
                     <i class="bi bi-shield-check"></i> {{ number_format($propertyList->total()) }} Offerings Available
                 </span>
                 @if($hasActiveFilters)
-                    <a href="{{ route('properties') }}" class="text-xs text-rose-600 dark:text-rose-400 hover:underline font-semibold flex items-center gap-1">
+                    <a href="{{ route('properties.index') }}" class="text-xs text-rose-600 dark:text-rose-400 hover:underline font-semibold flex items-center gap-1">
                         <i class="bi bi-arrow-counterclockwise"></i> Reset Filters
                     </a>
                 @endif
@@ -80,7 +80,7 @@
 
         <!-- Comprehensive Multi-Criteria Search & Filter System -->
         <div class="card-tw p-5 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border border-slate-200/80 dark:border-slate-800/80 shadow-md">
-            <form action="{{ route('properties') }}" method="GET" id="propertiesFilterForm" class="space-y-4">
+            <form action="{{ route('properties.index') }}" method="GET" id="propertiesFilterForm" class="space-y-4">
                 <!-- Primary Search Bar Row -->
                 <div class="grid grid-cols-1 md:grid-cols-12 gap-3">
                     <!-- Keyword search -->
@@ -239,7 +239,7 @@
                             </span>
                         @endif
 
-                        <a href="{{ route('properties') }}" class="text-xs text-rose-600 dark:text-rose-400 hover:underline font-semibold ml-2">Clear All</a>
+                        <a href="{{ route('properties.index') }}" class="text-xs text-rose-600 dark:text-rose-400 hover:underline font-semibold ml-2">Clear All</a>
                     </div>
                 @endif
             </form>
@@ -289,7 +289,7 @@
                                         <i class="bi bi-geo-alt-fill text-rose-500"></i> {{ $rec->location_label }}
                                     </div>
                                 </div>
-                                <a href="{{ route('property.singlepage', ['slug' => $rec->slug ?? $rec->id]) }}" class="btn-primary-tw w-full py-1.5 text-xs text-center flex items-center justify-center gap-1.5">
+                                <a href="{{ route('properties.show', ['slug' => $rec->slug ?? $rec->id]) }}" class="btn-primary-tw w-full py-1.5 text-xs text-center flex items-center justify-center gap-1.5">
                                     <i class="bi bi-eye"></i> View Details
                                 </a>
                             </div>
@@ -374,7 +374,7 @@
 
                     <!-- Card Actions -->
                     <div class="p-6 pt-0 flex items-center gap-2">
-                        <a href="{{ route('property.singlepage', ['slug' => $prop->slug ?? $prop->id]) }}" class="btn-primary-tw flex-1 py-2.5 text-center flex items-center justify-center gap-2">
+                        <a href="{{ route('properties.show', ['slug' => $prop->slug ?? $prop->id]) }}" class="btn-primary-tw flex-1 py-2.5 text-center flex items-center justify-center gap-2">
                             <i class="bi bi-eye"></i> View Details
                         </a>
                         <button type="button"
@@ -397,7 +397,7 @@
                         <p class="text-sm text-slate-500 dark:text-slate-400 max-w-md mx-auto mt-1">We couldn't find any real estate offerings matching your current search parameters.</p>
                     </div>
                     <div>
-                        <a href="{{ route('properties') }}" class="btn-primary-tw inline-flex items-center gap-2 py-2 px-4 text-xs">
+                        <a href="{{ route('properties.index') }}" class="btn-primary-tw inline-flex items-center gap-2 py-2 px-4 text-xs">
                             <i class="bi bi-arrow-counterclockwise"></i> Reset All Filters
                         </a>
                     </div>

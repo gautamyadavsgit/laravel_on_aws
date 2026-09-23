@@ -113,7 +113,7 @@ class AuditNegativePathTest extends TestCase
             'email' => $user->email,
             'password' => 'password123',
             'redirect' => 'https://evil.example.com',
-        ])->assertRedirect(route('properties'));
+        ])->assertRedirect(route('properties.index'));
     }
 
     // ------------------------------------------------------------------
@@ -140,7 +140,7 @@ class AuditNegativePathTest extends TestCase
     {
         $data = $this->validRegistration();
 
-        $this->post('/register', $data)->assertRedirect(route('properties'));
+        $this->post('/register', $data)->assertRedirect(route('properties.index'));
 
         $this->assertDatabaseHas('users', ['email' => $data['email'], 'first_name' => 'Jane']);
         $this->assertAuthenticated();
@@ -190,7 +190,7 @@ class AuditNegativePathTest extends TestCase
     public function test_registration_accepts_apostrophes_and_accents_but_rejects_markup_in_names(): void
     {
         $ok = $this->validRegistration(['first_name' => 'Zoë', 'last_name' => "O'Brien-Núñez"]);
-        $this->post('/register', $ok)->assertRedirect(route('properties'));
+        $this->post('/register', $ok)->assertRedirect(route('properties.index'));
         $this->assertDatabaseHas('users', ['email' => $ok['email'], 'last_name' => "O'Brien-Núñez"]);
 
         auth()->logout();
@@ -756,7 +756,7 @@ class AuditNegativePathTest extends TestCase
 
     public function test_email_verification_handles_bad_tokens_and_is_single_use(): void
     {
-        $this->get('/verify-email/'.str_repeat('a', 64))->assertRedirect(route('properties'))->assertSessionHas('error');
+        $this->get('/verify-email/'.str_repeat('a', 64))->assertRedirect(route('properties.index'))->assertSessionHas('error');
 
         $user = $this->investor(['verification_token' => Str::random(64)]);
         $token = $user->verification_token;

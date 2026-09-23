@@ -1,20 +1,20 @@
 <?php
 
-use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\AdminAuthController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\PropertyAddressController;
-use App\Http\Controllers\Admin\PropertyController;
+use App\Http\Controllers\Admin\PropertyController as AdminPropertyController;
 use App\Http\Controllers\Admin\PropertyDetailController;
 use App\Http\Controllers\Admin\PropertyDocumentController;
 use App\Http\Controllers\Admin\PropertyOfferingController;
-use App\Http\Controllers\Admin\UserManagementController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\EmailVerificationNotificationController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
-use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\PropertyController;
 use App\Http\Controllers\PropertyFavoriteController;
 use App\Http\Controllers\PropertyInterestController;
 use App\Http\Controllers\UserDashboardController;
@@ -34,9 +34,9 @@ use Illuminate\Support\Facades\Route;
 // Public Frontend
 Route::view('/', 'frontend.index')->name('home');
 
-Route::get('/invest', [CustomerController::class, 'investor'])->name('properties');
-Route::get('/property/{slug}', [CustomerController::class, 'property_singlepage'])->name('property.singlepage');
-Route::get('/property_singlepage', [CustomerController::class, 'property_singlepage'])->name('property_singlepage');
+Route::get('/invest', [PropertyController::class, 'index'])->name('properties.index');
+Route::get('/property/{slug}', [PropertyController::class, 'show'])->name('properties.show');
+Route::get('/property_singlepage', [PropertyController::class, 'showLegacy'])->name('properties.legacy');
 
 // Customer / Investor Authentication (Laravel Breeze Flow)
 Route::middleware('guest')->group(function () {
@@ -53,7 +53,7 @@ Route::middleware('guest')->group(function () {
     Route::post('/reset-password', [NewPasswordController::class, 'store'])->middleware('throttle:6,1')->name('password.update');
 });
 
-Route::view('/investment-interest', 'frontend.investment_interest')->name('investment.interest');
+Route::view('/investment-interest', 'frontend.investment-interest')->name('investment.interest');
 
 Route::middleware(['auth', 'throttle:60,1'])->group(function () {
     Route::get('/dashboard', [UserDashboardController::class, 'dashboard'])->name('user.dashboard');
@@ -61,7 +61,7 @@ Route::middleware(['auth', 'throttle:60,1'])->group(function () {
     Route::post('/investment-interest/{propertyId}', [PropertyInterestController::class, 'store'])->whereNumber('propertyId')->name('investment.submit');
 
     // Property Favorites
-    Route::post('/property/{propertyId}/favorite', [PropertyFavoriteController::class, 'toggle'])->whereNumber('propertyId')->name('property.favorite.toggle');
+    Route::post('/property/{propertyId}/favorite', [PropertyFavoriteController::class, 'toggle'])->whereNumber('propertyId')->name('properties.favorite');
 });
 
 // Authenticated Routes
@@ -73,15 +73,15 @@ Route::post('/resend-verification', [EmailVerificationNotificationController::cl
 
 // Admin Authentication & Management
 Route::prefix('/admin')->group(function () {
-    Route::get('/', [AdminController::class, 'index'])->name('admin.index');
-    Route::post('/login', [AdminController::class, 'login'])->name('admin.login.post');
+    Route::get('/', [AdminAuthController::class, 'index'])->name('admin.index');
+    Route::post('/login', [AdminAuthController::class, 'login'])->name('admin.login.post');
 
     Route::middleware('admin.access')->group(function () {
-        Route::post('/logout', [AdminController::class, 'logout'])->name('admin.logout');
-        Route::get('/dashboard', [DashboardController::class, 'viewDashboard'])->name('admin.dashboard');
-        Route::resource('users', UserManagementController::class)->names('admin.users');
+        Route::post('/logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
+        Route::get('/dashboard', DashboardController::class)->name('admin.dashboard');
+        Route::resource('users', UserController::class)->names('admin.users');
 
-        Route::resource('properties', PropertyController::class)->names('admin.properties');
+        Route::resource('properties', AdminPropertyController::class)->names('admin.properties');
 
         Route::prefix('properties/{property}')->name('admin.properties.')->group(function () {
             Route::get('address', [PropertyAddressController::class, 'edit'])->name('address.edit');

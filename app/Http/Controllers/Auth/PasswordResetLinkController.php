@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Auth\PasswordResetEmailRequest;
+use App\Http\Requests\Auth\SendPasswordResetLinkRequest;
 use App\Services\AuthService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Password;
@@ -29,7 +29,7 @@ class PasswordResetLinkController extends Controller
     /**
      * Handle an incoming password reset link request.
      */
-    public function store(PasswordResetEmailRequest $request): RedirectResponse
+    public function store(SendPasswordResetLinkRequest $request): RedirectResponse
     {
         $status = $this->authService->sendPasswordResetLink($request->validated('email'));
 

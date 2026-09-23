@@ -19,7 +19,7 @@ class PropertySeeder extends Seeder
     public function run(): void
     {
         // 1. Ensure all local sample images, and PDFs exist
-        ImageSeederHelper::ensureSeedAssets();
+        SeedAssetGenerator::ensureSeedAssets();
 
         $admin = Admin::first();
         $adminId = $admin ? $admin->id : 1;

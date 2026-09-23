@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Auth\PasswordResetUpdateRequest;
+use App\Http\Requests\Auth\ResetPasswordRequest;
 use App\Services\AuthService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -33,7 +33,7 @@ class NewPasswordController extends Controller
     /**
      * Handle an incoming new password request.
      */
-    public function store(PasswordResetUpdateRequest $request): RedirectResponse
+    public function store(ResetPasswordRequest $request): RedirectResponse
     {
         $status = $this->authService->resetPassword(
             $request->validated()

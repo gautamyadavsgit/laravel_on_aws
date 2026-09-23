@@ -24,13 +24,13 @@ class VerifyEmailController extends Controller
         $user = $this->verificationService->verify($token);
 
         if (! $user) {
-            return redirect()->route('properties')->with(
+            return redirect()->route('properties.index')->with(
                 'error',
                 'Invalid or expired email verification link.'
             );
         }
 
-        return redirect()->route('properties')->with(
+        return redirect()->route('properties.index')->with(
             'success',
             'Your email address ('.$user->email.') has been verified successfully! Welcome to Gautam Real Estate.'
         );

@@ -18,9 +18,9 @@
                     <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-900 dark:text-white mb-4">Investments</h3>
                     <ul class="space-y-2.5 text-sm text-slate-500 dark:text-slate-400">
                         <li><a href="{{ url('invest') }}" class="hover:text-indigo-600 dark:hover:text-indigo-400 transition">Browse All Properties</a></li>
-                        <li><a href="{{ url('property_singlepage') }}" class="hover:text-indigo-600 dark:hover:text-indigo-400 transition">Featured Listing</a></li>
+                        <li><a href="{{ route('properties.legacy') }}" class="hover:text-indigo-600 dark:hover:text-indigo-400 transition">Featured Listing</a></li>
                         <li><a href="{{ url('/#how-it-works') }}" class="hover:text-indigo-600 dark:hover:text-indigo-400 transition">How Fractional Works</a></li>
-                        <li><a href="{{ url('register') }}" class="hover:text-indigo-600 dark:hover:text-indigo-400 transition">Investor Accreditation</a></li>
+                        <li><a href="{{ route('register') }}" class="hover:text-indigo-600 dark:hover:text-indigo-400 transition">Investor Accreditation</a></li>
                     </ul>
                 </div>
 

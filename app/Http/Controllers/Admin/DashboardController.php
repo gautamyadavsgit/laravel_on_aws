@@ -11,7 +11,7 @@ class DashboardController extends Controller
     /**
      * Display the primary administration dashboard.
      */
-    public function viewDashboard(): View
+    public function __invoke(): View
     {
         return view('admin.dashboard', ['propertyCount' => Property::count()]);
     }

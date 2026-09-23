@@ -28,7 +28,7 @@
             </div>
 
             <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
-                <a href="{{ route('properties') }}" class="btn-primary-tw px-6 py-3 text-sm font-semibold shadow-md">
+                <a href="{{ route('properties.index') }}" class="btn-primary-tw px-6 py-3 text-sm font-semibold shadow-md">
                     <i class="bi bi-house-door"></i> {{ __('common.browse_investments') }}
                 </a>
                 <a href="{{ route('home') }}" class="btn-secondary-tw px-6 py-3 text-sm font-semibold">

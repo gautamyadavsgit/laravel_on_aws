@@ -22,7 +22,7 @@
         <div class="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 max-w-md mx-auto">
             <div class="w-full relative flex items-center">
                 <input type="text" placeholder="Enter your email to get started..." class="input-tw pr-36 py-3 rounded-full shadow-md" aria-label="Email address">
-                <a href="{{ url('register') }}" class="absolute right-1.5 px-4 py-2 rounded-full bg-indigo-600 text-white text-xs font-semibold hover:bg-indigo-700 transition flex items-center gap-1.5">
+                <a href="{{ route('register') }}" class="absolute right-1.5 px-4 py-2 rounded-full bg-indigo-600 text-white text-xs font-semibold hover:bg-indigo-700 transition flex items-center gap-1.5">
                     Get Started <i class="bi bi-arrow-right"></i>
                 </a>
             </div>

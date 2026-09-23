@@ -26,13 +26,13 @@ class UserDashboardController extends Controller
             ->latest()
             ->get();
 
-        return view('frontend.user_dashboard', compact('user', 'interests', 'favorites'));
+        return view('frontend.user.dashboard', compact('user', 'interests', 'favorites'));
     }
 
     public function profile(): View
     {
         $user = Auth::user();
 
-        return view('frontend.user_profile', compact('user'));
+        return view('frontend.user.profile', compact('user'));
     }
 }

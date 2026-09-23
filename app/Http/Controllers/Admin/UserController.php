@@ -20,7 +20,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
 
-class UserManagementController extends Controller
+class UserController extends Controller
 {
     /**
      * Display a listing of users with search and filter capabilities.

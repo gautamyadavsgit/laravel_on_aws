@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Support\Facades\Storage;
 
-class ImageSeederHelper
+class SeedAssetGenerator
 {
     /**
      * Ensure all seed images and sample documents exist in the public storage disk.

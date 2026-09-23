@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\View\View;
 
-class AdminController extends Controller
+class AdminAuthController extends Controller
 {
     /**
      * Show the admin login page or redirect to dashboard.

@@ -53,7 +53,7 @@
                 <h2 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
                     <i class="bi bi-table text-indigo-600 dark:text-indigo-400"></i> {{ __('dashboard.my_investment_interest') }}
                 </h2>
-                <a href="{{ route('properties') }}" class="btn-primary-tw text-xs py-2 px-3">
+                <a href="{{ route('properties.index') }}" class="btn-primary-tw text-xs py-2 px-3">
                     <i class="bi bi-search"></i> {{ __('dashboard.browse_more_assets') }}
                 </a>
             </div>
@@ -113,7 +113,7 @@
                 <h2 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
                     <i class="bi bi-heart-fill text-rose-600 dark:text-rose-400"></i> {{ __('dashboard.my_favorite_properties') }}
                 </h2>
-                <a href="{{ route('properties') }}" class="btn-primary-tw text-xs py-2 px-3">
+                <a href="{{ route('properties.index') }}" class="btn-primary-tw text-xs py-2 px-3">
                     <i class="bi bi-search"></i> {{ __('dashboard.browse_more_assets') }}
                 </a>
             </div>
@@ -122,7 +122,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-5">
                     @foreach($favorites as $favorite)
                         @php $property = $favorite->property; @endphp
-                        <a href="{{ route('property.singlepage', ['id' => $property->id]) }}" class="group relative rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 hover:border-rose-300 dark:hover:border-rose-700 hover:shadow-lg transition">
+                        <a href="{{ route('properties.show', ['slug' => $property->slug]) }}" class="group relative rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 hover:border-rose-300 dark:hover:border-rose-700 hover:shadow-lg transition">
                             <div class="aspect-video bg-slate-100 dark:bg-slate-800 overflow-hidden">
                                 @if($property->hero_image_url)
                                     <img src="{{ $property->hero_image_url }}" alt="{{ $property->name }}" class="w-full h-full object-cover group-hover:scale-110 transition duration-300">

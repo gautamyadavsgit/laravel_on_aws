@@ -23,7 +23,7 @@ class PropertySlugTest extends TestCase
 
         $this->get('/property/'.$property->slug)
             ->assertOk()
-            ->assertViewHas('featuredProperty');
+            ->assertViewHas('property');
     }
 
     public function test_legacy_property_single_page_redirects_to_canonical_slug(): void

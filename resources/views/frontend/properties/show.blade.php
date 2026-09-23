@@ -1,10 +1,8 @@
-@include('frontend.common.header', ['title' => $featuredProperty->name.' - Fractional Investment | Gautam Real Estate'])
+@include('frontend.common.header', ['title' => $property->name.' - Fractional Investment | Gautam Real Estate'])
 
 @php
-    $propName = $featuredProperty->name;
-    $propDesc = $featuredProperty->description;
-    $details = $featuredProperty->details;
-    $images = $featuredProperty->gallery_urls;
+    $details = $property->details;
+    $images = $property->gallery_urls;
     $slideCount = count($images);
 @endphp
 
@@ -25,7 +23,7 @@
                     <div class="relative h-72 sm:h-96 md:h-[420px] w-full">
                         @forelse ($images as $idx => $imageUrl)
                             <div data-carousel-item class="absolute inset-0 transition-opacity duration-300 {{ $idx > 0 ? 'opacity-0 pointer-events-none hidden' : '' }}">
-                                <img src="{{ $imageUrl }}" alt="{{ $propName }} image {{ $idx + 1 }}" class="w-full h-full object-cover">
+                                <img src="{{ $imageUrl }}" alt="{{ $property->name }} image {{ $idx + 1 }}" class="w-full h-full object-cover">
                             </div>
                         @empty
                             <div class="absolute inset-0 flex items-center justify-center text-slate-500">
@@ -86,11 +84,11 @@
                 <div class="card-tw space-y-4">
                     <div class="card-header-tw">
                         <h2 class="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                            <i class="bi bi-house-door text-indigo-600 dark:text-indigo-400"></i> About {{ $propName }}
+                            <i class="bi bi-house-door text-indigo-600 dark:text-indigo-400"></i> About {{ $property->name }}
                         </h2>
                     </div>
                     <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-                        {{ $propDesc }}
+                        {{ $property->description }}
                     </p>
                 </div>
             </div>
@@ -104,11 +102,11 @@
                                 <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Available for Investment
                             </span>
                         </div>
-                        <h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">{{ $propName }}</h2>
-                        @if($featuredProperty->address)
+                        <h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">{{ $property->name }}</h2>
+                        @if($property->address)
                             <p class="text-sm text-slate-500 dark:text-slate-400 mt-1 flex items-center gap-1.5">
                                 <i class="bi bi-geo-alt-fill text-rose-500"></i>
-                                {{ implode(', ', array_filter([$featuredProperty->address->address, $featuredProperty->location_label])) }}
+                                {{ implode(', ', array_filter([$property->address->address, $property->location_label])) }}
                             </p>
                         @endif
                     </div>
@@ -142,7 +140,7 @@
                     </div>
 
                     @if(Auth::check())
-                        <form action="{{ route('investment.submit', ['propertyId' => $featuredProperty->id]) }}" method="POST" class="w-full">
+                        <form action="{{ route('investment.submit', ['propertyId' => $property->id]) }}" method="POST" class="w-full">
                             @csrf
                             <button type="submit" class="btn-primary-tw w-full py-3 text-base shadow-md text-center flex items-center justify-center gap-2">
                                 <i class="bi bi-wallet2"></i> {{ __('properties.invest_offering') }}
@@ -157,7 +155,7 @@
                     @if(Auth::check())
                         <button type="button"
                             data-favorite-btn
-                            data-property-id="{{ $featuredProperty->id }}"
+                            data-property-id="{{ $property->id }}"
                             class="favorite-btn w-full py-3 text-base text-center flex items-center justify-center gap-2 px-4 rounded-xl border transition {{ $isFavorited ? 'border-rose-300 dark:border-rose-800 bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400' : 'border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-200 hover:bg-rose-50 dark:hover:bg-rose-950/40' }}"
                             title="Add to favorites">
                             <i class="bi bi-heart{{ $isFavorited ? '-fill' : '' }} text-lg"></i> <span class="favorite-text">{{ $isFavorited ? 'Favorited' : 'Add to Favorites' }}</span>

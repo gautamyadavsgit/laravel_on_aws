@@ -6,7 +6,7 @@ use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Password;
 
-class InvestorRegisterRequest extends FormRequest
+class RegisterRequest extends FormRequest
 {
     /**
      * Letters (incl. accents), combining marks, spaces, apostrophes, periods and hyphens.
