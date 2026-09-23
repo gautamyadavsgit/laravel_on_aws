@@ -16,18 +16,7 @@ class ResetPasswordMail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
-    public User $user;
-
-    public string $resetUrl;
-
-    /**
-     * Create a new message instance.
-     */
-    public function __construct(User $user, string $resetUrl)
-    {
-        $this->user = $user;
-        $this->resetUrl = $resetUrl;
-    }
+    public function __construct(public User $user, public string $resetUrl) {}
 
     /**
      * Get the message envelope.

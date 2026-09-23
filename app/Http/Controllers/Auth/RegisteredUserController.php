@@ -12,12 +12,7 @@ use Illuminate\View\View;
 
 class RegisteredUserController extends Controller
 {
-    protected RegistrationService $registrationService;
-
-    public function __construct(RegistrationService $registrationService)
-    {
-        $this->registrationService = $registrationService;
-    }
+    public function __construct(private readonly RegistrationService $registrationService) {}
 
     /**
      * Display the registration view.

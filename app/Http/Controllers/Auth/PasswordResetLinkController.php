@@ -11,12 +11,7 @@ use Illuminate\View\View;
 
 class PasswordResetLinkController extends Controller
 {
-    protected AuthService $authService;
-
-    public function __construct(AuthService $authService)
-    {
-        $this->authService = $authService;
-    }
+    public function __construct(private readonly AuthService $authService) {}
 
     /**
      * Display the password reset link request view.

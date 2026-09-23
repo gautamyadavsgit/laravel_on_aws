@@ -10,12 +10,7 @@ use Illuminate\Support\Facades\Auth;
 
 class EmailVerificationNotificationController extends Controller
 {
-    protected VerificationService $verificationService;
-
-    public function __construct(VerificationService $verificationService)
-    {
-        $this->verificationService = $verificationService;
-    }
+    public function __construct(private readonly VerificationService $verificationService) {}
 
     /**
      * Send a new email verification notification.

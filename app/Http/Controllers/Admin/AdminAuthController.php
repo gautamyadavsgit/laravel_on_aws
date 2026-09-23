@@ -7,7 +7,6 @@ use App\Http\Requests\Admin\AdminLoginRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\View\View;
 
 class AdminAuthController extends Controller
@@ -34,13 +33,13 @@ class AdminAuthController extends Controller
         $credentials = $request->only('email', 'password');
 
         if (Auth::guard('admin')->attempt($credentials)) {
-            RateLimiter::clear($request->throttleKey());
+            $request->clearFailedAttempts();
             $request->session()->regenerate();
 
             return redirect(route('admin.dashboard'));
         }
 
-        RateLimiter::hit($request->throttleKey());
+        $request->recordFailedAttempt();
 
         return back()->with('error', 'The provided credentials do not match our records.')->withInput($request->only('email'));
     }

@@ -9,12 +9,7 @@ use Illuminate\Http\Request;
 
 class VerifyEmailController extends Controller
 {
-    protected VerificationService $verificationService;
-
-    public function __construct(VerificationService $verificationService)
-    {
-        $this->verificationService = $verificationService;
-    }
+    public function __construct(private readonly VerificationService $verificationService) {}
 
     /**
      * Mark the authenticated user's email address as verified using token.

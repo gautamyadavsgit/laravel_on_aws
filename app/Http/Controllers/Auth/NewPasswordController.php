@@ -12,12 +12,7 @@ use Illuminate\View\View;
 
 class NewPasswordController extends Controller
 {
-    protected AuthService $authService;
-
-    public function __construct(AuthService $authService)
-    {
-        $this->authService = $authService;
-    }
+    public function __construct(private readonly AuthService $authService) {}
 
     /**
      * Display the password reset view.
