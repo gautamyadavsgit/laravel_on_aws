@@ -64,12 +64,4 @@ class PropertyMediaService
             $property->documents()->createMany($newData);
         }
     }
-
-    /**
-     * Delete a stored file from storage disk
-     */
-    public function deleteFile(string $path, ?string $disk = null): bool
-    {
-        return Storage::disk($disk)->delete($path);
-    }
 }

@@ -108,3 +108,13 @@ Audit date: 2026-09-23. Read-only: no application code was changed for this docu
 4. Private S3 images: keep 403 for now, or move to signed URLs/CloudFront?
 5. Add Larastan (new dev dependency)?
 6. Is the database deployed anywhere with real data? (This decides new-migration-only vs rewriting old migrations; earlier this session old migrations were edited for the removed modules on the assumption of a dev-only database.)
+
+## 6. Implementation status (2026-09-23)
+
+Owner decisions: no real data (old migrations may be edited), logout may change to POST.
+
+**Done:** framework updated to 13.33; redundant polyfill autoload removed; `.gitattributes` (LF) and `pint.json`, whole repo Pint-clean; logout POST-only (links are CSRF forms); throttling on register, forgot/reset password, resend verification and authenticated actions; `PropertyAvailability` enum with cast and `Rule::enum`; unique, soft-delete-aware `properties.slug` and no writes on read paths; `Admins` alias, orphan view, unused service methods and one-off commands removed, `AdminFactory` added; single relation naming (`images/address/details/offering/documents`); `cache.default` reads `CACHE_STORE`, `broadcasting.default` reads `BROADCAST_CONNECTION` (Laravel 11+ names) and the service no longer hardcodes a cache store; admin user list uses `withCount`; README written; 81 tests (7 new `PropertyService` tests, logout/throttle tests, slug tests).
+
+**Deliberately not done:** renaming `PropertyModel`/`PropertyImageModel`/`PropertyDocumentModel`; `declare(strict_types=1)`; Larastan; route model binding for the admin wizard (renaming `{id}` touches every `route()` call and test for little gain); the `dob` date cast (changes how the edit form pre-fills the date); signed S3 URLs; removing the unused Sanctum stub and `laravel/sail`/`guzzle` (need an owner decision).
+
+**Local follow-ups:** your `.env` still uses `BROADCAST_DRIVER` (harmless, default is `null`) and needs `php artisan migrate:fresh --seed` because migrations were edited; clear the cache table afterwards (`php artisan cache:clear`) since relation names changed.

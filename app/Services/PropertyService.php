@@ -167,14 +167,6 @@ class PropertyService
     }
 
     /**
-     * Backward-compatible alias for getPaginatedProperties
-     */
-    public function getPaginatedProperties(int $perPage = 9, array $filters = []): LengthAwarePaginator
-    {
-        return $this->getFilteredProperties($filters, $perPage);
-    }
-
-    /**
      * Log user/guest search behavior for preference learning and personalized recommendations
      */
     public function logUserSearch(array $filters, int $resultsCount): void
