@@ -97,7 +97,7 @@ class SeedMillionPropertiesCommand extends Command
                     'admin_id' => $adminId,
                     'name' => $name,
                     'slug' => Str::slug($name),
-                    'availability' => ($uniqueIdx % 5 === 0) ? 'Not Available' : (($uniqueIdx % 3 === 0) ? 'Available' : 'Available'),
+                    'availability' => ($uniqueIdx % 5 === 0) ? 'Not Available' : 'Available',
                     'description' => "Institutional-grade fractional investment property #{$uniqueIdx} located in prime tourist corridor with verified annual yield and professional management.",
                     'management_company' => 'Gautam Asset Management LLC',
                     'created_at' => $now,
@@ -105,7 +105,7 @@ class SeedMillionPropertiesCommand extends Command
                 ];
             }
 
-            DB::transaction(function () use ($propertiesBatch, $cities, $now, &$insertedCount, $currentChunk) {
+            DB::transaction(function () use ($propertiesBatch, $cities, $now, $currentChunk) {
                 // 1. Bulk insert properties
                 DB::table('properties')->insert($propertiesBatch);
 

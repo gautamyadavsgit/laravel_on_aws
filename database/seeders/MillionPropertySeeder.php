@@ -12,7 +12,7 @@ class MillionPropertySeeder extends Seeder
      */
     public function run(): void
     {
-        $output = $this->command ? $this->command->getOutput() : null;
+        $output = $this->command->getOutput();
 
         Artisan::call('property:seed-million', [
             '--count' => 100,

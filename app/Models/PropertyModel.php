@@ -98,31 +98,37 @@ class PropertyModel extends Model
     // Standard Eloquent Relationship Definitions
     // ==========================================
 
+    /** @return BelongsTo<Admin, $this> */
     public function admin(): BelongsTo
     {
         return $this->belongsTo(Admin::class, 'admin_id');
     }
 
+    /** @return HasOne<PropertyAddress, $this> */
     public function address(): HasOne
     {
         return $this->hasOne(PropertyAddress::class, 'property_id');
     }
 
+    /** @return HasMany<PropertyImageModel, $this> */
     public function images(): HasMany
     {
         return $this->hasMany(PropertyImageModel::class, 'property_id');
     }
 
+    /** @return HasOne<PropertyDetails, $this> */
     public function details(): HasOne
     {
         return $this->hasOne(PropertyDetails::class, 'property_id');
     }
 
+    /** @return HasOne<PropertyOffering, $this> */
     public function offering(): HasOne
     {
         return $this->hasOne(PropertyOffering::class, 'property_id');
     }
 
+    /** @return HasMany<PropertyDocumentModel, $this> */
     public function documents(): HasMany
     {
         return $this->hasMany(PropertyDocumentModel::class, 'property_id');

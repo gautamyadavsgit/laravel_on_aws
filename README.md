@@ -55,8 +55,9 @@ The suite runs against a real MySQL database named in `.env.testing` (default `l
 php artisan migrate:fresh --env=testing --force
 php artisan db:seed --class=LookupTablesSeeder --env=testing --force
 
-php artisan test
-./vendor/bin/pint --test
+composer test      # php artisan test
+composer lint      # Laravel Pint (style check)
+composer analyse   # Larastan level 5
 ```
 
 Tests that create data use `DatabaseTransactions` so they leave the database clean.

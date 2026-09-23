@@ -18,14 +18,12 @@ class PropertyMediaService
         $records = [];
 
         foreach ($files as $file) {
-            if ($file instanceof UploadedFile) {
-                $path = Storage::putFile('property_images', $file);
-                if ($path) {
-                    $records[] = [
-                        'property_image_key' => 'property_image',
-                        'property_image_value' => $path,
-                    ];
-                }
+            $path = Storage::putFile('property_images', $file);
+            if ($path) {
+                $records[] = [
+                    'property_image_key' => 'property_image',
+                    'property_image_value' => $path,
+                ];
             }
         }
 

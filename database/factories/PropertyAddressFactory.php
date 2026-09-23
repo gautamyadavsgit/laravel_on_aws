@@ -18,7 +18,7 @@ class PropertyAddressFactory extends Factory
             'address_1' => fake()->streetAddress(),
             'address_2' => 'Suite '.fake()->numberBetween(100, 500),
             'city' => fake()->city(),
-            'state' => fake()->state(),
+            'state' => fake()->randomElement(['TN', 'NC', 'GA', 'FL', 'TX', 'CO']),
             'zip' => fake()->numberBetween(10000, 99999),
         ];
     }

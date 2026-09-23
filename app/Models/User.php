@@ -4,6 +4,8 @@ namespace App\Models;
 
 use App\Mail\ResetPasswordMail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Log;
@@ -17,7 +19,7 @@ class User extends Authenticatable
     /**
      * The attributes that are mass assignable.
      *
-     * @var array<int, string>
+     * @var list<string>
      */
     protected $fillable = [
         'first_name',
@@ -51,7 +53,7 @@ class User extends Authenticatable
     /**
      * The attributes that should be hidden for serialization.
      *
-     * @var array<int, string>
+     * @var list<string>
      */
     protected $hidden = [
         'password',
@@ -75,7 +77,8 @@ class User extends Authenticatable
     /**
      * Get the user's favorite properties.
      */
-    public function propertyFavorites()
+    /** @return HasMany<PropertyFavorite, $this> */
+    public function propertyFavorites(): HasMany
     {
         return $this->hasMany(PropertyFavorite::class);
     }
@@ -93,7 +96,8 @@ class User extends Authenticatable
         return $this->propertyFavorites()->where('property_id', $propertyId)->exists();
     }
 
-    public function searchLogs()
+    /** @return HasMany<UserSearchLog, $this> */
+    public function searchLogs(): HasMany
     {
         return $this->hasMany(UserSearchLog::class);
     }
@@ -101,7 +105,8 @@ class User extends Authenticatable
     /**
      * Get the user's property interests.
      */
-    public function propertyInterests()
+    /** @return HasMany<PropertyInterest, $this> */
+    public function propertyInterests(): HasMany
     {
         return $this->hasMany(PropertyInterest::class);
     }
@@ -109,7 +114,8 @@ class User extends Authenticatable
     /**
      * Get the user's accreditation status.
      */
-    public function accreditationStatus()
+    /** @return BelongsTo<AccreditationStatus, $this> */
+    public function accreditationStatus(): BelongsTo
     {
         return $this->belongsTo(AccreditationStatus::class, 'accreditation_status');
     }
@@ -117,7 +123,8 @@ class User extends Authenticatable
     /**
      * Get the user's experience level.
      */
-    public function experienceLevel()
+    /** @return BelongsTo<ExperienceLevel, $this> */
+    public function experienceLevel(): BelongsTo
     {
         return $this->belongsTo(ExperienceLevel::class, 'experiance_level');
     }
@@ -125,7 +132,8 @@ class User extends Authenticatable
     /**
      * Get the user's reason for investing.
      */
-    public function investingReason()
+    /** @return BelongsTo<ReasonForInvesting, $this> */
+    public function investingReason(): BelongsTo
     {
         return $this->belongsTo(ReasonForInvesting::class, 'investing_reason');
     }
@@ -133,7 +141,8 @@ class User extends Authenticatable
     /**
      * Get the user's investment source.
      */
-    public function investmentSource()
+    /** @return BelongsTo<InvestmentSource, $this> */
+    public function investmentSource(): BelongsTo
     {
         return $this->belongsTo(InvestmentSource::class, 'investment_sources');
     }
@@ -141,7 +150,8 @@ class User extends Authenticatable
     /**
      * Get the user's investment timeline.
      */
-    public function investmentTimeline()
+    /** @return BelongsTo<InvestmentTimeline, $this> */
+    public function investmentTimeline(): BelongsTo
     {
         return $this->belongsTo(InvestmentTimeline::class, 'investing_timeline');
     }
@@ -149,7 +159,8 @@ class User extends Authenticatable
     /**
      * Get the user's investment goals.
      */
-    public function investmentGoal()
+    /** @return BelongsTo<InvestmentGoal, $this> */
+    public function investmentGoal(): BelongsTo
     {
         return $this->belongsTo(InvestmentGoal::class, 'investment_goals');
     }
@@ -157,7 +168,8 @@ class User extends Authenticatable
     /**
      * Get the user's investment time length.
      */
-    public function investmentTimelength()
+    /** @return BelongsTo<InvestmentTimelength, $this> */
+    public function investmentTimelength(): BelongsTo
     {
         return $this->belongsTo(InvestmentTimelength::class, 'investment_timelength');
     }
@@ -165,7 +177,8 @@ class User extends Authenticatable
     /**
      * Get the user's net worth tier.
      */
-    public function userNetWorth()
+    /** @return BelongsTo<UserNetWorth, $this> */
+    public function userNetWorth(): BelongsTo
     {
         return $this->belongsTo(UserNetWorth::class, 'users_net_worth');
     }
@@ -173,7 +186,8 @@ class User extends Authenticatable
     /**
      * Get how the user heard about the platform.
      */
-    public function hearAboutUs()
+    /** @return BelongsTo<HearAboutUs, $this> */
+    public function hearAboutUs(): BelongsTo
     {
         return $this->belongsTo(HearAboutUs::class, 'hear_about_us');
     }

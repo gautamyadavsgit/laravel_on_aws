@@ -11,6 +11,9 @@ use App\Models\PropertyModel;
 use App\Models\PropertyOffering;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
+/**
+ * @extends Factory<PropertyModel>
+ */
 class PropertyDataFactory extends Factory
 {
     protected $model = PropertyModel::class;
