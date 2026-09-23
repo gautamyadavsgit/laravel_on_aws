@@ -66,6 +66,27 @@ class PropertyModel extends Model
     }
 
     // ==========================================
+    // Presentation accessors
+    // ==========================================
+
+    public function getGalleryUrlsAttribute(): array
+    {
+        return $this->propertyImage->pluck('url')->all();
+    }
+
+    public function getHeroImageUrlAttribute(): ?string
+    {
+        return $this->propertyImage->first()?->url;
+    }
+
+    public function getLocationLabelAttribute(): string
+    {
+        $address = $this->propertyAddress;
+
+        return implode(', ', array_filter([$address?->city, $address?->state]));
+    }
+
+    // ==========================================
     // Standard Eloquent Relationship Definitions
     // ==========================================
 
@@ -84,19 +105,9 @@ class PropertyModel extends Model
         return $this->hasMany(PropertyImageModel::class, 'property_id');
     }
 
-    public function amenities(): HasMany
-    {
-        return $this->hasMany(PropertyAmenity::class, 'property_id');
-    }
-
     public function details(): HasOne
     {
         return $this->hasOne(PropertyDetails::class, 'property_id');
-    }
-
-    public function floorplans(): HasMany
-    {
-        return $this->hasMany(PropertyFloorplan::class, 'property_id');
     }
 
     public function offering(): HasOne
@@ -107,11 +118,6 @@ class PropertyModel extends Model
     public function documents(): HasMany
     {
         return $this->hasMany(PropertyDocumentModel::class, 'property_id');
-    }
-
-    public function metrics(): HasOne
-    {
-        return $this->hasOne(PropertyMetrics::class, 'property_id');
     }
 
     // ==========================================
@@ -128,19 +134,9 @@ class PropertyModel extends Model
         return $this->images();
     }
 
-    public function propertyAmenities(): HasMany
-    {
-        return $this->amenities();
-    }
-
     public function propertyDetails(): HasOne
     {
         return $this->details();
-    }
-
-    public function propertyFloorplan(): HasMany
-    {
-        return $this->floorplans();
     }
 
     public function propertyOffering(): HasOne
@@ -151,10 +147,5 @@ class PropertyModel extends Model
     public function propertyDocumentModel(): HasMany
     {
         return $this->documents();
-    }
-
-    public function propertyMetrics(): HasOne
-    {
-        return $this->metrics();
     }
 }

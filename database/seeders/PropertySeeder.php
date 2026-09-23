@@ -4,14 +4,11 @@ namespace Database\Seeders;
 
 use App\Models\Admins;
 use App\Models\PropertyAddress;
-use App\Models\PropertyAmenity;
 use App\Models\PropertyDetails;
 use App\Models\PropertyDocumentModel;
-use App\Models\PropertyFloorplan;
 use App\Models\PropertyImageModel;
 use App\Models\PropertyModel;
 use App\Models\PropertyOffering;
-use App\Services\PropertyMetricsService;
 use Illuminate\Database\Seeder;
 
 class PropertySeeder extends Seeder
@@ -21,7 +18,7 @@ class PropertySeeder extends Seeder
      */
     public function run(): void
     {
-        // 1. Ensure all local sample images, floorplans, and PDFs exist
+        // 1. Ensure all local sample images, and PDFs exist
         ImageSeederHelper::ensureSeedAssets();
 
         $admin = Admins::first();
@@ -54,12 +51,6 @@ class PropertySeeder extends Seeder
                     'year_built' => 2022,
                     'zoning' => 'Commercial / Short-Term Rental Qualified',
                     'value' => 617000,
-                ],
-                'aacf' => [
-                    'annual_rent_amount' => 64000,
-                    'annual_rent_gross_yield' => 10.37,
-                    'aacf_expences' => 14500,
-                    'aacf_net' => 49500,
                 ],
                 'shares' => [
                     'equity_raise' => 617000,
@@ -103,12 +94,6 @@ class PropertySeeder extends Seeder
                     'zoning' => 'Short-Term Rental Approved',
                     'value' => 498000,
                 ],
-                'aacf' => [
-                    'annual_rent_amount' => 58000,
-                    'annual_rent_gross_yield' => 9.80,
-                    'aacf_expences' => 12800,
-                    'aacf_net' => 45200,
-                ],
                 'shares' => [
                     'equity_raise' => 498000,
                     'price_per_share_deed' => 50,
@@ -150,12 +135,6 @@ class PropertySeeder extends Seeder
                     'year_built' => 2023,
                     'zoning' => 'Resort Commercial Waterfront',
                     'value' => 845000,
-                ],
-                'aacf' => [
-                    'annual_rent_amount' => 99700,
-                    'annual_rent_gross_yield' => 11.80,
-                    'aacf_expences' => 19500,
-                    'aacf_net' => 80200,
                 ],
                 'shares' => [
                     'equity_raise' => 845000,
@@ -199,12 +178,6 @@ class PropertySeeder extends Seeder
                     'zoning' => 'Resort Residential Qualified',
                     'value' => 920000,
                 ],
-                'aacf' => [
-                    'annual_rent_amount' => 115000,
-                    'annual_rent_gross_yield' => 12.50,
-                    'aacf_expences' => 22000,
-                    'aacf_net' => 93000,
-                ],
                 'shares' => [
                     'equity_raise' => 920000,
                     'price_per_share_deed' => 50,
@@ -247,12 +220,6 @@ class PropertySeeder extends Seeder
                     'zoning' => 'Agricultural Hospitality Approved',
                     'value' => 1250000,
                 ],
-                'aacf' => [
-                    'annual_rent_amount' => 145000,
-                    'annual_rent_gross_yield' => 11.60,
-                    'aacf_expences' => 28000,
-                    'aacf_net' => 117000,
-                ],
                 'shares' => [
                     'equity_raise' => 1250000,
                     'price_per_share_deed' => 50,
@@ -294,12 +261,6 @@ class PropertySeeder extends Seeder
                     'year_built' => 2023,
                     'zoning' => 'Short-Term Rental Certified',
                     'value' => 775000,
-                ],
-                'aacf' => [
-                    'annual_rent_amount' => 88000,
-                    'annual_rent_gross_yield' => 11.35,
-                    'aacf_expences' => 16500,
-                    'aacf_net' => 71500,
                 ],
                 'shares' => [
                     'equity_raise' => 775000,
@@ -347,30 +308,11 @@ class PropertySeeder extends Seeder
                 ]);
             }
 
-            // 3. Amenities
-            PropertyAmenity::updateOrCreate(
-                ['property_id' => $propId],
-                [
-                    'property_amenities' => 'Panoramic Mountain View, 8-Person Hot Tub, Starlink High Speed Internet, Stone Fireplace, Game Room & Billiards, Keyless Smart Lock, Private Swimming Pool, Custom Chef Kitchen',
-                ]
-            );
-
             // 4. Details
             PropertyDetails::updateOrCreate(
                 ['property_id' => $propId],
                 $propData['details']
             );
-
-            // 5. Floorplans (2 levels)
-            PropertyFloorplan::where('property_id', $propId)->delete();
-            for ($f = 1; $f <= 2; $f++) {
-                $planNum = (($index + $f - 1) % 6) + 1;
-                PropertyFloorplan::create([
-                    'property_id' => $propId,
-                    'key' => 'Architectural Floorplan Level '.$f,
-                    'value' => 'floorplan_images/floorplan_'.$planNum.'.png',
-                ]);
-            }
 
             // 6. Offering Breakdown
             $purchase = (int) ($propData['details']['value'] * 0.84);
@@ -404,25 +346,6 @@ class PropertySeeder extends Seeder
                 ]);
             }
 
-            // 10. Financial Underwriting & Goal Match Metrics
-            $aacf = $propData['aacf'] ?? [];
-            PropertyMetricsService::syncForProperty($property, [
-                'gross_annual_rent' => $aacf['annual_rent_amount'] ?? null,
-                'operating_expenses' => $aacf['aacf_expences'] ?? null,
-                'net_operating_income' => $aacf['aacf_net'] ?? null,
-                'cap_rate' => $aacf['annual_rent_gross_yield'] ?? null,
-                'annual_cash_flow' => $aacf['aacf_net'] ?? null,
-                'cash_on_cash_return' => $aacf['annual_rent_gross_yield'] ?? null,
-                'estimated_appreciation_rate' => 5.40,
-                'is_1031_exchange_eligible' => true,
-                'cost_segregation_eligible' => true,
-                'diversification_score' => 9.2,
-                'occupancy_rate_projected' => 88.5,
-                'cash_flow_rating' => 95,
-                'appreciation_rating' => 89,
-                'tax_benefit_rating' => 93,
-                'diversification_rating' => 91,
-            ]);
         }
     }
 }

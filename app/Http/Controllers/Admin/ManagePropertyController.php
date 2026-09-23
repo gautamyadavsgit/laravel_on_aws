@@ -5,16 +5,12 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\AdminAddPropertyRequest;
 use App\Http\Requests\Admin\AdminUpdateAddressRequest;
-use App\Http\Requests\Admin\UpdatePropertyAmenitiesRequest;
 use App\Http\Requests\Admin\UpdatePropertyDetailsRequest;
 use App\Http\Requests\Admin\UpdatePropertyDocumentRequest;
-use App\Http\Requests\Admin\UpdatePropertyFloorPlanRequest;
-use App\Http\Requests\Admin\UpdatePropertyMetricsRequest;
 use App\Http\Requests\Admin\UpdatePropertyOfferingRequest;
 use App\Http\Requests\Admin\UpdatePropertyRequest;
 use App\Models\PropertyModel;
 use App\Services\PropertyMediaService;
-use App\Services\PropertyMetricsService;
 use App\Services\PropertyService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -43,10 +39,7 @@ class ManagePropertyController extends Controller
             'propertyDetails',
             'propertyAddress',
             'propertyOffering',
-            'propertyAmenities',
-            'propertyFloorplan',
             'propertyDocumentModel',
-            'propertyMetrics',
         ])
             ->latest()
             ->paginate(15)
@@ -89,7 +82,7 @@ class ManagePropertyController extends Controller
      */
     public function show(string $id): View
     {
-        $property = PropertyModel::with('propertyImage', 'propertyFloorplan', 'propertyDocumentModel')->findOrFail($id);
+        $property = PropertyModel::with('propertyImage', 'propertyDocumentModel')->findOrFail($id);
         $pagetitle = $property->name ?? 'Property Details';
 
         return view('admin.properties.property')->with(['property' => $property, 'pagetitle' => $pagetitle]);
@@ -152,7 +145,7 @@ class ManagePropertyController extends Controller
         $property = PropertyModel::findOrFail($id);
         $propertyAddress = $property->propertyAddress;
 
-        return view('admin.properties.edit_address')->with(['propertyAddress' => $propertyAddress, 'property_id' => $id]);
+        return view('admin.properties.edit_address')->with(['property' => $property, 'propertyAddress' => $propertyAddress, 'property_id' => $id]);
     }
 
     public function updateAddress(AdminUpdateAddressRequest $request, string $id): RedirectResponse
@@ -178,7 +171,7 @@ class ManagePropertyController extends Controller
         $property = PropertyModel::findOrFail($id);
         $propertyDetails = $property->propertyDetails;
 
-        return view('admin.properties.edit_details')->with(['propertyDetails' => $propertyDetails, 'property_id' => $id]);
+        return view('admin.properties.edit_details')->with(['property' => $property, 'propertyDetails' => $propertyDetails, 'property_id' => $id]);
     }
 
     public function updateDetails(UpdatePropertyDetailsRequest $request, string $id): RedirectResponse
@@ -196,64 +189,7 @@ class ManagePropertyController extends Controller
 
         $this->propertyService->clearPropertiesCache($property->slug);
 
-        return redirect(route('admin.manage-property.edit-amenities', ['id' => $id]))->with('success', 'Details updated successfully.');
-    }
-
-    public function editAmenities(Request $request, string $id): View
-    {
-        $property = PropertyModel::findOrFail($id);
-        $propertyAmenities = $property->propertyAmenities;
-
-        return view('admin.properties.edit_amenities')->with(['propertyAmenities' => $propertyAmenities, 'property_id' => $id]);
-    }
-
-    public function updateAmenities(UpdatePropertyAmenitiesRequest $request, string $id): RedirectResponse
-    {
-        $data = $request->validated();
-        $rawAmenities = $data['property_amenities'] ?? [];
-        $property = PropertyModel::findOrFail($id);
-
-        // Normalize amenities array from CSV string or array
-        if (is_string($rawAmenities)) {
-            $rawAmenities = array_filter(explode(',', $rawAmenities));
-        }
-
-        $formattedData = [];
-        foreach ($rawAmenities as $amenity) {
-            if (! empty(trim((string) $amenity))) {
-                $formattedData[] = ['property_amenities' => trim((string) $amenity)];
-            }
-        }
-
-        $property->propertyAmenities()->delete();
-        if (! empty($formattedData)) {
-            $property->propertyAmenities()->createMany($formattedData);
-        }
-
-        $this->propertyService->clearPropertiesCache($property->slug);
-
-        return redirect(route('admin.manage-property.edit-floorplan', ['id' => $id]))->with('success', 'Amenities updated successfully.');
-    }
-
-    public function editFloorplan(Request $request, string $id): View
-    {
-        $property = PropertyModel::findOrFail($id);
-        $propertyFloorplan = $property->propertyFloorplan;
-
-        return view('admin.properties.edit_floorplan')->with(['propertyFloorplan' => $propertyFloorplan, 'property_id' => $id]);
-    }
-
-    public function updateFloorplan(UpdatePropertyFloorPlanRequest $request, string $id): RedirectResponse
-    {
-        $data = $request->validated();
-        $filteredData = array_filter($data);
-        $property = PropertyModel::findOrFail($id);
-
-        // Upload floorplans via PropertyMediaService / Storage facade
-        $this->mediaService->uploadFloorplans($property, $request->allFiles(), $filteredData);
-        $this->propertyService->clearPropertiesCache($property->slug);
-
-        return redirect(route('admin.manage-property.edit-property-offerings', ['id' => $id]))->with('success', 'Floor Plan updated successfully.');
+        return redirect(route('admin.manage-property.edit-property-offerings', ['id' => $id]))->with('success', 'Details updated successfully.');
     }
 
     public function editOfferings(Request $request, string $id): View
@@ -261,7 +197,7 @@ class ManagePropertyController extends Controller
         $property = PropertyModel::findOrFail($id);
         $propertyOffering = $property->propertyOffering;
 
-        return view('admin.properties.edit_property_offering')->with(['propertyOffering' => $propertyOffering, 'property_id' => $id]);
+        return view('admin.properties.edit_property_offering')->with(['property' => $property, 'propertyOffering' => $propertyOffering, 'property_id' => $id]);
     }
 
     public function updateOfferings(UpdatePropertyOfferingRequest $request, string $id): RedirectResponse
@@ -287,7 +223,7 @@ class ManagePropertyController extends Controller
         $property = PropertyModel::findOrFail($id);
         $propertyDocumentModel = $property->propertyDocumentModel;
 
-        return view('admin.properties.edit_property_documents')->with(['propertyDocumentModel' => $propertyDocumentModel, 'property_id' => $id]);
+        return view('admin.properties.edit_property_documents')->with(['property' => $property, 'propertyDocumentModel' => $propertyDocumentModel, 'property_id' => $id]);
     }
 
     public function updateDocuments(UpdatePropertyDocumentRequest $request, string $id): RedirectResponse
@@ -300,107 +236,6 @@ class ManagePropertyController extends Controller
         $this->mediaService->uploadDocuments($property, $request->allFiles(), $filteredData);
         $this->propertyService->clearPropertiesCache($property->slug);
 
-        return redirect(route('admin.manage-property.edit-property-metrics', ['id' => $id]))->with('success', 'Documents updated successfully.');
-    }
-
-    public function editMetrics(Request $request, string $id): View
-    {
-        $property = PropertyModel::with(['propertyDetails', 'propertyOffering', 'propertyMetrics'])->findOrFail($id);
-
-        $propertyMetrics = $property->propertyMetrics;
-        if (! $propertyMetrics) {
-            $propertyMetrics = PropertyMetricsService::syncForProperty($property);
-        }
-
-        return view('admin.properties.edit_property_metrics')->with([
-            'property' => $property,
-            'propertyMetrics' => $propertyMetrics,
-            'property_id' => $id,
-        ]);
-    }
-
-    public function updateMetrics(UpdatePropertyMetricsRequest $request, string $id): RedirectResponse
-    {
-        $data = $request->validated();
-        $property = PropertyModel::findOrFail($id);
-
-        PropertyMetricsService::syncForProperty($property, $data);
-        $this->propertyService->clearPropertiesCache($property->slug);
-
-        return redirect(route('manage-property.index'))->with('success', 'Property metrics updated successfully.');
-    }
-
-    // ==========================================
-    // Backward Compatibility Method Aliases
-    // ==========================================
-
-    public function edit_address(Request $request, string $id): View
-    {
-        return $this->editAddress($request, $id);
-    }
-
-    public function update_address(AdminUpdateAddressRequest $request, string $id): RedirectResponse
-    {
-        return $this->updateAddress($request, $id);
-    }
-
-    public function edit_property_details(Request $request, string $id): View
-    {
-        return $this->editDetails($request, $id);
-    }
-
-    public function update_property_details(UpdatePropertyDetailsRequest $request, string $id): RedirectResponse
-    {
-        return $this->updateDetails($request, $id);
-    }
-
-    public function edit_amenities(Request $request, string $id): View
-    {
-        return $this->editAmenities($request, $id);
-    }
-
-    public function update_aminities(UpdatePropertyAmenitiesRequest $request, string $id): RedirectResponse
-    {
-        return $this->updateAmenities($request, $id);
-    }
-
-    public function edit_floorplan(Request $request, string $id): View
-    {
-        return $this->editFloorplan($request, $id);
-    }
-
-    public function update_floorplan(UpdatePropertyFloorPlanRequest $request, string $id): RedirectResponse
-    {
-        return $this->updateFloorplan($request, $id);
-    }
-
-    public function edit_property_offerings(Request $request, string $id): View
-    {
-        return $this->editOfferings($request, $id);
-    }
-
-    public function update_property_offerings(UpdatePropertyOfferingRequest $request, string $id): RedirectResponse
-    {
-        return $this->updateOfferings($request, $id);
-    }
-
-    public function edit_property_documents(Request $request, string $id): View
-    {
-        return $this->editDocuments($request, $id);
-    }
-
-    public function update_property_documents(UpdatePropertyDocumentRequest $request, string $id): RedirectResponse
-    {
-        return $this->updateDocuments($request, $id);
-    }
-
-    public function edit_property_metrics(Request $request, string $id): View
-    {
-        return $this->editMetrics($request, $id);
-    }
-
-    public function update_property_metrics(UpdatePropertyMetricsRequest $request, string $id): RedirectResponse
-    {
-        return $this->updateMetrics($request, $id);
+        return redirect(route('manage-property.index'))->with('success', 'Documents updated successfully.');
     }
 }

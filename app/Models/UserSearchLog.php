@@ -24,8 +24,6 @@ class UserSearchLog extends Model
         'property_type',
         'bedrooms',
         'bathrooms',
-        'min_cap_rate',
-        'is_1031',
         'sort_by',
         'filters_payload',
         'results_count',
@@ -36,8 +34,6 @@ class UserSearchLog extends Model
         'max_price' => 'integer',
         'bedrooms' => 'integer',
         'bathrooms' => 'integer',
-        'min_cap_rate' => 'decimal:2',
-        'is_1031' => 'boolean',
         'filters_payload' => 'array',
         'results_count' => 'integer',
     ];

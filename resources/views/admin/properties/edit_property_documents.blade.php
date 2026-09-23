@@ -26,12 +26,12 @@
                 </div>
                 <div>
                     <h2 class="text-base font-bold text-slate-900 dark:text-white">
-                        Stage 7: Legal Documentation & Financial Disclosures
+                        Stage 5: Legal Documentation & Financial Disclosures
                     </h2>
                     <p class="text-xs text-slate-500 dark:text-slate-400">Upload operating agreements, pro-forma calculations, deed restrictions, and title certificates.</p>
                 </div>
             </div>
-            <span class="badge-tw badge-info-tw hidden sm:inline-flex">Step 7 of 8</span>
+            <span class="badge-tw badge-info-tw hidden sm:inline-flex">Step 5 of 5</span>
         </div>
 
         <form action="{{ route('admin.manage-property.update-property-documents', ['id' => $property_id]) }}" method="POST" enctype="multipart/form-data" class="p-6 space-y-6">
@@ -101,7 +101,7 @@
                 </a>
                 <div class="flex items-center gap-2.5 w-full sm:w-auto order-1 sm:order-2">
                     <button type="submit" class="btn-primary-tw w-full sm:w-auto flex items-center justify-center gap-2">
-                        <i class="bi bi-check-lg text-base"></i> Save & Continue to Underwriting & Metrics
+                        <i class="bi bi-check-lg text-base"></i> Save & Finish
                         <i class="bi bi-arrow-right"></i>
                     </button>
                 </div>

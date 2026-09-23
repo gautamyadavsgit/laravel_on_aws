@@ -15,13 +15,13 @@ class UserDashboardController extends Controller
         $user = Auth::user();
 
         // Properties are soft deleted; rows pointing at a removed property are skipped rather than rendered blank
-        $interests = PropertyInterest::with('property.propertyAddress', 'property.propertyDetails')
+        $interests = PropertyInterest::with('property.propertyAddress', 'property.propertyDetails', 'property.propertyImage')
             ->whereHas('property')
             ->where('user_id', $user->id)
             ->latest()
             ->get();
 
-        $favorites = PropertyFavorite::with('property.propertyAddress', 'property.propertyDetails')
+        $favorites = PropertyFavorite::with('property.propertyAddress', 'property.propertyDetails', 'property.propertyImage')
             ->whereHas('property')
             ->where('user_id', $user->id)
             ->latest()

@@ -15,7 +15,7 @@
                         <h1 class="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
                             Create New Property
                         </h1>
-                        <span class="badge-tw badge-info-tw">Step 1 of 8</span>
+                        <span class="badge-tw badge-info-tw">Step 1 of 5</span>
                     </div>
                     <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-0.5">
                         Enter core property information to initialize a new fractional real estate investment offering.
@@ -49,28 +49,13 @@
                 </span>
                 <i class="bi bi-chevron-right text-slate-300 dark:text-slate-700 text-xs"></i>
                 <span class="flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold text-slate-400 dark:text-slate-600">
-                    <i class="bi bi-stars"></i>
-                    <span>4. Amenities</span>
-                </span>
-                <i class="bi bi-chevron-right text-slate-300 dark:text-slate-700 text-xs"></i>
-                <span class="flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold text-slate-400 dark:text-slate-600">
-                    <i class="bi bi-bounding-box"></i>
-                    <span>5. Floorplan</span>
-                </span>
-                <i class="bi bi-chevron-right text-slate-300 dark:text-slate-700 text-xs"></i>
-                <span class="flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold text-slate-400 dark:text-slate-600">
                     <i class="bi bi-tags"></i>
-                    <span>6. Offerings</span>
+                    <span>4. Offerings</span>
                 </span>
                 <i class="bi bi-chevron-right text-slate-300 dark:text-slate-700 text-xs"></i>
                 <span class="flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold text-slate-400 dark:text-slate-600">
                     <i class="bi bi-file-earmark-text"></i>
-                    <span>7. Documents</span>
-                </span>
-                <i class="bi bi-chevron-right text-slate-300 dark:text-slate-700 text-xs"></i>
-                <span class="flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold text-slate-400 dark:text-slate-600">
-                    <i class="bi bi-graph-up"></i>
-                    <span>8. Financials</span>
+                    <span>5. Documents</span>
                 </span>
             </nav>
         </div>
@@ -89,7 +74,7 @@
                     <p class="text-xs text-slate-500 dark:text-slate-400">Core listing attributes, availability status, and asset overview.</p>
                 </div>
             </div>
-            <span class="badge-tw badge-info-tw hidden sm:inline-flex">Step 1 of 8</span>
+            <span class="badge-tw badge-info-tw hidden sm:inline-flex">Step 1 of 5</span>
         </div>
 
         <form action="{{ route('manage-property.store') }}" method="POST" enctype="multipart/form-data" class="p-6 space-y-6">

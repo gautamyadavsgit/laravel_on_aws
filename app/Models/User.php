@@ -82,6 +82,16 @@ class User extends Authenticatable
     /**
      * Get the user's search history logs.
      */
+    public function favoritePropertyIds(): array
+    {
+        return $this->propertyFavorites()->pluck('property_id')->all();
+    }
+
+    public function hasFavorited(int $propertyId): bool
+    {
+        return $this->propertyFavorites()->where('property_id', $propertyId)->exists();
+    }
+
     public function searchLogs()
     {
         return $this->hasMany(UserSearchLog::class);

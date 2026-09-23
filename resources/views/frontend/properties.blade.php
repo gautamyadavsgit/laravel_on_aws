@@ -1,14 +1,9 @@
 @include('frontend.common.header', ['title' => 'Browse Real Estate Investments | Gautam Real Estate'])
 
 @php
-    $propertyList = isset($properties) ? $properties : \App\Models\PropertyModel::with(['propertyImage', 'propertyAddress', 'propertyMetrics', 'propertyDetails'])->latest()->paginate(9)->withQueryString();
-    $favoriteIds = isset($favoriteIds) ? $favoriteIds : (Auth::check() ? \App\Models\PropertyFavorite::where('user_id', Auth::id())->pluck('property_id')->toArray() : []);
-    $appliedFilters = $filters ?? request()->all();
-    $filterOpts = $filterOptions ?? [
-        'cities' => ['Gatlinburg', 'Pigeon Forge', 'Sevierville', 'Nashville', 'Austin', 'Miami'],
-        'states' => ['TN', 'FL', 'TX', 'NC', 'GA'],
-        'types' => ['Luxury Cabin', 'Single Family', 'Multi-Family', 'Commercial', 'Short-Term Rental', 'Fractional Estate'],
-    ];
+    $propertyList = $properties;
+    $appliedFilters = $filters;
+    $filterOpts = $filterOptions;
 
     $hasActiveFilters = !empty($appliedFilters['q']) ||
         !empty($appliedFilters['location']) ||
@@ -17,8 +12,6 @@
         !empty($appliedFilters['property_type']) ||
         !empty($appliedFilters['bedrooms']) ||
         !empty($appliedFilters['bathrooms']) ||
-        !empty($appliedFilters['min_cap_rate']) ||
-        !empty($appliedFilters['is_1031']) ||
         (!empty($appliedFilters['sort_by']) && $appliedFilters['sort_by'] !== 'latest');
 @endphp
 
@@ -149,7 +142,7 @@
                             title="Toggle Advanced Filters"
                             aria-expanded="false">
                             <i class="bi bi-sliders text-base"></i>
-                            @if(!empty(request('min_price')) || !empty(request('max_price')) || !empty(request('bedrooms')) || !empty(request('bathrooms')) || !empty(request('min_cap_rate')) || !empty(request('is_1031')) || (!empty(request('sort_by')) && request('sort_by') !== 'latest'))
+                            @if(!empty(request('min_price')) || !empty(request('max_price')) || !empty(request('bedrooms')) || !empty(request('bathrooms')) || (!empty(request('sort_by')) && request('sort_by') !== 'latest'))
                                 <span class="absolute -top-1 -right-1 w-2.5 h-2.5 bg-indigo-600 rounded-full ring-2 ring-white dark:ring-slate-900"></span>
                             @endif
                         </button>
@@ -157,8 +150,8 @@
                 </div>
 
                 <!-- Expandable / Collapsible Advanced Filters -->
-                <div id="advancedFiltersSection" class="{{ (!empty(request('min_price')) || !empty(request('max_price')) || !empty(request('bedrooms')) || !empty(request('bathrooms')) || !empty(request('min_cap_rate')) || !empty(request('is_1031')) || (!empty(request('sort_by')) && request('sort_by') !== 'latest')) ? '' : 'hidden' }} pt-4 border-t border-slate-100 dark:border-slate-800/80">
-                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3.5 text-xs">
+                <div id="advancedFiltersSection" class="{{ (!empty(request('min_price')) || !empty(request('max_price')) || !empty(request('bedrooms')) || !empty(request('bathrooms')) || (!empty(request('sort_by')) && request('sort_by') !== 'latest')) ? '' : 'hidden' }} pt-4 border-t border-slate-100 dark:border-slate-800/80">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3.5 text-xs">
                         <!-- Min Price -->
                         <div>
                             <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Min Price ($)</label>
@@ -194,18 +187,6 @@
                             </select>
                         </div>
 
-                        <!-- Min Cap Rate -->
-                        <div>
-                            <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Min Cap Rate (%)</label>
-                            <select name="min_cap_rate" class="input-tw text-xs w-full py-2">
-                                <option value="">Any Cap Rate</option>
-                                <option value="6" {{ request('min_cap_rate') == '6' ? 'selected' : '' }}>6%+ Cap</option>
-                                <option value="8" {{ request('min_cap_rate') == '8' ? 'selected' : '' }}>8%+ Cap</option>
-                                <option value="10" {{ request('min_cap_rate') == '10' ? 'selected' : '' }}>10%+ Cap</option>
-                                <option value="12" {{ request('min_cap_rate') == '12' ? 'selected' : '' }}>12%+ High Yield</option>
-                            </select>
-                        </div>
-
                         <!-- Sort By -->
                         <div>
                             <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Sort By</label>
@@ -213,23 +194,7 @@
                                 <option value="latest" {{ request('sort_by') === 'latest' ? 'selected' : '' }}>Newest Listed</option>
                                 <option value="price_asc" {{ request('sort_by') === 'price_asc' ? 'selected' : '' }}>Price: Low to High</option>
                                 <option value="price_desc" {{ request('sort_by') === 'price_desc' ? 'selected' : '' }}>Price: High to Low</option>
-                                <option value="cap_rate_desc" {{ request('sort_by') === 'cap_rate_desc' ? 'selected' : '' }}>Highest Cap Rate</option>
-                                <option value="cash_flow_desc" {{ request('sort_by') === 'cash_flow_desc' ? 'selected' : '' }}>Highest Cash Flow</option>
                             </select>
-                        </div>
-
-                        <!-- 1031 Exchange Toggle -->
-                        <div class="flex items-center pt-5">
-                            <label class="relative flex items-center gap-2 cursor-pointer select-none">
-                                <input type="checkbox"
-                                    name="is_1031"
-                                    value="1"
-                                    {{ request('is_1031') ? 'checked' : '' }}
-                                    class="w-4 h-4 text-indigo-600 rounded border-slate-300 focus:ring-indigo-500 dark:border-slate-700 dark:bg-slate-900">
-                                <span class="text-xs font-semibold text-slate-800 dark:text-slate-200 flex items-center gap-1">
-                                    <i class="bi bi-shield-check text-emerald-500"></i> 1031 Ready
-                                </span>
-                            </label>
                         </div>
                     </div>
                 </div>
@@ -238,7 +203,7 @@
                 @if($hasActiveFilters)
                     <div class="flex flex-wrap items-center gap-2 pt-2 text-xs">
                         <span class="text-slate-400 font-semibold uppercase text-[10px] tracking-wider">Active Filters:</span>
-                        
+
                         @if(!empty(request('q')))
                             <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800 font-medium">
                                 Keyword: "{{ request('q') }}"
@@ -274,20 +239,6 @@
                             </span>
                         @endif
 
-                        @if(!empty(request('min_cap_rate')))
-                            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800 font-medium">
-                                Cap Rate: {{ request('min_cap_rate') }}%+
-                                <a href="{{ request()->fullUrlWithQuery(['min_cap_rate' => null]) }}" class="hover:text-rose-600 ml-1"><i class="bi bi-x"></i></a>
-                            </span>
-                        @endif
-
-                        @if(!empty(request('is_1031')))
-                            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 font-medium">
-                                1031 Exchange Ready
-                                <a href="{{ request()->fullUrlWithQuery(['is_1031' => null]) }}" class="hover:text-rose-600 ml-1"><i class="bi bi-x"></i></a>
-                            </span>
-                        @endif
-
                         <a href="{{ route('properties') }}" class="text-xs text-rose-600 dark:text-rose-400 hover:underline font-semibold ml-2">Clear All</a>
                     </div>
                 @endif
@@ -304,28 +255,24 @@
                         </span>
                         <div>
                             <h2 class="text-base font-bold text-slate-900 dark:text-white">Recommended For You</h2>
-                            <p class="text-xs text-slate-500 dark:text-slate-400">Curated opportunities matched to your investment criteria & preference history</p>
+                            <p class="text-xs text-slate-500 dark:text-slate-400">Curated opportunities based on your search history</p>
                         </div>
                     </div>
-                    <span class="badge-tw badge-info-tw text-[11px] py-1 px-2.5 hidden sm:inline-flex">
-                        <i class="bi bi-cpu"></i> AI Match Score: 96%
-                    </span>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     @foreach($recommendations as $rec)
                         @php
-                            $recImage = $rec->propertyImage ? $rec->propertyImage->firstWhere('property_image_key', 'property_image') : null;
-                            $recImgSrc = $recImage ? \Illuminate\Support\Facades\Storage::url($recImage->property_image_value) : \Illuminate\Support\Facades\Storage::url('property_images/property_1.png');
-                            $recCap = $rec->propertyMetrics->cap_rate ?? null;
-                            $recCity = $rec->propertyAddress->city ?? 'Gatlinburg';
-                            $recState = $rec->propertyAddress->state ?? 'TN';
                             $isRecFavorited = in_array($rec->id, $favoriteIds);
                         @endphp
                         <div class="relative group rounded-xl overflow-hidden bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-indigo-400 dark:hover:border-indigo-600 transition shadow-sm flex flex-col justify-between">
                             <div class="relative h-36 overflow-hidden bg-slate-900">
-                                <img src="{{ $recImgSrc }}" alt="{{ $rec->name }}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'600\' height=\'400\' viewBox=\'0 0 600 400\'><rect width=\'600\' height=\'400\' fill=\'%23312e81\'/><text x=\'50%25\' y=\'50%25\' dominant-baseline=\'middle\' text-anchor=\'middle\' font-family=\'sans-serif\' font-size=\'20\' fill=\'%23ffffff\'>Top Yield Asset</text></svg>';">
-                                
+                                @if ($rec->hero_image_url)
+                                    <img src="{{ $rec->hero_image_url }}" alt="{{ $rec->name }}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+                                @else
+                                    <div class="w-full h-full flex items-center justify-center text-slate-500"><i class="bi bi-image text-3xl"></i></div>
+                                @endif
+
                                 <button type="button"
                                     data-favorite-btn
                                     data-property-id="{{ $rec->id }}"
@@ -334,22 +281,16 @@
                                     aria-label="Favorite">
                                     <i class="bi bi-heart{{ $isRecFavorited ? '-fill' : '' }} text-xs pointer-events-none"></i>
                                 </button>
-
-                                @if($recCap)
-                                    <span class="absolute top-2.5 right-2.5 bg-indigo-900/90 backdrop-blur-md text-white font-bold text-[10px] px-2 py-0.5 rounded shadow">
-                                        {{ $recCap }}% Cap
-                                    </span>
-                                @endif
                             </div>
                             <div class="p-3.5 space-y-2">
                                 <div>
                                     <h3 class="font-bold text-sm text-slate-900 dark:text-white truncate">{{ $rec->name }}</h3>
                                     <div class="text-[11px] text-slate-500 dark:text-slate-400 flex items-center gap-1 mt-0.5">
-                                        <i class="bi bi-geo-alt-fill text-rose-500"></i> {{ $recCity }}, {{ $recState }}
+                                        <i class="bi bi-geo-alt-fill text-rose-500"></i> {{ $rec->location_label }}
                                     </div>
                                 </div>
                                 <a href="{{ route('property.singlepage', ['slug' => $rec->slug ?? $rec->id]) }}" class="btn-primary-tw w-full py-1.5 text-xs text-center flex items-center justify-center gap-1.5">
-                                    <i class="bi bi-eye"></i> View Analysis
+                                    <i class="bi bi-eye"></i> View Details
                                 </a>
                             </div>
                         </div>
@@ -362,16 +303,8 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             @forelse ($propertyList as $prop)
                 @php
-                    $heroImage = $prop->propertyImage ? $prop->propertyImage->firstWhere('property_image_key', 'property_image') : null;
-                    $imageSrc = $heroImage ? \Illuminate\Support\Facades\Storage::url($heroImage->property_image_value) : \Illuminate\Support\Facades\Storage::url('property_images/property_1.png');
-                    $city = $prop->propertyAddress->city ?? 'Gatlinburg';
-                    $state = $prop->propertyAddress->state ?? 'TN';
-                    $metrics = $prop->propertyMetrics;
-                    $capRate = $metrics->cap_rate ?? null;
-                    $cashFlow = $metrics->annual_cash_flow ?? null;
-                    $growth5yr = $metrics->estimated_appreciation_rate ?? 5.2;
                     $isFavorited = in_array($prop->id, $favoriteIds);
-                    $propType = $prop->propertyDetails->type ?? 'Fractional Estate';
+                    $propType = $prop->propertyDetails->type ?? null;
                     $propBeds = $prop->propertyDetails->bedrooms ?? null;
                     $propBaths = $prop->propertyDetails->baths ?? null;
                     $propSqft = $prop->propertyDetails->square_feets ?? null;
@@ -381,8 +314,12 @@
                 <div class="card-tw p-0 overflow-hidden group hover:-translate-y-1 transition duration-300 flex flex-col justify-between">
                     <div>
                         <div class="relative h-64 overflow-hidden bg-slate-900">
-                            <img src="{{ $imageSrc }}" alt="{{ $prop->name }}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'800\' height=\'600\' viewBox=\'0 0 800 600\'><rect width=\'800\' height=\'600\' fill=\'%23312e81\'/><text x=\'50%25\' y=\'50%25\' dominant-baseline=\'middle\' text-anchor=\'middle\' font-family=\'sans-serif\' font-size=\'24\' fill=\'%23ffffff\'>Luxury Real Estate</text></svg>';">
-                            
+                            @if ($prop->hero_image_url)
+                                <img src="{{ $prop->hero_image_url }}" alt="{{ $prop->name }}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+                            @else
+                                <div class="w-full h-full flex items-center justify-center text-slate-500"><i class="bi bi-image text-4xl"></i></div>
+                            @endif
+
                             <!-- Favorite Floating Action Button -->
                             <button type="button"
                                 data-favorite-btn
@@ -393,25 +330,14 @@
                                 <i class="bi bi-heart{{ $isFavorited ? '-fill' : '' }} text-sm pointer-events-none"></i>
                             </button>
 
-                            <!-- Cap Rate Badge -->
-                            @if ($capRate)
-                                <div class="absolute top-3 right-3 bg-indigo-900/90 backdrop-blur-md border border-indigo-500/30 text-white font-bold text-xs px-2.5 py-1 rounded-lg shadow-lg flex items-center gap-1.5">
-                                    <i class="bi bi-graph-up-arrow text-emerald-400"></i>
-                                    <span>{{ $capRate }}% Cap Rate</span>
+                            <!-- Type Tag -->
+                            @if ($propType)
+                                <div class="absolute bottom-3 left-3 flex items-center gap-1.5">
+                                    <span class="bg-slate-950/80 backdrop-blur-md text-slate-200 text-[11px] font-medium px-2 py-0.5 rounded-md">
+                                        {{ $propType }}
+                                    </span>
                                 </div>
                             @endif
-
-                            <!-- Type & 1031 Status Tag -->
-                            <div class="absolute bottom-3 left-3 flex items-center gap-1.5">
-                                <span class="bg-slate-950/80 backdrop-blur-md text-slate-200 text-[11px] font-medium px-2 py-0.5 rounded-md">
-                                    {{ $propType }}
-                                </span>
-                                @if ($metrics && $metrics->is_1031_exchange_eligible)
-                                    <span class="bg-slate-950/80 backdrop-blur-md text-emerald-400 text-[11px] font-semibold px-2 py-0.5 rounded-md flex items-center gap-1">
-                                        <i class="bi bi-shield-check"></i> 1031
-                                    </span>
-                                @endif
-                            </div>
                         </div>
 
                         <div class="p-6 space-y-4">
@@ -419,7 +345,7 @@
                                 <h2 class="text-lg font-bold text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition">{{ $prop->name }}</h2>
                                 <div class="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 mt-1">
                                     <span class="flex items-center gap-1 text-rose-600 dark:text-rose-400 font-medium">
-                                        <i class="bi bi-geo-alt-fill"></i> {{ $city }}, {{ $state }}
+                                        <i class="bi bi-geo-alt-fill"></i> {{ $prop->location_label }}
                                     </span>
                                     @if($propPrice)
                                         <span class="font-bold text-slate-900 dark:text-white text-sm">
@@ -443,25 +369,13 @@
                                     @endif
                                 </div>
                             @endif
-
-                            <!-- Financial Metrics Grid Preview -->
-                            <div class="grid grid-cols-2 gap-2.5 p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800 text-xs">
-                                <div>
-                                    <span class="text-slate-400 block text-[10px] uppercase font-semibold">Net Cash Flow</span>
-                                    <strong class="text-slate-900 dark:text-white font-bold">{{ $cashFlow ? '$' . number_format((float) $cashFlow) . '/yr' : 'Underwritten' }}</strong>
-                                </div>
-                                <div>
-                                    <span class="text-slate-400 block text-[10px] uppercase font-semibold">Est. Growth</span>
-                                    <strong class="text-emerald-600 dark:text-emerald-400 font-bold">+{{ $growth5yr }}%/yr</strong>
-                                </div>
-                            </div>
                         </div>
                     </div>
 
                     <!-- Card Actions -->
                     <div class="p-6 pt-0 flex items-center gap-2">
                         <a href="{{ route('property.singlepage', ['slug' => $prop->slug ?? $prop->id]) }}" class="btn-primary-tw flex-1 py-2.5 text-center flex items-center justify-center gap-2">
-                            <i class="bi bi-eye"></i> View Underwriting & Specs
+                            <i class="bi bi-eye"></i> View Details
                         </a>
                         <button type="button"
                             data-favorite-btn

@@ -84,20 +84,11 @@ Route::prefix('/admin')->group(function () {
             Route::get('/edit-details/{id}', [ManagePropertyController::class, 'editDetails'])->name('admin.manage-property.edit-details');
             Route::post('/update-details/{id}', [ManagePropertyController::class, 'updateDetails'])->name('admin.manage-property.update-details');
 
-            Route::get('/edit-amenities/{id}', [ManagePropertyController::class, 'editAmenities'])->name('admin.manage-property.edit-amenities');
-            Route::post('/update-aminities/{id}', [ManagePropertyController::class, 'updateAmenities'])->name('admin.manage-property.update-aminities');
-
-            Route::get('/edit-floorplan/{id}', [ManagePropertyController::class, 'editFloorplan'])->name('admin.manage-property.edit-floorplan');
-            Route::post('/update-floorplan/{id}', [ManagePropertyController::class, 'updateFloorplan'])->name('admin.manage-property.update-floorplan');
-
             Route::get('/edit-property-offerings/{id}', [ManagePropertyController::class, 'editOfferings'])->name('admin.manage-property.edit-property-offerings');
             Route::post('/update-property-offerings/{id}', [ManagePropertyController::class, 'updateOfferings'])->name('admin.manage-property.update-property-offerings');
 
             Route::get('/edit-property-documents/{id}', [ManagePropertyController::class, 'editDocuments'])->name('admin.manage-property.edit-property-documents');
             Route::post('/update-property-documents/{id}', [ManagePropertyController::class, 'updateDocuments'])->name('admin.manage-property.update-property-documents');
-
-            Route::get('/edit-property-metrics/{id}', [ManagePropertyController::class, 'editMetrics'])->name('admin.manage-property.edit-property-metrics');
-            Route::post('/update-property-metrics/{id}', [ManagePropertyController::class, 'updateMetrics'])->name('admin.manage-property.update-property-metrics');
         });
     });
 });

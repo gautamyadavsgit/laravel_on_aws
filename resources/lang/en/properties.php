@@ -19,25 +19,8 @@ return [
     'favorited' => 'Favorited',
     'remove_favorites' => 'Remove from Favorites',
 
-    // Property Metrics
-    'investment_metrics' => 'Investment Goals & Financial Pro-Forma',
-    'underwritten_asset' => 'Underwritten Asset',
-    'audited_financials' => 'Audited Financial Metrics',
-    'cap_rate' => 'Cap Rate',
-    'match' => 'Match',
-
-    // Investment Goals
-    'cash_flow' => 'Cash Flow',
-    'appreciation' => 'Appreciation',
-    'tax_benefits' => 'Tax Shelter',
-    'diversification' => 'Diversification',
-    'cash_flow_objective' => 'Quarterly Cash Flow Objective',
-    'passive_dividends' => 'Optimized for consistent passive rental dividends distributed quarterly',
-
-    // Amenities & Features
-    'amenities' => 'Amenities',
+    // Features
     'features' => 'Features',
-    'floorplan' => 'Floor Plan',
 
     // Property Status
     'available' => 'Available',

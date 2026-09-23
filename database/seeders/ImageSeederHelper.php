@@ -15,7 +15,6 @@ class ImageSeederHelper
 
         // Ensure directories exist
         $disk->makeDirectory('property_images');
-        $disk->makeDirectory('floorplan_images');
         $disk->makeDirectory('market_image');
         $disk->makeDirectory('property_documents');
 
@@ -42,16 +41,7 @@ class ImageSeederHelper
             }
         }
 
-        // 2. Generate Architectural Floorplans (800x600 with blueprint grid)
-        for ($i = 1; $i <= 6; $i++) {
-            $filename = "floorplan_images/floorplan_{$i}.png";
-            if (! $disk->exists($filename)) {
-                $png = self::createImageBinary(800, 600, 25, 45, 80, 'blueprint');
-                $disk->put($filename, $png);
-            }
-        }
-
-        // 3. Generate Market Trend Images (800x600 with chart styling)
+        // 2. Generate Market Trend Images (800x600 with chart styling)
         for ($i = 1; $i <= 6; $i++) {
             $filename = "market_image/market_{$i}.png";
             if (! $disk->exists($filename)) {

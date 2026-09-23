@@ -27,11 +27,8 @@ return [
     'property_details' => 'Property Details',
     'edit_address' => 'Edit Address',
     'edit_details' => 'Edit Details',
-    'edit_amenities' => 'Edit Amenities',
-    'edit_floorplan' => 'Edit Floor Plan',
     'edit_offerings' => 'Edit Offerings',
     'edit_documents' => 'Edit Documents',
-    'edit_metrics' => 'Edit Metrics',
 
     // Table Headers
     'table_property_name' => 'Property Name',

@@ -26,12 +26,12 @@
                 </div>
                 <div>
                     <h2 class="text-base font-bold text-slate-900 dark:text-white">
-                        Stage 6: Capital Offering & Cost Breakdown
+                        Stage 4: Capital Offering & Cost Breakdown
                     </h2>
-                    <p class="text-xs text-slate-500 dark:text-slate-400">Underwriting breakdown, acquisition cost, renovation budget, and escrow fees.</p>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">Acquisition cost, renovation budget, and escrow fees.</p>
                 </div>
             </div>
-            <span class="badge-tw badge-info-tw hidden sm:inline-flex">Step 6 of 7</span>
+            <span class="badge-tw badge-info-tw hidden sm:inline-flex">Step 4 of 5</span>
         </div>
 
         <form action="{{ route('admin.manage-property.update-property-offerings', ['id' => $property_id]) }}" method="POST" enctype="multipart/form-data" class="p-6 space-y-6">
@@ -75,7 +75,7 @@
             </div>
 
             <div class="border-t border-slate-200 dark:border-slate-800 pt-5 flex flex-col sm:flex-row items-center justify-between gap-3">
-                <a href="{{ route('admin.manage-property.edit-floorplan', ['id' => $property_id]) }}" class="btn-secondary-tw w-full sm:w-auto text-center order-2 sm:order-1">
+                <a href="{{ route('admin.manage-property.edit-details', ['id' => $property_id]) }}" class="btn-secondary-tw w-full sm:w-auto text-center order-2 sm:order-1">
                     <i class="bi bi-arrow-left"></i> Previous Step
                 </a>
                 <div class="flex items-center gap-2.5 w-full sm:w-auto order-1 sm:order-2">

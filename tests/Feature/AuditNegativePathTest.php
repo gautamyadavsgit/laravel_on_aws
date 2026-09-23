@@ -260,7 +260,7 @@ class AuditNegativePathTest extends TestCase
         $queries = [
             '?q[]=x',
             '?location[]=x&property_type[]=y',
-            '?min_price=abc&max_price=-5&bedrooms=-3&bathrooms=zzz&min_cap_rate=1e999',
+            '?min_price=abc&max_price=-5&bedrooms=-3&bathrooms=zzz',
             '?min_price=99999999999999999999999',
             '?page=999999',
             '?page=-4',
@@ -270,7 +270,6 @@ class AuditNegativePathTest extends TestCase
             '?q='.urlencode(str_repeat('a', 5000)),
             '?q='.urlencode("'; DROP TABLE properties;--"),
             '?q=%25&location=_',
-            '?is_1031[]=1',
             '?min_price=500000&max_price=100',
         ];
 
@@ -368,11 +367,8 @@ class AuditNegativePathTest extends TestCase
             "/admin/manage-property/{$property->id}/edit",
             "/admin/manage-property/edit-address/{$property->id}",
             "/admin/manage-property/edit-details/{$property->id}",
-            "/admin/manage-property/edit-amenities/{$property->id}",
-            "/admin/manage-property/edit-floorplan/{$property->id}",
             "/admin/manage-property/edit-property-offerings/{$property->id}",
             "/admin/manage-property/edit-property-documents/{$property->id}",
-            "/admin/manage-property/edit-property-metrics/{$property->id}",
         ];
 
         foreach ([null, $investor] as $actor) {
@@ -390,7 +386,6 @@ class AuditNegativePathTest extends TestCase
             ['put', "/admin/manage-property/{$property->id}", ['name' => 'Hacked']],
             ['delete', "/admin/manage-property/{$property->id}", []],
             ['post', "/admin/manage-property/update-address/{$property->id}", ['city' => 'x']],
-            ['post', "/admin/manage-property/update-property-metrics/{$property->id}", ['cap_rate' => 1]],
         ];
 
         foreach ($posts as [$method, $url, $body]) {
@@ -553,7 +548,7 @@ class AuditNegativePathTest extends TestCase
 
         $this->actingAs($this->admin(), 'admin')
             ->post("/admin/manage-property/update-details/{$property->id}", $this->validDetails())
-            ->assertRedirect(route('admin.manage-property.edit-amenities', ['id' => $property->id]));
+            ->assertRedirect(route('admin.manage-property.edit-property-offerings', ['id' => $property->id]));
 
         $this->assertDatabaseHas('property_details', ['property_id' => $property->id, 'bedrooms' => 4, 'value' => 850000, 'zoning' => 'R-1']);
     }
@@ -596,36 +591,6 @@ class AuditNegativePathTest extends TestCase
             ->assertSessionHasErrors(['type', 'bedrooms', 'value']);
     }
 
-    public function test_admin_amenities_form_submits_comma_separated_text(): void
-    {
-        $property = $this->property();
-
-        $this->actingAs($this->admin(), 'admin')->from('/x')
-            ->post("/admin/manage-property/update-aminities/{$property->id}", [
-                'property_amenities' => ' Hot Tub, Pool ,, Pool, <b>Deck</b> ',
-            ])
-            ->assertSessionHasNoErrors()
-            ->assertRedirect(route('admin.manage-property.edit-floorplan', ['id' => $property->id]));
-
-        $stored = $property->propertyAmenities()->pluck('property_amenities')->all();
-        $this->assertSame(['Hot Tub', 'Pool', '<b>Deck</b>'], $stored);
-    }
-
-    public function test_admin_amenities_rejects_oversized_input(): void
-    {
-        $property = $this->property();
-
-        $this->actingAs($this->admin(), 'admin')->from('/x')
-            ->post("/admin/manage-property/update-aminities/{$property->id}", [
-                'property_amenities' => str_repeat('a', 300),
-            ])->assertSessionHasErrors('property_amenities.0');
-
-        $this->actingAs($this->admin(), 'admin')->from('/x')
-            ->post("/admin/manage-property/update-aminities/{$property->id}", [
-                'property_amenities' => implode(',', range(1, 150)),
-            ])->assertSessionHasErrors('property_amenities');
-    }
-
     public function test_admin_offerings_reject_negative_fractional_and_huge_values(): void
     {
         $property = $this->property();
@@ -649,44 +614,10 @@ class AuditNegativePathTest extends TestCase
         }
     }
 
-    public function test_admin_metrics_honours_net_operating_income_and_bounds_values(): void
+    public function test_admin_document_uploads_validate_files(): void
     {
         $property = $this->property();
         $admin = $this->admin();
-
-        $this->actingAs($admin, 'admin')
-            ->post("/admin/manage-property/update-property-metrics/{$property->id}", [
-                'gross_annual_rent' => 100000,
-                'operating_expenses' => 20000,
-                'net_operating_income' => 50000,
-            ])->assertRedirect(route('manage-property.index'));
-
-        $this->assertEquals(50000, $property->propertyMetrics()->first()->net_operating_income);
-
-        foreach ([
-            'gross_annual_rent' => '99999999999999',
-            'cap_rate' => 101,
-            'cash_flow_rating' => 101,
-            'diversification_score' => 11,
-            'calculation_notes' => str_repeat('a', 2001),
-            'projected_value_5yr' => '99999999999999999',
-        ] as $field => $value) {
-            $this->actingAs($admin, 'admin')->from('/x')
-                ->post("/admin/manage-property/update-property-metrics/{$property->id}", [$field => $value])
-                ->assertSessionHasErrors($field);
-        }
-    }
-
-    public function test_admin_floorplan_and_document_uploads_validate_files(): void
-    {
-        $property = $this->property();
-        $admin = $this->admin();
-
-        $this->actingAs($admin, 'admin')->from('/x')
-            ->post("/admin/manage-property/update-floorplan/{$property->id}", [
-                'floor_plan_1' => UploadedFile::fake()->create('plan.pdf', 10, 'application/pdf'),
-                'floor_plan_2' => $this->realUpload('shell.png', '<?php echo 1;'),
-            ])->assertSessionHasErrors(['floor_plan_1', 'floor_plan_2']);
 
         $this->actingAs($admin, 'admin')->from('/x')
             ->post("/admin/manage-property/update-property-documents/{$property->id}", [
@@ -694,12 +625,6 @@ class AuditNegativePathTest extends TestCase
                 'Documents_Master_Deed' => $this->realUpload('deed.pdf', '<?php echo 1;'),
                 'Documents_Deed_Example' => UploadedFile::fake()->create('big.pdf', 5000, 'application/pdf'),
             ])->assertSessionHasErrors(['document_1', 'Documents_Master_Deed', 'Documents_Deed_Example']);
-
-        $this->actingAs($admin, 'admin')
-            ->post("/admin/manage-property/update-floorplan/{$property->id}", [
-                'floor_plan_1' => UploadedFile::fake()->image('plan.png', 50, 50),
-            ])->assertSessionHasNoErrors();
-        $this->assertCount(1, $property->propertyFloorplan()->get());
     }
 
     public function test_admin_update_property_validates_and_missing_records_are_404(): void
@@ -874,7 +799,7 @@ class AuditNegativePathTest extends TestCase
         $admin = $this->admin();
         $property = $this->property();
 
-        foreach (['edit-address', 'edit-details', 'edit-amenities', 'edit-floorplan', 'edit-property-offerings', 'edit-property-documents', 'edit-property-metrics'] as $step) {
+        foreach (['edit-address', 'edit-details', 'edit-property-offerings', 'edit-property-documents'] as $step) {
             $this->actingAs($admin, 'admin')->get("/admin/manage-property/{$step}/{$property->id}")->assertOk();
         }
 
@@ -904,19 +829,6 @@ class AuditNegativePathTest extends TestCase
             ->assertSee('value="TYPED-ZONE"', false);
     }
 
-    public function test_failed_amenities_submission_redisplays_without_erroring(): void
-    {
-        $admin = $this->admin();
-        $property = $this->property();
-        $url = "/admin/manage-property/edit-amenities/{$property->id}";
-
-        $this->actingAs($admin, 'admin')->from($url)
-            ->post("/admin/manage-property/update-aminities/{$property->id}", ['property_amenities' => 'Pool, '.str_repeat('a', 300)])
-            ->assertRedirect($url);
-
-        $this->actingAs($admin, 'admin')->get($url)->assertOk()->assertSee('Pool, ');
-    }
-
     public function test_registration_form_offers_password_confirmation(): void
     {
         $this->get('/register')->assertOk()->assertSee('name="password_confirmation"', false);
@@ -928,26 +840,6 @@ class AuditNegativePathTest extends TestCase
             ->assertRedirect('/register');
 
         $this->get('/register')->assertOk();
-    }
-
-    public function test_replacing_a_floorplan_leaves_one_record_and_removes_the_old_file(): void
-    {
-        $admin = $this->admin();
-        $property = $this->property();
-        $disk = Storage::disk();
-
-        $this->actingAs($admin, 'admin')->post("/admin/manage-property/update-floorplan/{$property->id}", [
-            'floor_plan_1' => UploadedFile::fake()->image('one.png', 40, 40),
-        ])->assertSessionHasNoErrors();
-        $first = $property->propertyFloorplan()->first()->value;
-        $disk->assertExists($first);
-
-        $this->actingAs($admin, 'admin')->post("/admin/manage-property/update-floorplan/{$property->id}", [
-            'floor_plan_1' => UploadedFile::fake()->image('two.png', 40, 40),
-        ])->assertSessionHasNoErrors();
-
-        $this->assertSame(1, $property->propertyFloorplan()->count());
-        $disk->assertMissing($first);
     }
 
     public function test_property_with_a_very_long_name_is_reachable_by_its_slug(): void
@@ -971,7 +863,7 @@ class AuditNegativePathTest extends TestCase
 
     public function test_listing_filters_still_work_with_valid_input(): void
     {
-        $this->get('/invest?q=chalet&bedrooms=2&min_price=100000&max_price=900000&sort_by=price_asc&min_cap_rate=6&is_1031=1&page=1')
+        $this->get('/invest?q=chalet&bedrooms=2&min_price=100000&max_price=900000&sort_by=price_asc&page=1')
             ->assertOk()
             ->assertViewHas('properties');
     }

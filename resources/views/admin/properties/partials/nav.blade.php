@@ -1,7 +1,7 @@
 @php
     $currentRoute = Route::currentRouteName();
-    $propId = $property_id ?? $property->id ?? 1;
-    $propModel = isset($property) && is_object($property) ? $property : \App\Models\PropertyModel::find($propId);
+    $propId = $property->id;
+    $propModel = $property;
 @endphp
 
 <!-- Property Stepper Header -->
@@ -78,47 +78,20 @@
 
             <i class="bi bi-chevron-right text-slate-300 dark:text-slate-700 text-xs"></i>
 
-            <!-- 4. Amenities -->
-            <a href="{{ route('admin.manage-property.edit-amenities', ['id' => $propId]) }}" 
-               class="flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold transition {{ $currentRoute === 'admin.manage-property.edit-amenities' ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800' }}">
-                <i class="bi bi-stars"></i>
-                <span>4. Amenities</span>
-            </a>
-
-            <i class="bi bi-chevron-right text-slate-300 dark:text-slate-700 text-xs"></i>
-
-            <!-- 5. Floorplan -->
-            <a href="{{ route('admin.manage-property.edit-floorplan', ['id' => $propId]) }}" 
-               class="flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold transition {{ $currentRoute === 'admin.manage-property.edit-floorplan' ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800' }}">
-                <i class="bi bi-bounding-box"></i>
-                <span>5. Floorplan</span>
-            </a>
-
-            <i class="bi bi-chevron-right text-slate-300 dark:text-slate-700 text-xs"></i>
-
-            <!-- 6. Offerings -->
+            <!-- 4. Offerings -->
             <a href="{{ route('admin.manage-property.edit-property-offerings', ['id' => $propId]) }}" 
                class="flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold transition {{ $currentRoute === 'admin.manage-property.edit-property-offerings' ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800' }}">
                 <i class="bi bi-tag"></i>
-                <span>6. Offerings</span>
+                <span>4. Offerings</span>
             </a>
 
             <i class="bi bi-chevron-right text-slate-300 dark:text-slate-700 text-xs"></i>
 
-            <!-- 7. Documents -->
+            <!-- 5. Documents -->
             <a href="{{ route('admin.manage-property.edit-property-documents', ['id' => $propId]) }}" 
                class="flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold transition {{ $currentRoute === 'admin.manage-property.edit-property-documents' ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800' }}">
                 <i class="bi bi-file-earmark-pdf"></i>
-                <span>7. Documents</span>
-            </a>
-
-            <i class="bi bi-chevron-right text-slate-300 dark:text-slate-700 text-xs"></i>
-
-            <!-- 8. Metrics -->
-            <a href="{{ route('admin.manage-property.edit-property-metrics', ['id' => $propId]) }}" 
-               class="flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold transition {{ $currentRoute === 'admin.manage-property.edit-property-metrics' ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800' }}">
-                <i class="bi bi-graph-up-arrow"></i>
-                <span>8. Underwriting & Metrics</span>
+                <span>5. Documents</span>
             </a>
         </nav>
     </div>

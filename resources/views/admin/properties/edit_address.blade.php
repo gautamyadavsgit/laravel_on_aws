@@ -31,7 +31,7 @@
                     <p class="text-xs text-slate-500 dark:text-slate-400">Postal street address, city, state jurisdiction, and postal code.</p>
                 </div>
             </div>
-            <span class="badge-tw badge-info-tw hidden sm:inline-flex">Step 2 of 8</span>
+            <span class="badge-tw badge-info-tw hidden sm:inline-flex">Step 2 of 5</span>
         </div>
 
         <form action="{{ route('admin.manage-property.update-address', ['id' => $property_id]) }}" method="POST" enctype="multipart/form-data" class="p-6 space-y-6">

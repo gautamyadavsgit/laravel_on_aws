@@ -31,7 +31,7 @@
                     <p class="text-xs text-slate-500 dark:text-slate-400">Core listing attributes, availability status, and asset overview.</p>
                 </div>
             </div>
-            <span class="badge-tw badge-info-tw hidden sm:inline-flex">Step 1 of 8</span>
+            <span class="badge-tw badge-info-tw hidden sm:inline-flex">Step 1 of 5</span>
         </div>
 
         <form action="{{ route('manage-property.update', ['manage_property' => $property_id]) }}" method="POST" enctype="multipart/form-data" class="p-6 space-y-6">
@@ -86,7 +86,7 @@
                     <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
                         @foreach($property->propertyImage as $img)
                             <div class="relative group rounded-lg overflow-hidden border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-800 aspect-video flex items-center justify-center">
-                                <img src="{{ \Illuminate\Support\Facades\Storage::url($img->property_image_value) }}" alt="Photo" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'100\' fill=\'%2364748b\'><rect width=\'100\' height=\'100\' fill=\'%23f1f5f9\'/><text x=\'50%\' y=\'50%\' font-size=\'10\' text-anchor=\'middle\' dy=\'.3em\'>Gallery Photo</text></svg>'">
+                                <img src="{{ $img->url }}" alt="Photo" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
                             </div>
                         @endforeach
                     </div>

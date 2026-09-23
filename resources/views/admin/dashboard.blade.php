@@ -39,7 +39,7 @@
         </div>
         <div>
             <div class="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">{{ __('admin.total_properties') }}</div>
-            <div class="text-xl font-bold text-slate-900 dark:text-white">{{ \App\Models\PropertyModel::count() }}</div>
+            <div class="text-xl font-bold text-slate-900 dark:text-white">{{ $propertyCount }}</div>
             <div class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{{ __('admin.listed_on_platform') }}</div>
         </div>
     </div>

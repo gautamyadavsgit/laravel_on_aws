@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Storage;
 
 class PropertyImageModel extends Model
 {
@@ -17,6 +18,11 @@ class PropertyImageModel extends Model
         'property_image_key',
         'property_image_value',
     ];
+
+    public function getUrlAttribute(): string
+    {
+        return Storage::url($this->property_image_value);
+    }
 
     public function property(): BelongsTo
     {

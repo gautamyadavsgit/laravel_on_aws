@@ -5,7 +5,6 @@ namespace App\Services;
 use App\Models\PropertyAddress;
 use App\Models\PropertyDetails;
 use App\Models\PropertyFavorite;
-use App\Models\PropertyMetrics;
 use App\Models\PropertyModel;
 use App\Models\User;
 use App\Models\UserSearchLog;
@@ -78,7 +77,6 @@ class PropertyService
         $query = PropertyModel::with([
             'propertyImage',
             'propertyAddress',
-            'propertyMetrics',
             'propertyDetails',
         ]);
 
@@ -147,22 +145,7 @@ class PropertyService
             });
         }
 
-        // 7. Cap Rate filter (Minimum %)
-        if (isset($filters['min_cap_rate']) && is_numeric($filters['min_cap_rate']) && $filters['min_cap_rate'] > 0) {
-            $minCapRate = (float) $filters['min_cap_rate'];
-            $query->whereHas('metrics', function (Builder $metricsQuery) use ($minCapRate) {
-                $metricsQuery->where('cap_rate', '>=', $minCapRate);
-            });
-        }
-
-        // 8. 1031 Exchange Ready filter
-        if (! empty($filters['is_1031'])) {
-            $query->whereHas('metrics', function (Builder $metricsQuery) {
-                $metricsQuery->where('is_1031_exchange_eligible', 1);
-            });
-        }
-
-        // 9. Sorting
+        // 7. Sorting
         $sortBy = $filters['sort_by'] ?? 'latest';
         switch ($sortBy) {
             case 'price_asc':
@@ -173,16 +156,6 @@ class PropertyService
             case 'price_desc':
                 $query->join('property_details', 'properties.id', '=', 'property_details.property_id')
                     ->orderBy('property_details.value', 'desc')
-                    ->select('properties.*');
-                break;
-            case 'cap_rate_desc':
-                $query->leftJoin('property_metrics', 'properties.id', '=', 'property_metrics.property_id')
-                    ->orderByRaw('COALESCE(property_metrics.cap_rate, 0) DESC')
-                    ->select('properties.*');
-                break;
-            case 'cash_flow_desc':
-                $query->leftJoin('property_metrics', 'properties.id', '=', 'property_metrics.property_id')
-                    ->orderByRaw('COALESCE(property_metrics.annual_cash_flow, 0) DESC')
                     ->select('properties.*');
                 break;
             case 'oldest':
@@ -221,7 +194,7 @@ class PropertyService
     public function logUserSearch(array $filters, int $resultsCount): void
     {
         try {
-            $meaningfulKeys = ['q', 'location', 'min_price', 'max_price', 'property_type', 'bedrooms', 'bathrooms', 'min_cap_rate', 'is_1031', 'sort_by'];
+            $meaningfulKeys = ['q', 'location', 'min_price', 'max_price', 'property_type', 'bedrooms', 'bathrooms', 'sort_by'];
             $hasFilter = false;
             foreach ($meaningfulKeys as $k) {
                 if (! empty($filters[$k])) {
@@ -246,8 +219,6 @@ class PropertyService
                 'property_type' => ! empty($filters['property_type']) ? substr($filters['property_type'], 0, 100) : null,
                 'bedrooms' => ! empty($filters['bedrooms']) ? (int) $filters['bedrooms'] : null,
                 'bathrooms' => ! empty($filters['bathrooms']) ? (int) $filters['bathrooms'] : null,
-                'min_cap_rate' => ! empty($filters['min_cap_rate']) ? (float) $filters['min_cap_rate'] : null,
-                'is_1031' => ! empty($filters['is_1031']) ? (bool) $filters['is_1031'] : null,
                 'sort_by' => ! empty($filters['sort_by']) ? substr($filters['sort_by'], 0, 50) : null,
                 'filters_payload' => array_filter($filters, fn ($v) => $v !== null && $v !== ''),
                 'results_count' => $resultsCount,
@@ -258,7 +229,7 @@ class PropertyService
     }
 
     /**
-     * Get personalized property recommendations based on user's search history, favorites, or high yield
+     * Get personalized property recommendations based on user's search history, favorites, or newest listings
      */
     public function getPersonalizedRecommendations(?User $user = null, int $limit = 3): Collection
     {
@@ -279,10 +250,8 @@ class PropertyService
 
         $preferredLocations = $recentSearches->pluck('location')->filter()->values()->all();
         $preferredTypes = $recentSearches->pluck('property_type')->filter()->values()->all();
-        $minCapRates = $recentSearches->pluck('min_cap_rate')->filter()->values()->all();
-        $avgMinCap = ! empty($minCapRates) ? array_sum($minCapRates) / count($minCapRates) : 0;
 
-        $query = PropertyModel::with(['propertyImage', 'propertyAddress', 'propertyMetrics', 'propertyDetails']);
+        $query = PropertyModel::with(['propertyImage', 'propertyAddress', 'propertyDetails']);
 
         if (! empty($preferredLocations)) {
             $query->whereHas('address', function ($q) use ($preferredLocations) {
@@ -293,22 +262,16 @@ class PropertyService
             $query->whereHas('details', function ($q) use ($preferredTypes) {
                 $q->whereIn('type', $preferredTypes);
             });
-        } elseif ($avgMinCap > 0) {
-            $query->whereHas('metrics', function ($q) use ($avgMinCap) {
-                $q->where('cap_rate', '>=', $avgMinCap);
-            });
         }
 
         $recommendations = $query->take($limit)->get();
 
-        // Fallback: If not enough results, fetch top cap rate properties
+        // Fallback: If not enough results, fill with the newest properties
         if ($recommendations->count() < $limit) {
             $existingIds = $recommendations->pluck('id')->all();
-            $fallback = PropertyModel::with(['propertyImage', 'propertyAddress', 'propertyMetrics', 'propertyDetails'])
-                ->whereNotIn('properties.id', $existingIds)
-                ->leftJoin('property_metrics', 'properties.id', '=', 'property_metrics.property_id')
-                ->orderByRaw('COALESCE(property_metrics.cap_rate, 0) DESC')
-                ->select('properties.*')
+            $fallback = PropertyModel::with(['propertyImage', 'propertyAddress', 'propertyDetails'])
+                ->whereNotIn('id', $existingIds)
+                ->latest()
                 ->take($limit - $recommendations->count())
                 ->get();
 
@@ -344,13 +307,10 @@ class PropertyService
         return $this->cache()->remember($this->detailCacheKey($slug), self::CACHE_TTL_SECONDS, function () use ($slug) {
             return PropertyModel::with([
                 'propertyImage',
-                'propertyFloorplan',
                 'propertyDocumentModel',
                 'propertyAddress',
                 'propertyDetails',
-                'propertyAmenities',
-                'propertyMetrics',
-            ])
+                ])
                 ->where('slug', $slug)
                 ->first();
         });
@@ -363,12 +323,9 @@ class PropertyService
     {
         $query = PropertyModel::with([
             'propertyImage',
-            'propertyFloorplan',
             'propertyDocumentModel',
             'propertyAddress',
             'propertyDetails',
-            'propertyAmenities',
-            'propertyMetrics',
         ]);
 
         $property = $id ? $query->find($id) : $query->first();

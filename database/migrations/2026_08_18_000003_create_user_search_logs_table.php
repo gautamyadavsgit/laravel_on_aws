@@ -24,8 +24,6 @@ return new class extends Migration
             $table->string('property_type', 100)->nullable()->index();
             $table->unsignedSmallInteger('bedrooms')->nullable();
             $table->unsignedSmallInteger('bathrooms')->nullable();
-            $table->decimal('min_cap_rate', 5, 2)->nullable();
-            $table->boolean('is_1031')->nullable();
             $table->string('sort_by', 50)->nullable();
             $table->json('filters_payload')->nullable();
             $table->unsignedInteger('results_count')->default(0);

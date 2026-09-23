@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\PropertyModel;
 use Illuminate\View\View;
 
 class DashboardController extends Controller
@@ -12,6 +13,6 @@ class DashboardController extends Controller
      */
     public function viewDashboard(): View
     {
-        return view('admin.dashboard');
+        return view('admin.dashboard', ['propertyCount' => PropertyModel::count()]);
     }
 }

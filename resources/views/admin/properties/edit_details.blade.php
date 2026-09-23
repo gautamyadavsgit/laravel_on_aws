@@ -31,7 +31,7 @@
                     <p class="text-xs text-slate-500 dark:text-slate-400">Structural capacity, square footage, bed/bath count, and appraisal value.</p>
                 </div>
             </div>
-            <span class="badge-tw badge-info-tw hidden sm:inline-flex">Step 3 of 8</span>
+            <span class="badge-tw badge-info-tw hidden sm:inline-flex">Step 3 of 5</span>
         </div>
 
         <form action="{{ route('admin.manage-property.update-details', ['id' => $property_id]) }}" method="POST" enctype="multipart/form-data" class="p-6 space-y-6">
@@ -136,7 +136,7 @@
                 </a>
                 <div class="flex items-center gap-2.5 w-full sm:w-auto order-1 sm:order-2">
                     <button type="submit" class="btn-primary-tw w-full sm:w-auto flex items-center justify-center gap-2">
-                        <i class="bi bi-check-lg text-base"></i> Save & Continue to Amenities
+                        <i class="bi bi-check-lg text-base"></i> Save & Continue to Offerings
                         <i class="bi bi-arrow-right"></i>
                     </button>
                 </div>

@@ -6,6 +6,7 @@ use Illuminate\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 
+use App\Models\PropertyModel;
 use App\Services\PropertyService;
 
 class CustomerController extends Controller
@@ -33,9 +34,7 @@ class CustomerController extends Controller
         $recommendations = $this->propertyService->getPersonalizedRecommendations(auth()->user(), 3);
         $filterOptions = $this->propertyService->getFilterOptions();
 
-        $favoriteIds = auth()->check()
-            ? \App\Models\PropertyFavorite::where('user_id', auth()->id())->pluck('property_id')->toArray()
-            : [];
+        $favoriteIds = auth()->user()?->favoritePropertyIds() ?? [];
 
         return view('frontend.properties', compact('properties', 'favoriteIds', 'filters', 'filterOptions', 'recommendations'));
     }
@@ -61,7 +60,7 @@ class CustomerController extends Controller
                 abort(404, 'The requested real estate asset could not be found.');
             }
 
-            return view('frontend.property_singlepage', ['featuredProperty' => $property]);
+            return $this->renderSinglePage($property);
         }
 
         // 2. Legacy fallback for /property_singlepage?id=X
@@ -80,7 +79,15 @@ class CustomerController extends Controller
             return redirect()->route('property.singlepage', ['slug' => $featuredProperty->slug], 301);
         }
 
-        return view('frontend.property_singlepage', compact('featuredProperty'));
+        return $this->renderSinglePage($featuredProperty);
+    }
+
+    protected function renderSinglePage(PropertyModel $property): View
+    {
+        return view('frontend.property_singlepage', [
+            'featuredProperty' => $property,
+            'isFavorited' => auth()->user()?->hasFavorited($property->id) ?? false,
+        ]);
     }
 
     /**
@@ -107,17 +114,8 @@ class CustomerController extends Controller
             }
         }
 
-        $capRate = $request->query('min_cap_rate');
-        if (is_string($capRate) && is_numeric($capRate) && (float) $capRate > 0) {
-            $filters['min_cap_rate'] = (string) min((float) $capRate, 100);
-        }
-
-        if ($request->query('is_1031') !== null && filter_var($request->query('is_1031'), FILTER_VALIDATE_BOOLEAN)) {
-            $filters['is_1031'] = '1';
-        }
-
         $sortBy = $request->query('sort_by');
-        if (is_string($sortBy) && in_array($sortBy, ['latest', 'oldest', 'price_asc', 'price_desc', 'cap_rate_desc', 'cash_flow_desc'], true)) {
+        if (is_string($sortBy) && in_array($sortBy, ['latest', 'oldest', 'price_asc', 'price_desc'], true)) {
             $filters['sort_by'] = $sortBy;
         }
 

@@ -35,37 +35,6 @@ class PropertyMediaService
     }
 
     /**
-     * Upload and sync floorplan images
-     */
-    public function uploadFloorplans(PropertyModel $property, array $fileInputs, array $filteredData): void
-    {
-        $propertyFloorplan = $property->propertyFloorplan;
-        $newData = [];
-
-        foreach ($filteredData as $key => $value) {
-            if (isset($fileInputs[$key]) && $fileInputs[$key] instanceof UploadedFile) {
-                $path = Storage::putFile('floorplan_images', $fileInputs[$key]);
-                if ($path) {
-                    $newData[] = ['key' => $key, 'value' => $path];
-                }
-            }
-        }
-
-        if (! $propertyFloorplan->isEmpty()) {
-            foreach ($propertyFloorplan as $model) {
-                if (array_key_exists($model->key, $filteredData)) {
-                    Storage::delete($model->value);
-                    $model->delete();
-                }
-            }
-        }
-
-        if (! empty($newData)) {
-            $property->propertyFloorplan()->createMany($newData);
-        }
-    }
-
-    /**
      * Upload and sync property documents
      */
     public function uploadDocuments(PropertyModel $property, array $fileInputs, array $filteredData): void

@@ -67,8 +67,6 @@
                             $addr = $prop->propertyAddress;
                             $details = $prop->propertyDetails;
                             $offering = $prop->propertyOffering;
-                            $amenities = $prop->propertyAmenities;
-                            $floorplans = $prop->propertyFloorplan;
                             $documents = $prop->propertyDocumentModel;
                         @endphp
                         <!-- Master Row -->
@@ -85,7 +83,7 @@
                                 <div class="flex items-center gap-4">
                                     <div class="w-16 h-14 rounded-xl overflow-hidden bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shrink-0 shadow-sm flex items-center justify-center">
                                         @if($thumb && !empty($thumb->property_image_value))
-                                            <img src="{{ \Illuminate\Support\Facades\Storage::url($thumb->property_image_value) }}" alt="{{ $prop->name }}" class="w-full h-full object-cover" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'100\' fill=\'%2364748b\'><rect width=\'100\' height=\'100\' fill=\'%23e2e8f0\'/><text x=\'50%\' y=\'50%\' font-size=\'10\' text-anchor=\'middle\' dy=\'.3em\'>Estate</text></svg>'">
+                                            <img src="{{ $thumb->url }}" alt="{{ $prop->name }}" class="w-full h-full object-cover">
                                         @else
                                             <i class="bi bi-building text-slate-400 text-2xl"></i>
                                         @endif
@@ -232,24 +230,6 @@
                                         @else
                                             <p class="text-xs text-slate-400 italic">No structural specifications recorded.</p>
                                         @endif
-
-                                        <!-- Amenities Badges -->
-                                        <div class="pt-3 border-t border-slate-100 dark:border-slate-700/60">
-                                            <span class="text-xs font-semibold text-slate-500 dark:text-slate-400 block mb-2">Amenities Highlights:</span>
-                                            <div class="flex flex-wrap gap-1.5 max-h-24 overflow-y-auto">
-                                                @if(count($amenities) > 0)
-                                                    @foreach(explode(',', $amenities[0]->property_amenities) as $tag)
-                                                        @if(trim($tag))
-                                                            <span class="px-2 py-0.5 rounded-md text-[11px] font-medium bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300">
-                                                                {{ trim($tag) }}
-                                                            </span>
-                                                        @endif
-                                                    @endforeach
-                                                @else
-                                                    <span class="text-xs text-slate-400 italic">No amenities added yet.</span>
-                                                @endif
-                                            </div>
-                                        </div>
                                     </div>
 
                                     <!-- Card 2: Financials & Capital Offering -->
@@ -328,34 +308,19 @@
                                                 <span class="font-medium">3. Specifications</span>
                                             </a>
 
-                                            <!-- 4. Amenities -->
-                                            <a href="{{ route('admin.manage-property.edit-amenities', ['id' => $prop->id]) }}" class="p-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/60 hover:border-indigo-500 hover:text-indigo-600 dark:hover:text-indigo-400 transition flex items-center gap-2">
-                                                <i class="bi bi-stars text-violet-500"></i>
-                                                <span class="font-medium">4. Amenities</span>
-                                            </a>
-
-                                            <!-- 5. Floorplans -->
-                                            <a href="{{ route('admin.manage-property.edit-floorplan', ['id' => $prop->id]) }}" class="p-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/60 hover:border-indigo-500 hover:text-indigo-600 dark:hover:text-indigo-400 transition flex items-center justify-between">
-                                                <div class="flex items-center gap-2">
-                                                    <i class="bi bi-bounding-box text-cyan-500"></i>
-                                                    <span class="font-medium">5. Floorplans</span>
-                                                </div>
-                                                <span class="badge-tw badge-neutral-tw text-[10px]">{{ count($floorplans) }}</span>
-                                            </a>
-
-                                            <!-- 6. Offerings -->
+                                            <!-- 4. Offerings -->
                                             <a href="{{ route('admin.manage-property.edit-property-offerings', ['id' => $prop->id]) }}" class="p-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/60 hover:border-indigo-500 hover:text-indigo-600 dark:hover:text-indigo-400 transition flex items-center gap-2">
                                                 <i class="bi bi-tag text-emerald-500"></i>
-                                                <span class="font-medium">6. Offerings</span>
+                                                <span class="font-medium">4. Offerings</span>
                                             </a>
                                         </div>
 
-                                        <!-- 7. Legal Documents Action Link -->
+                                        <!-- 5. Legal Documents Action Link -->
                                         <div class="pt-2 border-t border-slate-100 dark:border-slate-700/60">
                                             <a href="{{ route('admin.manage-property.edit-property-documents', ['id' => $prop->id]) }}" class="w-full p-2.5 rounded-lg border border-indigo-200 dark:border-indigo-900 bg-indigo-50 dark:bg-indigo-950/40 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 text-indigo-700 dark:text-indigo-300 transition flex items-center justify-between text-xs font-semibold">
                                                 <div class="flex items-center gap-2">
                                                     <i class="bi bi-file-earmark-pdf-fill text-rose-500"></i>
-                                                    <span>7. Legal Documentation & Disclosures</span>
+                                                    <span>5. Legal Documentation & Disclosures</span>
                                                 </div>
                                                 <span class="badge-tw badge-info-tw text-[10px]">{{ count($documents) }} PDFs</span>
                                             </a>

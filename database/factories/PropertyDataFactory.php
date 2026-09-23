@@ -4,10 +4,8 @@ namespace Database\Factories;
 
 use App\Models\Admins;
 use App\Models\PropertyAddress;
-use App\Models\PropertyAmenity;
 use App\Models\PropertyDetails;
 use App\Models\PropertyDocumentModel;
-use App\Models\PropertyFloorplan;
 use App\Models\PropertyImageModel;
 use App\Models\PropertyModel;
 use App\Models\PropertyOffering;
@@ -62,25 +60,10 @@ class PropertyDataFactory extends Factory
                 ]);
             }
 
-            // 3. Amenities
-            PropertyAmenity::factory()->create([
-                'property_id' => $property->id,
-            ]);
-
             // 4. Details
             PropertyDetails::factory()->create([
                 'property_id' => $property->id,
             ]);
-
-            // 5. Floorplans (2 floorplans per property)
-            for ($i = 1; $i <= 2; $i++) {
-                $planNum = (($property->id + $i - 2) % 6) + 1;
-                PropertyFloorplan::factory()->create([
-                    'property_id' => $property->id,
-                    'key' => 'Floorplan Level '.$i,
-                    'value' => 'floorplan_images/floorplan_'.$planNum.'.png',
-                ]);
-            }
 
             // 6. Offering Structure
             PropertyOffering::factory()->create([
