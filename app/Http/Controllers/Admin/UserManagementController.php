@@ -10,8 +10,8 @@ use App\Models\ExperienceLevel;
 use App\Models\HearAboutUs;
 use App\Models\InvestmentGoal;
 use App\Models\InvestmentSource;
-use App\Models\InvestmentTimeline;
 use App\Models\InvestmentTimelength;
+use App\Models\InvestmentTimeline;
 use App\Models\ReasonForInvesting;
 use App\Models\User;
 use App\Models\UserNetWorth;
@@ -102,7 +102,7 @@ class UserManagementController extends Controller
 
         $data['password'] = Hash::make($data['password']);
 
-        if (!empty($data['email_verified'])) {
+        if (! empty($data['email_verified'])) {
             $data['email_verified_at'] = now();
         } else {
             $data['email_verified_at'] = null;
@@ -161,7 +161,7 @@ class UserManagementController extends Controller
         $data = $request->validated();
 
         // Handle password update
-        if (!empty($data['password'])) {
+        if (! empty($data['password'])) {
             $data['password'] = Hash::make($data['password']);
         } else {
             unset($data['password']);
@@ -169,9 +169,9 @@ class UserManagementController extends Controller
 
         // Handle email verification toggle
         if (isset($data['email_verified'])) {
-            if ($data['email_verified'] && !$user->email_verified_at) {
+            if ($data['email_verified'] && ! $user->email_verified_at) {
                 $data['email_verified_at'] = now();
-            } elseif (!$data['email_verified']) {
+            } elseif (! $data['email_verified']) {
                 $data['email_verified_at'] = null;
             }
             unset($data['email_verified']);

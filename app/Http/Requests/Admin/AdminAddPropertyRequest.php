@@ -5,8 +5,8 @@ namespace App\Http\Requests\Admin;
 use App\Enums\PropertyAvailability;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class AdminAddPropertyRequest extends FormRequest
 {

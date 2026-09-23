@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Models\PropertyAddress;
 use App\Models\PropertyDetails;
-use App\Models\PropertyFavorite;
 use App\Models\PropertyModel;
 use App\Models\User;
 use App\Models\UserSearchLog;
@@ -55,7 +54,7 @@ class PropertyService
         $params['per_page'] = $perPage;
 
         $version = $this->cache()->rememberForever(self::LISTING_VERSION_KEY, fn () => (string) microtime(true));
-        $cacheKey = 'property_listing_' . sha1($version . '|' . request()->url() . '?' . http_build_query($params));
+        $cacheKey = 'property_listing_'.sha1($version.'|'.request()->url().'?'.http_build_query($params));
 
         return $this->cache()->remember(
             $cacheKey,
@@ -211,7 +210,7 @@ class PropertyService
                 'results_count' => $resultsCount,
             ]);
         } catch (\Throwable $e) {
-            Log::warning('Failed to log user search activity: ' . $e->getMessage());
+            Log::warning('Failed to log user search activity: '.$e->getMessage());
         }
     }
 
@@ -297,7 +296,7 @@ class PropertyService
                 'propertyDocumentModel',
                 'propertyAddress',
                 'propertyDetails',
-                ])
+            ])
                 ->where('slug', $slug)
                 ->first();
         });

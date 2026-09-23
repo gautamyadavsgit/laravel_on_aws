@@ -11,6 +11,9 @@ use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\PropertyFavoriteController;
+use App\Http\Controllers\PropertyInterestController;
+use App\Http\Controllers\UserDashboardController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -49,12 +52,12 @@ Route::middleware('guest')->group(function () {
 Route::view('/investment-interest', 'frontend.investment_interest')->name('investment.interest');
 
 Route::middleware(['auth', 'throttle:60,1'])->group(function () {
-    Route::get('/dashboard', [\App\Http\Controllers\UserDashboardController::class, 'dashboard'])->name('user.dashboard');
-    Route::get('/profile', [\App\Http\Controllers\UserDashboardController::class, 'profile'])->name('user.profile');
-    Route::post('/investment-interest/{propertyId}', [\App\Http\Controllers\PropertyInterestController::class, 'store'])->whereNumber('propertyId')->name('investment.submit');
+    Route::get('/dashboard', [UserDashboardController::class, 'dashboard'])->name('user.dashboard');
+    Route::get('/profile', [UserDashboardController::class, 'profile'])->name('user.profile');
+    Route::post('/investment-interest/{propertyId}', [PropertyInterestController::class, 'store'])->whereNumber('propertyId')->name('investment.submit');
 
     // Property Favorites
-    Route::post('/property/{propertyId}/favorite', [\App\Http\Controllers\PropertyFavoriteController::class, 'toggle'])->whereNumber('propertyId')->name('property.favorite.toggle');
+    Route::post('/property/{propertyId}/favorite', [PropertyFavoriteController::class, 'toggle'])->whereNumber('propertyId')->name('property.favorite.toggle');
 });
 
 // Authenticated Routes

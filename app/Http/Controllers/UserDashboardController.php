@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\PropertyInterest;
 use App\Models\PropertyFavorite;
-use Illuminate\Http\Request;
+use App\Models\PropertyInterest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 

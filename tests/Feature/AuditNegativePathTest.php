@@ -9,6 +9,7 @@ use App\Models\PropertyModel;
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Routing\Middleware\ThrottleRequests;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Storage;
@@ -154,7 +155,7 @@ class AuditNegativePathTest extends TestCase
     public function test_registration_rejects_invalid_input(): void
     {
         // Route throttling has its own test; this one submits many payloads back to back.
-        $this->withoutMiddleware(\Illuminate\Routing\Middleware\ThrottleRequests::class);
+        $this->withoutMiddleware(ThrottleRequests::class);
 
         $existing = $this->investor();
 
