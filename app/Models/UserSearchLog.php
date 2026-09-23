@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class UserSearchLog extends Model
 {
@@ -37,9 +36,4 @@ class UserSearchLog extends Model
         'filters_payload' => 'array',
         'results_count' => 'integer',
     ];
-
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class);
-    }
 }

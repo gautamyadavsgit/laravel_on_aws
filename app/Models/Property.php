@@ -5,7 +5,6 @@ namespace App\Models;
 use App\Enums\PropertyAvailability;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -97,12 +96,6 @@ class Property extends Model
     // ==========================================
     // Standard Eloquent Relationship Definitions
     // ==========================================
-
-    /** @return BelongsTo<Admin, $this> */
-    public function admin(): BelongsTo
-    {
-        return $this->belongsTo(Admin::class, 'admin_id');
-    }
 
     /** @return HasOne<PropertyAddress, $this> */
     public function address(): HasOne

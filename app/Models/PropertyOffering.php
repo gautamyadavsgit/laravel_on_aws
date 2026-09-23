@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class PropertyOffering extends Model
 {
@@ -20,9 +19,4 @@ class PropertyOffering extends Model
         'offering_closing_cost',
         'offering_sourcing_fees',
     ];
-
-    public function property(): BelongsTo
-    {
-        return $this->belongsTo(Property::class, 'property_id');
-    }
 }
