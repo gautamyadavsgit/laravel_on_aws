@@ -75,16 +75,16 @@
             </div>
 
             <!-- Existing Image Gallery Preview -->
-            @if(isset($property->propertyImage) && $property->propertyImage->count() > 0)
+            @if(isset($property->images) && $property->images->count() > 0)
                 <div class="border-t border-slate-200 dark:border-slate-800 pt-5">
                     <div class="flex items-center justify-between mb-3">
                         <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300">
-                            Current Gallery Photos ({{ $property->propertyImage->count() }} Images)
+                            Current Gallery Photos ({{ $property->images->count() }} Images)
                         </label>
                         <span class="text-xs text-slate-500 dark:text-slate-400">Stored on public disk</span>
                     </div>
                     <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
-                        @foreach($property->propertyImage as $img)
+                        @foreach($property->images as $img)
                             <div class="relative group rounded-lg overflow-hidden border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-800 aspect-video flex items-center justify-center">
                                 <img src="{{ $img->url }}" alt="Photo" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
                             </div>

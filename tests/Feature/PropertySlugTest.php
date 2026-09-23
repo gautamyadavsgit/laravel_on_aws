@@ -57,7 +57,7 @@ class PropertySlugTest extends TestCase
     public function test_each_slug_renders_its_own_property_and_only_real_images(): void
     {
         $withImage = $this->makeProperty('Slug Test Alpha');
-        $withImage->propertyImage()->create(['property_image_key' => 'property_image', 'property_image_value' => 'property_images/alpha.png']);
+        $withImage->images()->create(['property_image_key' => 'property_image', 'property_image_value' => 'property_images/alpha.png']);
         $withoutImage = $this->makeProperty('Slug Test Beta');
 
         $this->get('/property/'.$withImage->slug)

@@ -79,17 +79,17 @@ class PropertyModel extends Model
 
     public function getGalleryUrlsAttribute(): array
     {
-        return $this->propertyImage->pluck('url')->all();
+        return $this->images->pluck('url')->all();
     }
 
     public function getHeroImageUrlAttribute(): ?string
     {
-        return $this->propertyImage->first()?->url;
+        return $this->images->first()?->url;
     }
 
     public function getLocationLabelAttribute(): string
     {
-        $address = $this->propertyAddress;
+        $address = $this->address;
 
         return implode(', ', array_filter([$address?->city, $address?->state]));
     }
@@ -126,34 +126,5 @@ class PropertyModel extends Model
     public function documents(): HasMany
     {
         return $this->hasMany(PropertyDocumentModel::class, 'property_id');
-    }
-
-    // ==========================================
-    // Backward Compatibility Relationship Aliases
-    // ==========================================
-
-    public function propertyAddress(): HasOne
-    {
-        return $this->address();
-    }
-
-    public function propertyImage(): HasMany
-    {
-        return $this->images();
-    }
-
-    public function propertyDetails(): HasOne
-    {
-        return $this->details();
-    }
-
-    public function propertyOffering(): HasOne
-    {
-        return $this->offering();
-    }
-
-    public function propertyDocumentModel(): HasMany
-    {
-        return $this->documents();
     }
 }

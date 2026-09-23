@@ -449,7 +449,7 @@ class AuditNegativePathTest extends TestCase
 
         $property = PropertyModel::where('name', $payload['name'])->firstOrFail();
         $response->assertRedirect(route('admin.manage-property.edit-address', ['id' => $property->id]));
-        $this->assertCount(1, $property->propertyImage);
+        $this->assertCount(1, $property->images);
     }
 
     public function test_admin_create_property_rejects_invalid_input(): void

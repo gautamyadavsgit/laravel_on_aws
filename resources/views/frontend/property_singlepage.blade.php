@@ -3,7 +3,7 @@
 @php
     $propName = $featuredProperty->name;
     $propDesc = $featuredProperty->description;
-    $details = $featuredProperty->propertyDetails;
+    $details = $featuredProperty->details;
     $images = $featuredProperty->gallery_urls;
     $slideCount = count($images);
 @endphp
@@ -105,10 +105,10 @@
                             </span>
                         </div>
                         <h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">{{ $propName }}</h2>
-                        @if($featuredProperty->propertyAddress)
+                        @if($featuredProperty->address)
                             <p class="text-sm text-slate-500 dark:text-slate-400 mt-1 flex items-center gap-1.5">
                                 <i class="bi bi-geo-alt-fill text-rose-500"></i>
-                                {{ implode(', ', array_filter([$featuredProperty->propertyAddress->address, $featuredProperty->location_label])) }}
+                                {{ implode(', ', array_filter([$featuredProperty->address->address, $featuredProperty->location_label])) }}
                             </p>
                         @endif
                     </div>

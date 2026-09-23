@@ -35,11 +35,11 @@ class ManagePropertyController extends Controller
     public function index(): View
     {
         $property = PropertyModel::with([
-            'propertyImage',
-            'propertyDetails',
-            'propertyAddress',
-            'propertyOffering',
-            'propertyDocumentModel',
+            'images',
+            'details',
+            'address',
+            'offering',
+            'documents',
         ])
             ->latest()
             ->paginate(15)
@@ -82,7 +82,7 @@ class ManagePropertyController extends Controller
      */
     public function show(string $id): View
     {
-        $property = PropertyModel::with('propertyImage', 'propertyDocumentModel')->findOrFail($id);
+        $property = PropertyModel::with('images', 'documents')->findOrFail($id);
         $pagetitle = $property->name ?? 'Property Details';
 
         return view('admin.properties.property')->with(['property' => $property, 'pagetitle' => $pagetitle]);
@@ -143,7 +143,7 @@ class ManagePropertyController extends Controller
     public function editAddress(Request $request, string $id): View
     {
         $property = PropertyModel::findOrFail($id);
-        $propertyAddress = $property->propertyAddress;
+        $propertyAddress = $property->address;
 
         return view('admin.properties.edit_address')->with(['property' => $property, 'propertyAddress' => $propertyAddress, 'property_id' => $id]);
     }
@@ -153,12 +153,12 @@ class ManagePropertyController extends Controller
         $data = $request->validated();
         $property = PropertyModel::findOrFail($id);
 
-        $propertyAddress = $property->propertyAddress;
+        $propertyAddress = $property->address;
 
         if ($propertyAddress) {
             $propertyAddress->update($data);
         } else {
-            $property->propertyAddress()->create($data);
+            $property->address()->create($data);
         }
 
         $this->propertyService->clearPropertiesCache($property->slug);
@@ -169,7 +169,7 @@ class ManagePropertyController extends Controller
     public function editDetails(Request $request, string $id): View
     {
         $property = PropertyModel::findOrFail($id);
-        $propertyDetails = $property->propertyDetails;
+        $propertyDetails = $property->details;
 
         return view('admin.properties.edit_details')->with(['property' => $property, 'propertyDetails' => $propertyDetails, 'property_id' => $id]);
     }
@@ -179,12 +179,12 @@ class ManagePropertyController extends Controller
         $data = $request->validated();
         $property = PropertyModel::findOrFail($id);
 
-        $propertyDetails = $property->propertyDetails;
+        $propertyDetails = $property->details;
 
         if ($propertyDetails) {
             $propertyDetails->update($data);
         } else {
-            $property->propertyDetails()->create($data);
+            $property->details()->create($data);
         }
 
         $this->propertyService->clearPropertiesCache($property->slug);
@@ -195,7 +195,7 @@ class ManagePropertyController extends Controller
     public function editOfferings(Request $request, string $id): View
     {
         $property = PropertyModel::findOrFail($id);
-        $propertyOffering = $property->propertyOffering;
+        $propertyOffering = $property->offering;
 
         return view('admin.properties.edit_property_offering')->with(['property' => $property, 'propertyOffering' => $propertyOffering, 'property_id' => $id]);
     }
@@ -205,12 +205,12 @@ class ManagePropertyController extends Controller
         $data = $request->validated();
         $property = PropertyModel::findOrFail($id);
 
-        $propertyOffering = $property->propertyOffering;
+        $propertyOffering = $property->offering;
 
         if ($propertyOffering) {
             $propertyOffering->update($data);
         } else {
-            $property->propertyOffering()->create($data);
+            $property->offering()->create($data);
         }
 
         $this->propertyService->clearPropertiesCache($property->slug);
@@ -221,7 +221,7 @@ class ManagePropertyController extends Controller
     public function editDocuments(Request $request, string $id): View
     {
         $property = PropertyModel::findOrFail($id);
-        $propertyDocumentModel = $property->propertyDocumentModel;
+        $propertyDocumentModel = $property->documents;
 
         return view('admin.properties.edit_property_documents')->with(['property' => $property, 'propertyDocumentModel' => $propertyDocumentModel, 'property_id' => $id]);
     }

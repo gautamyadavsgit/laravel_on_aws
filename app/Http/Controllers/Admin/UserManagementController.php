@@ -28,8 +28,8 @@ class UserManagementController extends Controller
     public function index(Request $request): View
     {
         $query = User::with([
-            'propertyInterests.property.propertyAddress',
-            'propertyInterests.property.propertyDetails',
+            'propertyInterests.property.address',
+            'propertyInterests.property.details',
             'accreditationStatus',
             'experienceLevel',
         ]);
@@ -121,10 +121,10 @@ class UserManagementController extends Controller
     public function show(User $user): View
     {
         $user->load([
-            'propertyInterests.property.propertyAddress',
-            'propertyInterests.property.propertyDetails',
-            'propertyFavorites.property.propertyAddress',
-            'propertyFavorites.property.propertyDetails',
+            'propertyInterests.property.address',
+            'propertyInterests.property.details',
+            'propertyFavorites.property.address',
+            'propertyFavorites.property.details',
             'searchLogs' => function ($q) {
                 $q->latest()->take(10);
             },

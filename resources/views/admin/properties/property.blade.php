@@ -25,10 +25,10 @@
             <h2 class="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
                 <i class="bi bi-images text-indigo-600 dark:text-indigo-400"></i> Uploaded Property Gallery
             </h2>
-            <span class="badge-tw badge-info-tw">{{ count($property->propertyImage ?? []) }} Images</span>
+            <span class="badge-tw badge-info-tw">{{ count($property->images ?? []) }} Images</span>
         </div>
         <div class="flex flex-wrap gap-4">
-            @forelse ($property->propertyImage as $image)
+            @forelse ($property->images as $image)
                 @if ($image->property_image_key == 'property_image')
                     <div class="border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden bg-slate-50 dark:bg-slate-800/50 w-56 shadow-sm">
                         <a target="_blank" href="{{ $image->url }}">
@@ -53,7 +53,7 @@
                 </h2>
             </div>
             <div class="divide-y divide-slate-100 dark:divide-slate-800">
-                @forelse ($property->propertyDocumentModel ?? [] as $doc)
+                @forelse ($property->documents ?? [] as $doc)
                     <a target="_blank" href="{{ $doc->url }}" class="flex items-center justify-between py-3 px-2 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800/60 transition text-sm">
                         <div class="flex items-center gap-2.5">
                             <i class="bi bi-file-earmark-pdf-fill text-rose-600 text-lg"></i>

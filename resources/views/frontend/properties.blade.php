@@ -304,11 +304,11 @@
             @forelse ($propertyList as $prop)
                 @php
                     $isFavorited = in_array($prop->id, $favoriteIds);
-                    $propType = $prop->propertyDetails->type ?? null;
-                    $propBeds = $prop->propertyDetails->bedrooms ?? null;
-                    $propBaths = $prop->propertyDetails->baths ?? null;
-                    $propSqft = $prop->propertyDetails->square_feets ?? null;
-                    $propPrice = $prop->propertyDetails->value ?? null;
+                    $propType = $prop->details->type ?? null;
+                    $propBeds = $prop->details->bedrooms ?? null;
+                    $propBaths = $prop->details->baths ?? null;
+                    $propSqft = $prop->details->square_feets ?? null;
+                    $propPrice = $prop->details->value ?? null;
                 @endphp
                 <!-- Property Card -->
                 <div class="card-tw p-0 overflow-hidden group hover:-translate-y-1 transition duration-300 flex flex-col justify-between">

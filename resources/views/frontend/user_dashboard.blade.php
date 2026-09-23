@@ -78,15 +78,15 @@
                                     <div class="text-xs text-slate-500 dark:text-slate-400">{{ $property->management_company ?? 'Gautam REI' }}</div>
                                 </td>
                                 <td class="px-6 py-5">
-                                    @if($property && $property->propertyAddress)
-                                        {{ $property->propertyAddress->city ?? '' }}{{ $property->propertyAddress->city && $property->propertyAddress->state ? ', ' : '' }}{{ $property->propertyAddress->state ?? '' }}
+                                    @if($property && $property->address)
+                                        {{ $property->address->city ?? '' }}{{ $property->address->city && $property->address->state ? ', ' : '' }}{{ $property->address->state ?? '' }}
                                     @else
                                         <span class="text-slate-400 italic">N/A</span>
                                     @endif
                                 </td>
                                 <td class="px-6 py-5">
-                                    @if($property && $property->propertyDetails)
-                                        ${{ number_format((float) ($property->propertyDetails->value ?? 0)) }}
+                                    @if($property && $property->details)
+                                        ${{ number_format((float) ($property->details->value ?? 0)) }}
                                     @else
                                         <span class="text-slate-400 italic">N/A</span>
                                     @endif
@@ -135,16 +135,16 @@
                             <div class="p-4 bg-white dark:bg-slate-900">
                                 <h3 class="font-bold text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition">{{ $property->name ?? 'Property' }}</h3>
                                 <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                                    @if($property && $property->propertyAddress)
-                                        {{ $property->propertyAddress->city ?? '' }}{{ $property->propertyAddress->city && $property->propertyAddress->state ? ', ' : '' }}{{ $property->propertyAddress->state ?? '' }}
+                                    @if($property && $property->address)
+                                        {{ $property->address->city ?? '' }}{{ $property->address->city && $property->address->state ? ', ' : '' }}{{ $property->address->state ?? '' }}
                                     @else
                                         <span class="italic">{{ __('dashboard.location_na') }}</span>
                                     @endif
                                 </p>
                                 <div class="mt-3 flex items-center justify-between">
                                     <span class="text-sm font-bold text-slate-900 dark:text-white">
-                                        @if($property && $property->propertyDetails)
-                                            ${{ number_format((float) ($property->propertyDetails->value ?? 0)) }}
+                                        @if($property && $property->details)
+                                            ${{ number_format((float) ($property->details->value ?? 0)) }}
                                         @else
                                             <span class="text-slate-400">N/A</span>
                                         @endif

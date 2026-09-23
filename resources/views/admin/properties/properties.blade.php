@@ -63,11 +63,11 @@
                 <tbody class="divide-y divide-slate-100 dark:divide-slate-800/80">
                     @forelse ($property as $prop)
                         @php
-                            $thumb = $prop->propertyImage->first();
-                            $addr = $prop->propertyAddress;
-                            $details = $prop->propertyDetails;
-                            $offering = $prop->propertyOffering;
-                            $documents = $prop->propertyDocumentModel;
+                            $thumb = $prop->images->first();
+                            $addr = $prop->address;
+                            $details = $prop->details;
+                            $offering = $prop->offering;
+                            $documents = $prop->documents;
                         @endphp
                         <!-- Master Row -->
                         <tr class="hover:bg-slate-50/90 dark:hover:bg-slate-800/50 transition property-row" id="row-{{ $prop->id }}">

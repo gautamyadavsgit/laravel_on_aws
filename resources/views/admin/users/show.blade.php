@@ -215,8 +215,8 @@
                                 <div class="text-xs text-slate-400">ID #{{ $property->id ?? $interest->property_id }}</div>
                             </td>
                             <td class="px-6 py-4 text-xs">
-                                @if($property && $property->propertyAddress)
-                                    <span>{{ $property->propertyAddress->city ?? '' }}{{ $property->propertyAddress->city && $property->propertyAddress->state ? ', ' : '' }}{{ $property->propertyAddress->state ?? '' }}</span>
+                                @if($property && $property->address)
+                                    <span>{{ $property->address->city ?? '' }}{{ $property->address->city && $property->address->state ? ', ' : '' }}{{ $property->address->state ?? '' }}</span>
                                 @else
                                     <span class="text-slate-400 italic">N/A</span>
                                 @endif

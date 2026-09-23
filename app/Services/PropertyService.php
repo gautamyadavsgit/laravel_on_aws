@@ -69,9 +69,9 @@ class PropertyService
     public function getFilteredProperties(array $filters = [], int $perPage = 9): LengthAwarePaginator
     {
         $query = PropertyModel::with([
-            'propertyImage',
-            'propertyAddress',
-            'propertyDetails',
+            'images',
+            'address',
+            'details',
         ]);
 
         // 1. Keyword search (Name, Description, Management Company, or Address)
@@ -237,7 +237,7 @@ class PropertyService
         $preferredLocations = $recentSearches->pluck('location')->filter()->values()->all();
         $preferredTypes = $recentSearches->pluck('property_type')->filter()->values()->all();
 
-        $query = PropertyModel::with(['propertyImage', 'propertyAddress', 'propertyDetails']);
+        $query = PropertyModel::with(['images', 'address', 'details']);
 
         if (! empty($preferredLocations)) {
             $query->whereHas('address', function ($q) use ($preferredLocations) {
@@ -255,7 +255,7 @@ class PropertyService
         // Fallback: If not enough results, fill with the newest properties
         if ($recommendations->count() < $limit) {
             $existingIds = $recommendations->pluck('id')->all();
-            $fallback = PropertyModel::with(['propertyImage', 'propertyAddress', 'propertyDetails'])
+            $fallback = PropertyModel::with(['images', 'address', 'details'])
                 ->whereNotIn('id', $existingIds)
                 ->latest()
                 ->take($limit - $recommendations->count())
@@ -292,10 +292,10 @@ class PropertyService
     {
         return $this->cache()->remember($this->detailCacheKey($slug), self::CACHE_TTL_SECONDS, function () use ($slug) {
             return PropertyModel::with([
-                'propertyImage',
-                'propertyDocumentModel',
-                'propertyAddress',
-                'propertyDetails',
+                'images',
+                'documents',
+                'address',
+                'details',
             ])
                 ->where('slug', $slug)
                 ->first();
@@ -308,10 +308,10 @@ class PropertyService
     public function getPropertyById(?string $id = null): ?PropertyModel
     {
         $query = PropertyModel::with([
-            'propertyImage',
-            'propertyDocumentModel',
-            'propertyAddress',
-            'propertyDetails',
+            'images',
+            'documents',
+            'address',
+            'details',
         ]);
 
         $property = $id ? $query->find($id) : $query->first();

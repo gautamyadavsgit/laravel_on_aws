@@ -30,7 +30,7 @@ class PropertyMediaService
         }
 
         if (! empty($records)) {
-            $property->propertyImage()->createMany($records);
+            $property->images()->createMany($records);
         }
     }
 
@@ -39,7 +39,7 @@ class PropertyMediaService
      */
     public function uploadDocuments(PropertyModel $property, array $fileInputs, array $filteredData): void
     {
-        $propertyDocumentModel = $property->propertyDocumentModel;
+        $propertyDocumentModel = $property->documents;
         $newData = [];
 
         foreach ($filteredData as $key => $value) {
@@ -61,7 +61,7 @@ class PropertyMediaService
         }
 
         if (! empty($newData)) {
-            $property->propertyDocumentModel()->createMany($newData);
+            $property->documents()->createMany($newData);
         }
     }
 
