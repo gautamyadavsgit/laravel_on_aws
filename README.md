@@ -76,7 +76,7 @@ Set `APP_ENV=production`, `APP_DEBUG=false` and `LOG_LEVEL=warning`. Rotate the 
 ## Structure notes
 
 - `app/Http/Controllers` are thin; validation lives in `app/Http/Requests`.
-- `PropertyService` owns listing, filtering, detail lookups and the property caches; `PropertyRecommendationService` logs searches and recommends properties; `PropertyMediaService` owns uploads.
-- Admin property management is `Admin\PropertyController` (CRUD) plus one small controller per wizard step (`PropertyAddressController`, `PropertyDetailController`, `PropertyOfferingController`, `PropertyDocumentController`); public browsing is `PropertyController`.
+- `PropertyService` owns listing, filtering and detail lookups (plain queries, no caching layer); `PropertyMediaService` owns image uploads and deletes.
+- A property is one row in `properties` (address, specs and offering columns included) plus `property_images`. Admin management is `Admin\PropertyController` (CRUD, one form via `PropertyRequest`); public browsing is `PropertyController`.
 - `app/Enums/PropertyAvailability` is the only fixed-state enum today (`Available`, `Not Available`; database values unchanged).
 - Presentation helpers live on the models (`hero_image_url`, `gallery_urls`, `location_label`, `url`); Blade views do not query the database.

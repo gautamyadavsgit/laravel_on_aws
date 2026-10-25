@@ -2,11 +2,7 @@
 
 use App\Http\Controllers\Admin\AdminAuthController;
 use App\Http\Controllers\Admin\DashboardController;
-use App\Http\Controllers\Admin\PropertyAddressController;
 use App\Http\Controllers\Admin\PropertyController as AdminPropertyController;
-use App\Http\Controllers\Admin\PropertyDetailController;
-use App\Http\Controllers\Admin\PropertyDocumentController;
-use App\Http\Controllers\Admin\PropertyOfferingController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\EmailVerificationNotificationController;
@@ -83,18 +79,6 @@ Route::prefix('/admin')->group(function () {
 
         Route::resource('properties', AdminPropertyController::class)->names('admin.properties');
 
-        Route::prefix('properties/{property}')->name('admin.properties.')->group(function () {
-            Route::get('address', [PropertyAddressController::class, 'edit'])->name('address.edit');
-            Route::put('address', [PropertyAddressController::class, 'update'])->name('address.update');
-
-            Route::get('details', [PropertyDetailController::class, 'edit'])->name('details.edit');
-            Route::put('details', [PropertyDetailController::class, 'update'])->name('details.update');
-
-            Route::get('offering', [PropertyOfferingController::class, 'edit'])->name('offering.edit');
-            Route::put('offering', [PropertyOfferingController::class, 'update'])->name('offering.update');
-
-            Route::get('documents', [PropertyDocumentController::class, 'edit'])->name('documents.edit');
-            Route::put('documents', [PropertyDocumentController::class, 'update'])->name('documents.update');
-        });
+        Route::delete('properties/{property}/images/{image}', [AdminPropertyController::class, 'destroyImage'])->scopeBindings()->name('admin.properties.images.destroy');
     });
 });

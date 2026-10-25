@@ -92,7 +92,7 @@
                         <input type="text"
                             name="q" maxlength="100"
                             id="searchQuery"
-                            value="{{ request('q') }}"
+                            value="{{ ($filters['q'] ?? null) }}"
                             placeholder="Search by name, features, or keywords..."
                             class="input-tw pl-10 text-sm w-full">
                     </div>
@@ -107,7 +107,7 @@
                             name="location" maxlength="100"
                             id="locationQuery"
                             list="locationSuggestions"
-                            value="{{ request('location') }}"
+                            value="{{ ($filters['location'] ?? null) }}"
                             placeholder="City, State (e.g. Gatlinburg, TN)"
                             class="input-tw pl-10 text-sm w-full">
                         <datalist id="locationSuggestions">
@@ -126,7 +126,7 @@
                         <select name="property_type" id="propertyType" class="input-tw text-sm w-full">
                             <option value="">All Property Types</option>
                             @foreach($filterOpts['types'] as $type)
-                                <option value="{{ $type }}" {{ request('property_type') === $type ? 'selected' : '' }}>{{ $type }}</option>
+                                <option value="{{ $type }}" {{ ($filters['property_type'] ?? null) === $type ? 'selected' : '' }}>{{ $type }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -142,7 +142,7 @@
                             title="Toggle Advanced Filters"
                             aria-expanded="false">
                             <i class="bi bi-sliders text-base"></i>
-                            @if(!empty(request('min_price')) || !empty(request('max_price')) || !empty(request('bedrooms')) || !empty(request('bathrooms')) || (!empty(request('sort_by')) && request('sort_by') !== 'latest'))
+                            @if(!empty(($filters['min_price'] ?? null)) || !empty(($filters['max_price'] ?? null)) || !empty(($filters['bedrooms'] ?? null)) || !empty(($filters['bathrooms'] ?? null)) || (!empty(($filters['sort_by'] ?? null)) && ($filters['sort_by'] ?? null) !== 'latest'))
                                 <span class="absolute -top-1 -right-1 w-2.5 h-2.5 bg-indigo-600 rounded-full ring-2 ring-white dark:ring-slate-900"></span>
                             @endif
                         </button>
@@ -150,7 +150,7 @@
                 </div>
 
                 <!-- Expandable / Collapsible Advanced Filters -->
-                <div id="advancedFiltersSection" class="{{ (!empty(request('min_price')) || !empty(request('max_price')) || !empty(request('bedrooms')) || !empty(request('bathrooms')) || (!empty(request('sort_by')) && request('sort_by') !== 'latest')) ? '' : 'hidden' }} pt-4 border-t border-slate-100 dark:border-slate-800/80">
+                <div id="advancedFiltersSection" class="{{ (!empty(($filters['min_price'] ?? null)) || !empty(($filters['max_price'] ?? null)) || !empty(($filters['bedrooms'] ?? null)) || !empty(($filters['bathrooms'] ?? null)) || (!empty(($filters['sort_by'] ?? null)) && ($filters['sort_by'] ?? null) !== 'latest')) ? '' : 'hidden' }} pt-4 border-t border-slate-100 dark:border-slate-800/80">
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3.5 text-xs">
                         <!-- Min Price -->
                         <div>
@@ -158,7 +158,7 @@
                             <input type="number"
                                 name="min_price" min="0" max="100000000000"
                                 step="25000"
-                                value="{{ request('min_price') }}"
+                                value="{{ ($filters['min_price'] ?? null) }}"
                                 placeholder="Min ($)"
                                 class="input-tw text-xs w-full py-2">
                         </div>
@@ -169,7 +169,7 @@
                             <input type="number"
                                 name="max_price" min="0" max="100000000000"
                                 step="50000"
-                                value="{{ request('max_price') }}"
+                                value="{{ ($filters['max_price'] ?? null) }}"
                                 placeholder="Max ($)"
                                 class="input-tw text-xs w-full py-2">
                         </div>
@@ -179,11 +179,11 @@
                             <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Bedrooms</label>
                             <select name="bedrooms" class="input-tw text-xs w-full py-2">
                                 <option value="">Any Beds</option>
-                                <option value="1" {{ request('bedrooms') == '1' ? 'selected' : '' }}>1+ Bed</option>
-                                <option value="2" {{ request('bedrooms') == '2' ? 'selected' : '' }}>2+ Beds</option>
-                                <option value="3" {{ request('bedrooms') == '3' ? 'selected' : '' }}>3+ Beds</option>
-                                <option value="4" {{ request('bedrooms') == '4' ? 'selected' : '' }}>4+ Beds</option>
-                                <option value="5" {{ request('bedrooms') == '5' ? 'selected' : '' }}>5+ Beds</option>
+                                <option value="1" {{ ($filters['bedrooms'] ?? null) == '1' ? 'selected' : '' }}>1+ Bed</option>
+                                <option value="2" {{ ($filters['bedrooms'] ?? null) == '2' ? 'selected' : '' }}>2+ Beds</option>
+                                <option value="3" {{ ($filters['bedrooms'] ?? null) == '3' ? 'selected' : '' }}>3+ Beds</option>
+                                <option value="4" {{ ($filters['bedrooms'] ?? null) == '4' ? 'selected' : '' }}>4+ Beds</option>
+                                <option value="5" {{ ($filters['bedrooms'] ?? null) == '5' ? 'selected' : '' }}>5+ Beds</option>
                             </select>
                         </div>
 
@@ -191,9 +191,9 @@
                         <div>
                             <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Sort By</label>
                             <select name="sort_by" class="input-tw text-xs w-full py-2">
-                                <option value="latest" {{ request('sort_by') === 'latest' ? 'selected' : '' }}>Newest Listed</option>
-                                <option value="price_asc" {{ request('sort_by') === 'price_asc' ? 'selected' : '' }}>Price: Low to High</option>
-                                <option value="price_desc" {{ request('sort_by') === 'price_desc' ? 'selected' : '' }}>Price: High to Low</option>
+                                <option value="latest" {{ ($filters['sort_by'] ?? null) === 'latest' ? 'selected' : '' }}>Newest Listed</option>
+                                <option value="price_asc" {{ ($filters['sort_by'] ?? null) === 'price_asc' ? 'selected' : '' }}>Price: Low to High</option>
+                                <option value="price_desc" {{ ($filters['sort_by'] ?? null) === 'price_desc' ? 'selected' : '' }}>Price: High to Low</option>
                             </select>
                         </div>
                     </div>
@@ -204,38 +204,38 @@
                     <div class="flex flex-wrap items-center gap-2 pt-2 text-xs">
                         <span class="text-slate-400 font-semibold uppercase text-[10px] tracking-wider">Active Filters:</span>
 
-                        @if(!empty(request('q')))
+                        @if(!empty(($filters['q'] ?? null)))
                             <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800 font-medium">
-                                Keyword: "{{ request('q') }}"
-                                <a href="{{ request()->fullUrlWithQuery(['q' => null]) }}" class="hover:text-rose-600 ml-1"><i class="bi bi-x"></i></a>
+                                Keyword: "{{ ($filters['q'] ?? null) }}"
+                                <a href="{{ route('properties.index', \Illuminate\Support\Arr::except($filters, ['q'])) }}" class="hover:text-rose-600 ml-1"><i class="bi bi-x"></i></a>
                             </span>
                         @endif
 
-                        @if(!empty(request('location')))
+                        @if(!empty(($filters['location'] ?? null)))
                             <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-800 font-medium">
-                                Location: {{ request('location') }}
-                                <a href="{{ request()->fullUrlWithQuery(['location' => null]) }}" class="hover:text-rose-600 ml-1"><i class="bi bi-x"></i></a>
+                                Location: {{ ($filters['location'] ?? null) }}
+                                <a href="{{ route('properties.index', \Illuminate\Support\Arr::except($filters, ['location'])) }}" class="hover:text-rose-600 ml-1"><i class="bi bi-x"></i></a>
                             </span>
                         @endif
 
-                        @if(!empty(request('property_type')))
+                        @if(!empty(($filters['property_type'] ?? null)))
                             <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700 font-medium">
-                                Type: {{ request('property_type') }}
-                                <a href="{{ request()->fullUrlWithQuery(['property_type' => null]) }}" class="hover:text-rose-600 ml-1"><i class="bi bi-x"></i></a>
+                                Type: {{ ($filters['property_type'] ?? null) }}
+                                <a href="{{ route('properties.index', \Illuminate\Support\Arr::except($filters, ['property_type'])) }}" class="hover:text-rose-600 ml-1"><i class="bi bi-x"></i></a>
                             </span>
                         @endif
 
-                        @if(!empty(request('min_price')) || !empty(request('max_price')))
+                        @if(!empty(($filters['min_price'] ?? null)) || !empty(($filters['max_price'] ?? null)))
                             <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 font-medium">
-                                Price: ${{ number_format((float) request('min_price', 0)) }} - {{ !empty(request('max_price')) ? '$' . number_format((float) request('max_price')) : 'Any' }}
-                                <a href="{{ request()->fullUrlWithQuery(['min_price' => null, 'max_price' => null]) }}" class="hover:text-rose-600 ml-1"><i class="bi bi-x"></i></a>
+                                Price: ${{ number_format((float) ($filters['min_price'] ?? 0)) }} - {{ !empty(($filters['max_price'] ?? null)) ? '$' . number_format((float) ($filters['max_price'] ?? null)) : 'Any' }}
+                                <a href="{{ route('properties.index', \Illuminate\Support\Arr::except($filters, ['min_price', 'max_price'])) }}" class="hover:text-rose-600 ml-1"><i class="bi bi-x"></i></a>
                             </span>
                         @endif
 
-                        @if(!empty(request('bedrooms')))
+                        @if(!empty(($filters['bedrooms'] ?? null)))
                             <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700 font-medium">
-                                {{ request('bedrooms') }}+ Beds
-                                <a href="{{ request()->fullUrlWithQuery(['bedrooms' => null]) }}" class="hover:text-rose-600 ml-1"><i class="bi bi-x"></i></a>
+                                {{ ($filters['bedrooms'] ?? null) }}+ Beds
+                                <a href="{{ route('properties.index', \Illuminate\Support\Arr::except($filters, ['bedrooms'])) }}" class="hover:text-rose-600 ml-1"><i class="bi bi-x"></i></a>
                             </span>
                         @endif
 
@@ -245,70 +245,16 @@
             </form>
         </div>
 
-        <!-- Personalized Recommendations / Curated For You Strip -->
-        @if(isset($recommendations) && $recommendations->count() > 0 && !$hasActiveFilters)
-            <div class="p-5 rounded-2xl bg-gradient-to-r from-indigo-900/10 via-purple-900/10 to-indigo-900/10 dark:from-indigo-950/40 dark:via-purple-950/40 dark:to-indigo-950/40 border border-indigo-200/80 dark:border-indigo-800/80 shadow-sm space-y-4">
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center gap-2.5">
-                        <span class="w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center text-sm shadow-md shadow-indigo-500/20">
-                            <i class="bi bi-stars"></i>
-                        </span>
-                        <div>
-                            <h2 class="text-base font-bold text-slate-900 dark:text-white">Recommended For You</h2>
-                            <p class="text-xs text-slate-500 dark:text-slate-400">Curated opportunities based on your search history</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    @foreach($recommendations as $rec)
-                        @php
-                            $isRecFavorited = in_array($rec->id, $favoriteIds);
-                        @endphp
-                        <div class="relative group rounded-xl overflow-hidden bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-indigo-400 dark:hover:border-indigo-600 transition shadow-sm flex flex-col justify-between">
-                            <div class="relative h-36 overflow-hidden bg-slate-900">
-                                @if ($rec->hero_image_url)
-                                    <img src="{{ $rec->hero_image_url }}" alt="{{ $rec->name }}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
-                                @else
-                                    <div class="w-full h-full flex items-center justify-center text-slate-500"><i class="bi bi-image text-3xl"></i></div>
-                                @endif
-
-                                <button type="button"
-                                    data-favorite-btn
-                                    data-property-id="{{ $rec->id }}"
-                                    class="favorite-card-btn absolute top-2.5 left-2.5 z-10 w-8 h-8 rounded-full flex items-center justify-center transition shadow-md backdrop-blur-md {{ $isRecFavorited ? 'bg-rose-500/90 text-white hover:bg-rose-600' : 'bg-slate-900/60 text-white hover:bg-slate-900/90 hover:text-rose-400' }}"
-                                    title="{{ $isRecFavorited ? 'Remove from Favorites' : 'Add to Favorites' }}"
-                                    aria-label="Favorite">
-                                    <i class="bi bi-heart{{ $isRecFavorited ? '-fill' : '' }} text-xs pointer-events-none"></i>
-                                </button>
-                            </div>
-                            <div class="p-3.5 space-y-2">
-                                <div>
-                                    <h3 class="font-bold text-sm text-slate-900 dark:text-white truncate">{{ $rec->name }}</h3>
-                                    <div class="text-[11px] text-slate-500 dark:text-slate-400 flex items-center gap-1 mt-0.5">
-                                        <i class="bi bi-geo-alt-fill text-rose-500"></i> {{ $rec->location_label }}
-                                    </div>
-                                </div>
-                                <a href="{{ route('properties.show', ['slug' => $rec->slug ?? $rec->id]) }}" class="btn-primary-tw w-full py-1.5 text-xs text-center flex items-center justify-center gap-1.5">
-                                    <i class="bi bi-eye"></i> View Details
-                                </a>
-                            </div>
-                        </div>
-                    @endforeach
-                </div>
-            </div>
-        @endif
-
         <!-- Main Property Listings Grid -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             @forelse ($propertyList as $prop)
                 @php
                     $isFavorited = in_array($prop->id, $favoriteIds);
-                    $propType = $prop->details->type ?? null;
-                    $propBeds = $prop->details->bedrooms ?? null;
-                    $propBaths = $prop->details->baths ?? null;
-                    $propSqft = $prop->details->square_feets ?? null;
-                    $propPrice = $prop->details->value ?? null;
+                    $propType = $prop->type;
+                    $propBeds = $prop->bedrooms;
+                    $propBaths = $prop->baths;
+                    $propSqft = $prop->square_feets;
+                    $propPrice = $prop->value;
                 @endphp
                 <!-- Property Card -->
                 <div class="card-tw p-0 overflow-hidden group hover:-translate-y-1 transition duration-300 flex flex-col justify-between">

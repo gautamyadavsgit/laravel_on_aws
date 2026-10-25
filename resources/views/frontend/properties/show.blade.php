@@ -1,7 +1,6 @@
 @include('frontend.common.header', ['title' => $property->name.' - Fractional Investment | Gautam Real Estate'])
 
 @php
-    $details = $property->details;
     $images = $property->gallery_urls;
     $slideCount = count($images);
 @endphp
@@ -56,25 +55,25 @@
                         <div class="pt-2 sm:pt-0">
                             <span class="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500 block">{{ __('properties.bedrooms') }}</span>
                             <strong class="text-lg font-bold text-slate-900 dark:text-white flex items-center justify-center gap-1.5 mt-0.5">
-                                <i class="bi bi-door-closed text-indigo-600 dark:text-indigo-400"></i> {{ $details?->bedrooms ?? '—' }} {{ __('properties.beds') }}
+                                <i class="bi bi-door-closed text-indigo-600 dark:text-indigo-400"></i> {{ $property->bedrooms ?? '—' }} {{ __('properties.beds') }}
                             </strong>
                         </div>
                         <div class="pt-2 sm:pt-0">
                             <span class="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500 block">{{ __('properties.bathrooms') }}</span>
                             <strong class="text-lg font-bold text-slate-900 dark:text-white flex items-center justify-center gap-1.5 mt-0.5">
-                                <i class="bi bi-droplet text-indigo-600 dark:text-indigo-400"></i> {{ $details?->baths ?? '—' }} {{ __('properties.baths') }}
+                                <i class="bi bi-droplet text-indigo-600 dark:text-indigo-400"></i> {{ $property->baths ?? '—' }} {{ __('properties.baths') }}
                             </strong>
                         </div>
                         <div class="pt-2 sm:pt-0">
                             <span class="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500 block">{{ __('properties.square_footage') }}</span>
                             <strong class="text-lg font-bold text-slate-900 dark:text-white flex items-center justify-center gap-1.5 mt-0.5">
-                                <i class="bi bi-aspect-ratio text-indigo-600 dark:text-indigo-400"></i> {{ $details?->square_feets ? number_format($details->square_feets) : '—' }} {{ __('properties.sqft') }}
+                                <i class="bi bi-aspect-ratio text-indigo-600 dark:text-indigo-400"></i> {{ $property->square_feets ? number_format($property->square_feets) : '—' }} {{ __('properties.sqft') }}
                             </strong>
                         </div>
                         <div class="pt-2 sm:pt-0">
                             <span class="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500 block">{{ __('properties.year_built') }}</span>
                             <strong class="text-lg font-bold text-slate-900 dark:text-white flex items-center justify-center gap-1.5 mt-0.5">
-                                <i class="bi bi-calendar3 text-indigo-600 dark:text-indigo-400"></i> {{ $details?->year_built ?? '—' }}
+                                <i class="bi bi-calendar3 text-indigo-600 dark:text-indigo-400"></i> {{ $property->year_built ?? '—' }}
                             </strong>
                         </div>
                     </div>
@@ -103,19 +102,19 @@
                             </span>
                         </div>
                         <h2 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">{{ $property->name }}</h2>
-                        @if($property->address)
+                        @if($property->address_1)
                             <p class="text-sm text-slate-500 dark:text-slate-400 mt-1 flex items-center gap-1.5">
                                 <i class="bi bi-geo-alt-fill text-rose-500"></i>
-                                {{ implode(', ', array_filter([$property->address->address, $property->location_label])) }}
+                                {{ implode(', ', array_filter([$property->address_1, $property->location_label])) }}
                             </p>
                         @endif
                     </div>
 
-                    @if ($details?->value)
+                    @if ($property->value)
                         <div class="p-4 rounded-xl bg-indigo-50/70 dark:bg-indigo-950/40 border border-indigo-100 dark:border-indigo-900/50">
                             <div class="flex items-center justify-between text-xs">
                                 <span class="text-slate-600 dark:text-slate-400">Asset Valuation:</span>
-                                <strong class="text-slate-900 dark:text-white">${{ number_format((float) $details->value) }}</strong>
+                                <strong class="text-slate-900 dark:text-white">${{ number_format((float) $property->value) }}</strong>
                             </div>
                         </div>
                     @endif
@@ -123,19 +122,19 @@
                     <div class="grid grid-cols-2 gap-3 p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-800 text-center">
                         <div>
                             <span class="text-[11px] font-semibold uppercase text-slate-400 dark:text-slate-500 block">Bedrooms</span>
-                            <strong class="text-sm font-bold text-slate-900 dark:text-white mt-0.5 block">{{ $details?->bedrooms ?? '—' }} Beds</strong>
+                            <strong class="text-sm font-bold text-slate-900 dark:text-white mt-0.5 block">{{ $property->bedrooms ?? '—' }} Beds</strong>
                         </div>
                         <div>
                             <span class="text-[11px] font-semibold uppercase text-slate-400 dark:text-slate-500 block">Bathrooms</span>
-                            <strong class="text-sm font-bold text-slate-900 dark:text-white mt-0.5 block">{{ $details?->baths ?? '—' }} Baths</strong>
+                            <strong class="text-sm font-bold text-slate-900 dark:text-white mt-0.5 block">{{ $property->baths ?? '—' }} Baths</strong>
                         </div>
                         <div>
                             <span class="text-[11px] font-semibold uppercase text-slate-400 dark:text-slate-500 block">Square Feet</span>
-                            <strong class="text-sm font-bold text-slate-900 dark:text-white mt-0.5 block">{{ $details?->square_feets ? number_format($details->square_feets) : '—' }} SqFt</strong>
+                            <strong class="text-sm font-bold text-slate-900 dark:text-white mt-0.5 block">{{ $property->square_feets ? number_format($property->square_feets) : '—' }} SqFt</strong>
                         </div>
                         <div>
                             <span class="text-[11px] font-semibold uppercase text-slate-400 dark:text-slate-500 block">Year Built</span>
-                            <strong class="text-sm font-bold text-slate-900 dark:text-white mt-0.5 block">{{ $details?->year_built ?? '—' }}</strong>
+                            <strong class="text-sm font-bold text-slate-900 dark:text-white mt-0.5 block">{{ $property->year_built ?? '—' }}</strong>
                         </div>
                     </div>
 

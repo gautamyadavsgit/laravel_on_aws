@@ -4,38 +4,29 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ListPropertiesRequest;
 use App\Models\Property;
-use App\Services\PropertyRecommendationService;
-use App\Services\PropertyService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class PropertyController extends Controller
 {
-    public function __construct(
-        private readonly PropertyService $propertyService,
-        private readonly PropertyRecommendationService $recommendations,
-    ) {}
-
     /**
-     * Browse properties with multi-criteria filtering and personalized recommendations.
+     * Browse properties with multi-criteria filtering.
      */
     public function index(ListPropertiesRequest $request): View
     {
         $filters = $request->filters();
 
-        // Views, pagination links and the listing cache read the current request's raw query string, and a
-        // form request is a copy of it, so the vetted values are written back to the current request
-        request()->query->replace($filters + array_filter(['page' => $request->page()]));
-
-        $properties = $this->propertyService->getCachedFilteredProperties($filters, 9);
-        $this->recommendations->logSearch($filters, $properties->total());
+        $properties = Property::with('images')
+            ->filter($filters)
+            ->sortedBy($filters['sort_by'] ?? null)
+            ->paginate(9, page: (int) ($request->page() ?? 1))
+            ->appends($filters);
 
         return view('frontend.properties.index', [
             'properties' => $properties,
             'filters' => $filters,
-            'filterOptions' => $this->propertyService->getFilterOptions(),
-            'recommendations' => $this->recommendations->recommend(auth()->user(), 3),
+            'filterOptions' => Property::filterOptions(),
             'favoriteIds' => auth()->user()?->favoritePropertyIds() ?? [],
         ]);
     }
@@ -45,10 +36,10 @@ class PropertyController extends Controller
      */
     public function show(string $slug): View|RedirectResponse
     {
-        $property = $this->propertyService->getPropertyBySlug($slug);
+        $property = Property::with('images')->where('slug', $slug)->first();
 
         if (! $property && ctype_digit($slug)) {
-            $property = $this->propertyService->getPropertyById($slug);
+            $property = Property::with('images')->find($slug);
 
             if ($property?->slug) {
                 return redirect()->route('properties.show', ['slug' => $property->slug], 301);
@@ -69,7 +60,8 @@ class PropertyController extends Controller
 
         abort_if($propertyId !== null && (! is_string($propertyId) || ! ctype_digit($propertyId)), 404, 'The requested real estate asset could not be found.');
 
-        $property = $this->propertyService->getPropertyById($propertyId);
+        $query = Property::with('images');
+        $property = $propertyId ? $query->find($propertyId) : $query->first();
 
         abort_if(! $property, 404, 'The requested real estate asset could not be found.');
 

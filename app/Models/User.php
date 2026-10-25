@@ -95,12 +95,6 @@ class User extends Authenticatable
         return $this->propertyFavorites()->where('property_id', $propertyId)->exists();
     }
 
-    /** @return HasMany<UserSearchLog, $this> */
-    public function searchLogs(): HasMany
-    {
-        return $this->hasMany(UserSearchLog::class);
-    }
-
     /**
      * Get the user's property interests.
      */

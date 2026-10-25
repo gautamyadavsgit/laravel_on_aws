@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Storage;
 class SeedAssetGenerator
 {
     /**
-     * Ensure all seed images and sample documents exist in the public storage disk.
+     * Ensure all seed images exist in the public storage disk.
      */
     public static function ensureSeedAssets(): void
     {
@@ -16,7 +16,6 @@ class SeedAssetGenerator
         // Ensure directories exist
         $disk->makeDirectory('property_images');
         $disk->makeDirectory('market_image');
-        $disk->makeDirectory('property_documents');
 
         // Palette presets for luxury real estate (R, G, B)
         $palettes = [
@@ -47,24 +46,6 @@ class SeedAssetGenerator
             if (! $disk->exists($filename)) {
                 $png = self::createImageBinary(800, 600, 35, 60, 95, 'chart');
                 $disk->put($filename, $png);
-            }
-        }
-
-        // 4. Generate Valid Sample PDF Legal Documents
-        $documentTypes = [
-            'master_deed',
-            'operating_agreement',
-            'rent_calculation',
-            'expense_statement',
-            'deed_restrictions',
-            'closing_statement',
-        ];
-
-        foreach ($documentTypes as $index => $type) {
-            $filename = "property_documents/{$type}_".($index + 1).'.pdf';
-            if (! $disk->exists($filename)) {
-                $pdf = self::createPdfBinary(ucwords(str_replace('_', ' ', $type)));
-                $disk->put($filename, $pdf);
             }
         }
     }
@@ -124,33 +105,5 @@ class SeedAssetGenerator
         $png .= pack('N', 0).'IEND'.pack('N', crc32('IEND'));
 
         return $png;
-    }
-
-    /**
-     * Generate a valid standalone PDF 1.4 binary.
-     */
-    public static function createPdfBinary(string $title): string
-    {
-        $content = "BT\n/F1 24 Tf\n50 720 Td\n({$title}) Tj\nET\n".
-                   "BT\n/F1 12 Tf\n50 680 Td\n(Gautam Real Estate Institutional Fractional Ownership Document) Tj\nET\n".
-                   "BT\n/F1 10 Tf\n50 650 Td\n(This is a verified legal pro-forma statement generated for property underwriting.) Tj\nET\n";
-
-        $contentLength = strlen($content);
-
-        return "%PDF-1.4\n".
-               "1 0 obj<</Type/Catalog/Pages 2 0 R>>endobj\n".
-               "2 0 obj<</Type/Pages/Count 1/Kids[3 0 R]>>endobj\n".
-               "3 0 obj<</Type/Page/MediaBox[0 0 612 792]/Parent 2 0 R/Resources<</Font<</F1 4 0 R>>>>/Contents 5 0 R>>endobj\n".
-               "4 0 obj<</Type/Font/Subtype/Type1/BaseFont/Helvetica>>endobj\n".
-               "5 0 obj<</Length {$contentLength}>>\nstream\n{$content}\nendstream\nendobj\n".
-               "xref\n0 6\n".
-               "0000000000 65535 f \n".
-               "0000000009 00000 n \n".
-               "0000000052 00000 n \n".
-               "0000000101 00000 n \n".
-               "0000000212 00000 n \n".
-               "0000000279 00000 n \n".
-               "trailer<</Size 6/Root 1 0 R>>\n".
-               "startxref\n380\n%%EOF\n";
     }
 }

@@ -13,6 +13,7 @@ class AdminAccessTest extends DatabaseTestCase
     public function test_guests_and_investors_cannot_reach_admin_endpoints(): void
     {
         $property = $this->property();
+        $image = $property->images()->create(['property_image_key' => 'property_image', 'property_image_value' => 'property_images/x.png']);
         $investor = $this->investor();
 
         $gets = [
@@ -25,10 +26,6 @@ class AdminAccessTest extends DatabaseTestCase
             '/admin/properties/create',
             "/admin/properties/{$property->id}",
             "/admin/properties/{$property->id}/edit",
-            "/admin/properties/{$property->id}/address",
-            "/admin/properties/{$property->id}/details",
-            "/admin/properties/{$property->id}/offering",
-            "/admin/properties/{$property->id}/documents",
         ];
 
         foreach ([null, $investor] as $actor) {
@@ -45,7 +42,7 @@ class AdminAccessTest extends DatabaseTestCase
             ['post', '/admin/properties', ['name' => 'x']],
             ['put', "/admin/properties/{$property->id}", ['name' => 'Hacked']],
             ['delete', "/admin/properties/{$property->id}", []],
-            ['put', "/admin/properties/{$property->id}/address", ['city' => 'x']],
+            ['delete', "/admin/properties/{$property->id}/images/{$image->id}", []],
         ];
 
         foreach ($posts as [$method, $url, $body]) {

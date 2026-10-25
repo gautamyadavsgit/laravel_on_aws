@@ -14,7 +14,7 @@
                         Property Portfolio Management
                     </h1>
                     <p class="text-sm text-slate-500 dark:text-slate-400 mt-0.5">
-                        Manage all real estate assets, fractional capital offerings, specifications, and legal documentation.
+                        Manage all real estate assets, fractional capital offerings, specifications, and photos.
                     </p>
                 </div>
             </div>
@@ -64,10 +64,6 @@
                     @forelse ($properties as $prop)
                         @php
                             $thumb = $prop->images->first();
-                            $addr = $prop->address;
-                            $details = $prop->details;
-                            $offering = $prop->offering;
-                            $documents = $prop->documents;
                         @endphp
                         <!-- Master Row -->
                         <tr class="hover:bg-slate-50/90 dark:hover:bg-slate-800/50 transition property-row" id="row-{{ $prop->id }}">
@@ -114,13 +110,13 @@
 
                             <!-- Location -->
                             <td class="px-6 py-5">
-                                @if($addr && ($addr->city || $addr->state))
+                                @if($prop->city || $prop->state)
                                     <div class="flex items-center gap-1.5 font-semibold text-slate-900 dark:text-slate-100">
                                         <i class="bi bi-geo-alt-fill text-rose-500 text-sm"></i>
-                                        <span>{{ $addr->city ?? '' }}{{ $addr->city && $addr->state ? ', ' : '' }}{{ $addr->state ?? '' }}</span>
+                                        <span>{{ $prop->location_label }}</span>
                                     </div>
                                     <span class="text-xs text-slate-400 dark:text-slate-500 block truncate max-w-[200px] mt-0.5">
-                                        {{ $addr->address_1 ?? 'Address configured' }}
+                                        {{ $prop->address_1 ?? 'Address configured' }}
                                     </span>
                                 @else
                                     <span class="text-xs text-slate-400 italic">No address set</span>
@@ -129,16 +125,16 @@
 
                             <!-- Valuation / Price -->
                             <td class="px-6 py-5">
-                                @if($details && $details->value)
+                                @if($prop->value)
                                     <div class="font-bold text-slate-900 dark:text-white text-base">
-                                        ${{ number_format($details->value) }}
+                                        ${{ number_format($prop->value) }}
                                     </div>
                                     <span class="text-[11px] text-emerald-600 dark:text-emerald-400 font-medium block">
                                         Appraised Valuation
                                     </span>
-                                @elseif($offering && $offering->offering_purchase)
+                                @elseif($prop->offering_purchase)
                                     <div class="font-bold text-slate-900 dark:text-white text-base">
-                                        ${{ number_format($offering->offering_purchase) }}
+                                        ${{ number_format($prop->offering_purchase) }}
                                     </div>
                                     <span class="text-[11px] text-indigo-500 font-medium block">
                                         Offering Target
@@ -184,43 +180,40 @@
                         <!-- Expandable Details Row Drawer -->
                         <tr id="details-row-{{ $prop->id }}" class="hidden bg-slate-50/80 dark:bg-slate-900/90 border-y-2 border-indigo-500/20">
                             <td colspan="6" class="p-6">
-                                <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+                                <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
                                     <!-- Card 1: Specifications & Physical Details -->
                                     <div class="p-5 rounded-xl bg-white dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700 shadow-sm space-y-4">
                                         <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-700/60 pb-3">
                                             <h3 class="text-xs font-bold uppercase tracking-wider text-slate-800 dark:text-slate-200 flex items-center gap-2">
                                                 <i class="bi bi-sliders text-indigo-600 dark:text-indigo-400"></i> Structural Specs
                                             </h3>
-                                            <a href="{{ route('admin.properties.details.edit', $prop) }}" class="text-xs text-indigo-600 dark:text-indigo-400 hover:underline font-semibold flex items-center gap-1">
-                                                <i class="bi bi-pencil"></i> Edit Specs
-                                            </a>
                                         </div>
 
-                                        @if($details)
+                                        @if($prop->type)
                                             <div class="grid grid-cols-2 gap-3 text-xs">
                                                 <div>
                                                     <span class="text-slate-400 block">Property Type:</span>
-                                                    <strong class="text-slate-800 dark:text-slate-200 font-semibold">{{ $details->type ?? 'Single Family' }}</strong>
+                                                    <strong class="text-slate-800 dark:text-slate-200 font-semibold">{{ $prop->type ?? 'Single Family' }}</strong>
                                                 </div>
                                                 <div>
                                                     <span class="text-slate-400 block">Bed / Bath:</span>
-                                                    <strong class="text-slate-800 dark:text-slate-200 font-semibold">{{ $details->bedrooms ?? '-' }} Beds &bull; {{ $details->baths ?? '-' }} Baths</strong>
+                                                    <strong class="text-slate-800 dark:text-slate-200 font-semibold">{{ $prop->bedrooms ?? '-' }} Beds &bull; {{ $prop->baths ?? '-' }} Baths</strong>
                                                 </div>
                                                 <div>
                                                     <span class="text-slate-400 block">Living Area:</span>
-                                                    <strong class="text-slate-800 dark:text-slate-200 font-semibold">{{ $details->square_feets ? number_format($details->square_feets) . ' SqFt' : 'N/A' }}</strong>
+                                                    <strong class="text-slate-800 dark:text-slate-200 font-semibold">{{ $prop->square_feets ? number_format($prop->square_feets) . ' SqFt' : 'N/A' }}</strong>
                                                 </div>
                                                 <div>
                                                     <span class="text-slate-400 block">Guest Capacity:</span>
-                                                    <strong class="text-slate-800 dark:text-slate-200 font-semibold">Sleeps {{ $details->sleeps ?? 'N/A' }}</strong>
+                                                    <strong class="text-slate-800 dark:text-slate-200 font-semibold">Sleeps {{ $prop->sleeps ?? 'N/A' }}</strong>
                                                 </div>
                                                 <div>
                                                     <span class="text-slate-400 block">Garages:</span>
-                                                    <strong class="text-slate-800 dark:text-slate-200 font-semibold">{{ $details->garages ?? '0' }} Cars</strong>
+                                                    <strong class="text-slate-800 dark:text-slate-200 font-semibold">{{ $prop->garages ?? '0' }} Cars</strong>
                                                 </div>
                                                 <div>
                                                     <span class="text-slate-400 block">Year Built:</span>
-                                                    <strong class="text-slate-800 dark:text-slate-200 font-semibold">{{ $details->year_built ?? 'N/A' }}</strong>
+                                                    <strong class="text-slate-800 dark:text-slate-200 font-semibold">{{ $prop->year_built ?? 'N/A' }}</strong>
                                                 </div>
                                             </div>
                                         @else
@@ -234,94 +227,41 @@
                                             <h3 class="text-xs font-bold uppercase tracking-wider text-slate-800 dark:text-slate-200 flex items-center gap-2">
                                                 <i class="bi bi-tag text-emerald-600 dark:text-emerald-400"></i> Capital Offering & Valuation
                                             </h3>
-                                            <a href="{{ route('admin.properties.offering.edit', $prop) }}" class="text-xs text-indigo-600 dark:text-indigo-400 hover:underline font-semibold flex items-center gap-1">
-                                                <i class="bi bi-pencil"></i> Edit Offering
-                                            </a>
                                         </div>
 
                                         <div class="space-y-2.5 text-xs">
                                             <div class="flex items-center justify-between p-2 rounded-lg bg-slate-50 dark:bg-slate-900/60">
                                                 <span class="text-slate-500">Appraised Valuation:</span>
                                                 <strong class="text-slate-900 dark:text-white font-bold text-sm">
-                                                    {{ $details && $details->value ? '$' . number_format($details->value) : 'Unpriced' }}
+                                                    {{ $prop->value ? '$' . number_format($prop->value) : 'Unpriced' }}
                                                 </strong>
                                             </div>
 
-                                            @if($offering)
                                                 <div class="flex items-center justify-between p-2 rounded-lg bg-slate-50 dark:bg-slate-900/60">
                                                     <span class="text-slate-500">Offering Purchase Price:</span>
                                                     <strong class="text-indigo-600 dark:text-indigo-400 font-semibold">
-                                                        {{ $offering->offering_purchase ? '$' . number_format($offering->offering_purchase) : 'N/A' }}
+                                                        {{ $prop->offering_purchase ? '$' . number_format($prop->offering_purchase) : 'N/A' }}
                                                     </strong>
                                                 </div>
                                                 <div class="flex items-center justify-between">
                                                     <span class="text-slate-400">Renovation / Build Cost:</span>
-                                                    <span class="font-medium text-slate-700 dark:text-slate-300">{{ $offering->offering_build_cost ? '$' . number_format($offering->offering_build_cost) : '-' }}</span>
+                                                    <span class="font-medium text-slate-700 dark:text-slate-300">{{ $prop->offering_build_cost ? '$' . number_format($prop->offering_build_cost) : '-' }}</span>
                                                 </div>
                                                 <div class="flex items-center justify-between">
                                                     <span class="text-slate-400">Capital Improvements:</span>
-                                                    <span class="font-medium text-slate-700 dark:text-slate-300">{{ $offering->offering_improvements ? '$' . number_format($offering->offering_improvements) : '-' }}</span>
+                                                    <span class="font-medium text-slate-700 dark:text-slate-300">{{ $prop->offering_improvements ? '$' . number_format($prop->offering_improvements) : '-' }}</span>
                                                 </div>
                                                 <div class="flex items-center justify-between">
                                                     <span class="text-slate-400">Closing & Escrow Fees:</span>
-                                                    <span class="font-medium text-slate-700 dark:text-slate-300">{{ $offering->offering_closing_cost ? '$' . number_format($offering->offering_closing_cost) : '-' }}</span>
+                                                    <span class="font-medium text-slate-700 dark:text-slate-300">{{ $prop->offering_closing_cost ? '$' . number_format($prop->offering_closing_cost) : '-' }}</span>
                                                 </div>
                                                 <div class="flex items-center justify-between">
                                                     <span class="text-slate-400">Sourcing / Acquisition Fees:</span>
-                                                    <span class="font-medium text-slate-700 dark:text-slate-300">{{ $offering->offering_sourcing_fees ? '$' . number_format($offering->offering_sourcing_fees) : '-' }}</span>
+                                                    <span class="font-medium text-slate-700 dark:text-slate-300">{{ $prop->offering_sourcing_fees ? '$' . number_format($prop->offering_sourcing_fees) : '-' }}</span>
                                                 </div>
-                                            @else
-                                                <p class="text-xs text-slate-400 italic">No offering breakdown configured.</p>
-                                            @endif
                                         </div>
                                     </div>
 
-                                    <!-- Card 3: Direct Sub-Module Navigation Links & Files -->
-                                    <div class="p-5 rounded-xl bg-white dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700 shadow-sm space-y-4">
-                                        <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-700/60 pb-3">
-                                            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-800 dark:text-slate-200 flex items-center gap-2">
-                                                <i class="bi bi-grid-fill text-indigo-600 dark:text-indigo-400"></i> Edit Stages & Sub-Modules
-                                            </h3>
-                                            <span class="badge-tw badge-info-tw text-[10px]">7 Stages</span>
-                                        </div>
-
-                                        <div class="grid grid-cols-2 gap-2 text-xs">
-                                            <!-- 1. Primary -->
-                                            <a href="{{ route('admin.properties.edit', $prop) }}" class="p-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/60 hover:border-indigo-500 hover:text-indigo-600 dark:hover:text-indigo-400 transition flex items-center gap-2">
-                                                <i class="bi bi-building text-indigo-500"></i>
-                                                <span class="font-medium">1. Primary Details</span>
-                                            </a>
-
-                                            <!-- 2. Address -->
-                                            <a href="{{ route('admin.properties.address.edit', $prop) }}" class="p-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/60 hover:border-indigo-500 hover:text-indigo-600 dark:hover:text-indigo-400 transition flex items-center gap-2">
-                                                <i class="bi bi-geo-alt text-rose-500"></i>
-                                                <span class="font-medium">2. Address Location</span>
-                                            </a>
-
-                                            <!-- 3. Specs -->
-                                            <a href="{{ route('admin.properties.details.edit', $prop) }}" class="p-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/60 hover:border-indigo-500 hover:text-indigo-600 dark:hover:text-indigo-400 transition flex items-center gap-2">
-                                                <i class="bi bi-sliders text-amber-500"></i>
-                                                <span class="font-medium">3. Specifications</span>
-                                            </a>
-
-                                            <!-- 4. Offerings -->
-                                            <a href="{{ route('admin.properties.offering.edit', $prop) }}" class="p-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/60 hover:border-indigo-500 hover:text-indigo-600 dark:hover:text-indigo-400 transition flex items-center gap-2">
-                                                <i class="bi bi-tag text-emerald-500"></i>
-                                                <span class="font-medium">4. Offerings</span>
-                                            </a>
-                                        </div>
-
-                                        <!-- 5. Legal Documents Action Link -->
-                                        <div class="pt-2 border-t border-slate-100 dark:border-slate-700/60">
-                                            <a href="{{ route('admin.properties.documents.edit', $prop) }}" class="w-full p-2.5 rounded-lg border border-indigo-200 dark:border-indigo-900 bg-indigo-50 dark:bg-indigo-950/40 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 text-indigo-700 dark:text-indigo-300 transition flex items-center justify-between text-xs font-semibold">
-                                                <div class="flex items-center gap-2">
-                                                    <i class="bi bi-file-earmark-pdf-fill text-rose-500"></i>
-                                                    <span>5. Legal Documentation & Disclosures</span>
-                                                </div>
-                                                <span class="badge-tw badge-info-tw text-[10px]">{{ count($documents) }} PDFs</span>
-                                            </a>
-                                        </div>
-                                    </div>
                                 </div>
                             </td>
                         </tr>

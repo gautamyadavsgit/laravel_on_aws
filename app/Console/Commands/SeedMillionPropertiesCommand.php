@@ -90,6 +90,7 @@ class SeedMillionPropertiesCommand extends Command
                 $uniqueIdx = $insertedCount + $i + 1;
                 $prefix = $propertyPrefixes[$uniqueIdx % count($propertyPrefixes)];
                 $type = $propertyTypes[$uniqueIdx % count($propertyTypes)];
+                $location = $cities[$uniqueIdx % count($cities)];
 
                 $name = "{$prefix} {$type} #{$uniqueIdx}";
 
@@ -100,80 +101,49 @@ class SeedMillionPropertiesCommand extends Command
                     'availability' => ($uniqueIdx % 5 === 0) ? 'Not Available' : 'Available',
                     'description' => "Institutional-grade fractional investment property #{$uniqueIdx} located in prime tourist corridor with verified annual yield and professional management.",
                     'management_company' => 'Gautam Asset Management LLC',
+                    'address_1' => (100 + ($uniqueIdx % 900)).' Mountain Vista Way',
+                    'address_2' => 'Unit #'.(($uniqueIdx % 50) + 1),
+                    'city' => $location['city'],
+                    'state' => $location['state'],
+                    'zip' => $location['zip'],
+                    'type' => 'Luxury Fractional Vacation Cabin',
+                    'bedrooms' => 3 + ($uniqueIdx % 5),
+                    'baths' => 2 + ($uniqueIdx % 4),
+                    'half_baths' => ($uniqueIdx % 2),
+                    'sleeps' => 8 + ($uniqueIdx % 12),
+                    'garages' => 2,
+                    'square_feets' => 2400 + (($uniqueIdx % 40) * 50),
+                    'stories' => '2-Story Custom Architectural Frame',
+                    'units' => 1,
+                    'lot_size' => 1 + ($uniqueIdx % 4),
+                    'year_built' => 2019 + ($uniqueIdx % 6),
+                    'zoning' => 'Commercial / Short-Term Rental Certified',
+                    'value' => 450000 + (($uniqueIdx % 60) * 10000),
                     'created_at' => $now,
                     'updated_at' => $now,
                 ];
             }
 
-            DB::transaction(function () use ($propertiesBatch, $cities, $now, $currentChunk) {
-                // 1. Bulk insert properties
+            DB::transaction(function () use ($propertiesBatch, $now, $currentChunk) {
+                // Bulk insert properties; ids of a single multi-row insert are consecutive
                 DB::table('properties')->insert($propertiesBatch);
 
-                // Get first inserted ID in this chunk
-                $firstId = DB::getPdo()->lastInsertId();
-                $startId = (int) $firstId;
-                $endId = $startId + $currentChunk - 1;
+                $startId = (int) DB::getPdo()->lastInsertId();
 
-                $addresses = [];
                 $imagesList = [];
-                $detailsList = [];
-
-                for ($id = $startId; $id <= $endId; $id++) {
-                    $location = $cities[$id % count($cities)];
-                    $imgNum = ($id % 10) + 1;
-                    $raise = 450000 + (($id % 60) * 10000);
-
-                    // Address
-                    $addresses[] = [
-                        'property_id' => $id,
-                        'address_1' => (100 + ($id % 900)).' Mountain Vista Way',
-                        'address_2' => 'Unit #'.(($id % 50) + 1),
-                        'city' => $location['city'],
-                        'state' => $location['state'],
-                        'zip' => $location['zip'],
-                        'created_at' => $now,
-                        'updated_at' => $now,
-                    ];
-
-                    // Hero Property Image
+                for ($id = $startId; $id < $startId + $currentChunk; $id++) {
                     $imagesList[] = [
                         'property_id' => $id,
                         'property_image_key' => 'property_image',
-                        'property_image_value' => 'property_images/property_'.$imgNum.'.png',
-                        'created_at' => $now,
-                        'updated_at' => $now,
-                    ];
-
-                    // Details
-                    $detailsList[] = [
-                        'property_id' => $id,
-                        'type' => 'Luxury Fractional Vacation Cabin',
-                        'bedrooms' => 3 + ($id % 5),
-                        'baths' => 2 + ($id % 4),
-                        'half_baths' => ($id % 2),
-                        'sleeps' => 8 + ($id % 12),
-                        'garages' => 2,
-                        'square_feets' => 2400 + (($id % 40) * 50),
-                        'stories' => '2-Story Custom Architectural Frame',
-                        'units' => 1,
-                        'lot_size' => 1 + ($id % 4),
-                        'year_built' => 2019 + ($id % 6),
-                        'zoning' => 'Commercial / Short-Term Rental Certified',
-                        'value' => $raise,
+                        'property_image_value' => 'property_images/property_'.(($id % 10) + 1).'.png',
                         'created_at' => $now,
                         'updated_at' => $now,
                     ];
                 }
 
-                // Chunk sub-records into safe batches of 1,500 rows to satisfy MySQL 65,535 parameter limit
-                foreach (array_chunk($addresses, 1500) as $subChunk) {
-                    DB::table('property_address')->insert($subChunk);
-                }
+                // Keep batches small enough for MySQL's 65,535 parameter limit
                 foreach (array_chunk($imagesList, 1500) as $subChunk) {
                     DB::table('property_images')->insert($subChunk);
-                }
-                foreach (array_chunk($detailsList, 1500) as $subChunk) {
-                    DB::table('property_details')->insert($subChunk);
                 }
             });
 

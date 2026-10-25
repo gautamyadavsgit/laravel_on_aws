@@ -36,7 +36,7 @@ class AuthenticatedSessionController extends Controller
         $credentials = $request->only('email', 'password');
         $remember = $request->boolean('remember');
 
-        if ($this->authService->login($credentials, $remember)) {
+        if (Auth::guard('web')->attempt($credentials, $remember)) {
             $request->clearFailedAttempts();
             $request->session()->regenerate();
 

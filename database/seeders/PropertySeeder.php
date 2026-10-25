@@ -4,11 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Admin;
 use App\Models\Property;
-use App\Models\PropertyAddress;
-use App\Models\PropertyDetail;
-use App\Models\PropertyDocument;
 use App\Models\PropertyImage;
-use App\Models\PropertyOffering;
 use Illuminate\Database\Seeder;
 
 class PropertySeeder extends Seeder
@@ -18,7 +14,7 @@ class PropertySeeder extends Seeder
      */
     public function run(): void
     {
-        // 1. Ensure all local sample images, and PDFs exist
+        // 1. Ensure all local sample images exist
         SeedAssetGenerator::ensureSeedAssets();
 
         $admin = Admin::first();
@@ -279,7 +275,9 @@ class PropertySeeder extends Seeder
             ],
         ];
 
-        foreach ($curatedProperties as $index => $propData) {
+        foreach ($curatedProperties as $propData) {
+            $purchase = (int) ($propData['details']['value'] * 0.84);
+
             $property = Property::updateOrCreate(
                 ['name' => $propData['name']],
                 [
@@ -287,65 +285,22 @@ class PropertySeeder extends Seeder
                     'availability' => $propData['availability'],
                     'description' => $propData['description'],
                     'management_company' => $propData['management_company'],
-                ]
+                    'offering_purchase' => $purchase,
+                    'offering_build_cost' => 45000,
+                    'offering_improvements' => 25000,
+                    'offering_closing_cost' => 12000,
+                    'offering_sourcing_fees' => 15000,
+                ] + $propData['address'] + $propData['details']
             );
 
-            $propId = $property->id;
-
-            // 1. Address
-            PropertyAddress::updateOrCreate(
-                ['property_id' => $propId],
-                $propData['address']
-            );
-
-            // 2. Images (3 images per property)
-            PropertyImage::where('property_id', $propId)->delete();
+            PropertyImage::where('property_id', $property->id)->delete();
             foreach ($propData['images'] as $imgUrl) {
                 PropertyImage::create([
-                    'property_id' => $propId,
+                    'property_id' => $property->id,
                     'property_image_key' => 'property_image',
                     'property_image_value' => $imgUrl,
                 ]);
             }
-
-            // 4. Details
-            PropertyDetail::updateOrCreate(
-                ['property_id' => $propId],
-                $propData['details']
-            );
-
-            // 6. Offering Breakdown
-            $purchase = (int) ($propData['details']['value'] * 0.84);
-            PropertyOffering::updateOrCreate(
-                ['property_id' => $propId],
-                [
-                    'offering_purchase' => $purchase,
-                    'offering_build_cost' => 45000,
-                    'offering_improvements' => 25000,
-                    'offering_closing_cost' => '12000',
-                    'offering_sourcing_fees' => '15000',
-                ]
-            );
-
-            // 9. Legal Documents (6 PDF files)
-            PropertyDocument::where('property_id', $propId)->delete();
-            $docList = [
-                'Documents_Master_Deed' => 'property_documents/master_deed_1.pdf',
-                'Documents_Expence_Calculations' => 'property_documents/expense_statement_4.pdf',
-                'Documents_Rent_Calculations' => 'property_documents/rent_calculation_3.pdf',
-                'Documents_Deed_Restrictions' => 'property_documents/deed_restrictions_5.pdf',
-                'Documents_Closing_Statement_Example' => 'property_documents/closing_statement_6.pdf',
-                'document_1' => 'property_documents/operating_agreement_2.pdf',
-            ];
-
-            foreach ($docList as $docKey => $docFile) {
-                PropertyDocument::create([
-                    'property_id' => $propId,
-                    'document_key' => $docKey,
-                    'document_value' => $docFile,
-                ]);
-            }
-
         }
     }
 }

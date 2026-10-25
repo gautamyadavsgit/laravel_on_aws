@@ -95,6 +95,55 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  // Image previews: an input with data-preview-target="#id" renders small thumbnails of the chosen files
+  // there, each with a button to drop that file from the selection before upload
+  document.querySelectorAll('input[type="file"][data-preview-target]').forEach(input => {
+    const grid = document.querySelector(input.dataset.previewTarget);
+    if (!grid) return;
+    let urls = [];
+
+    const render = () => {
+      urls.forEach(url => URL.revokeObjectURL(url));
+      urls = [];
+      grid.replaceChildren();
+      const hasFiles = input.files.length > 0;
+      grid.classList.toggle('hidden', !hasFiles);
+      grid.classList.toggle('grid', hasFiles);
+
+      Array.from(input.files).forEach((file, index) => {
+        if (!file.type.startsWith('image/')) return;
+        const url = URL.createObjectURL(file);
+        urls.push(url);
+
+        const tile = document.createElement('div');
+        tile.className = 'relative group rounded-lg overflow-hidden border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-800 aspect-video';
+        tile.title = file.name;
+
+        const img = document.createElement('img');
+        img.src = url;
+        img.alt = file.name;
+        img.className = 'w-full h-full object-cover';
+
+        const remove = document.createElement('button');
+        remove.type = 'button';
+        remove.className = 'absolute top-1.5 right-1.5 w-7 h-7 rounded-full bg-slate-900/70 text-white flex items-center justify-center text-xs hover:bg-rose-600';
+        remove.setAttribute('aria-label', `Remove ${file.name}`);
+        remove.innerHTML = '<i class="bi bi-x-lg"></i>';
+        remove.addEventListener('click', () => {
+          const remaining = new DataTransfer();
+          Array.from(input.files).forEach((f, i) => { if (i !== index) remaining.items.add(f); });
+          input.files = remaining.files;
+          input.dispatchEvent(new Event('change'));
+        });
+
+        tile.append(img, remove);
+        grid.append(tile);
+      });
+    };
+
+    input.addEventListener('change', render);
+  });
+
   // Block double submits: a second submit of the same form is ignored and the buttons are disabled
   // once the browser has accepted the first one (validation failures leave the form usable)
   document.querySelectorAll('form').forEach(form => {

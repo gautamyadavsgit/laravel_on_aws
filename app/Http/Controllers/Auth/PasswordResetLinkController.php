@@ -4,15 +4,12 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\SendPasswordResetLinkRequest;
-use App\Services\AuthService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Password;
 use Illuminate\View\View;
 
 class PasswordResetLinkController extends Controller
 {
-    public function __construct(private readonly AuthService $authService) {}
-
     /**
      * Display the password reset link request view.
      */
@@ -26,7 +23,7 @@ class PasswordResetLinkController extends Controller
      */
     public function store(SendPasswordResetLinkRequest $request): RedirectResponse
     {
-        $status = $this->authService->sendPasswordResetLink($request->validated('email'));
+        $status = Password::sendResetLink(['email' => $request->validated('email')]);
 
         // Same answer for known and unknown addresses so the form can't be used to discover accounts
         if ($status === Password::RESET_LINK_SENT || $status === Password::INVALID_USER) {

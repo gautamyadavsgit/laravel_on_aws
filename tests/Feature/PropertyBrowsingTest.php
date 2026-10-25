@@ -46,7 +46,7 @@ class PropertyBrowsingTest extends DatabaseTestCase
         $this->assertGreaterThan(200, strlen($property->slug));
 
         $this->get('/property/'.$property->slug)->assertOk();
-        // the cached copy is served on the second hit
+        // a second hit works too
         $this->get('/property/'.$property->slug)->assertOk();
     }
 

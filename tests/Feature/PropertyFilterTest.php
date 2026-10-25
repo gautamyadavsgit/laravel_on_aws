@@ -3,14 +3,10 @@
 namespace Tests\Feature;
 
 use App\Models\Property;
-use App\Models\User;
-use App\Models\UserSearchLog;
-use App\Services\PropertyRecommendationService;
-use App\Services\PropertyService;
 use Illuminate\Support\Str;
 use Tests\DatabaseTestCase;
 
-class PropertyServiceTest extends DatabaseTestCase
+class PropertyFilterTest extends DatabaseTestCase
 {
     protected string $tag;
 
@@ -23,16 +19,19 @@ class PropertyServiceTest extends DatabaseTestCase
 
     protected function makeProperty(string $suffix, array $details = [], array $address = []): Property
     {
-        return Property::factory()
-            ->withDetails(array_merge(['type' => 'Cabin', 'bedrooms' => 3, 'baths' => 2, 'value' => 500000], $details))
-            ->withAddress(array_merge(['city' => 'Testville', 'state' => 'TN', 'zip' => '37738'], $address))
-            ->create(['name' => "{$this->tag} {$suffix}"]);
+        return Property::factory()->create(array_merge(
+            ['type' => 'Cabin', 'bedrooms' => 3, 'baths' => 2, 'value' => 500000],
+            ['city' => 'Testville', 'state' => 'TN', 'zip' => '37738'],
+            $details,
+            $address,
+            ['name' => "{$this->tag} {$suffix}"]
+        ));
     }
 
     /** @return list<string> property names (without the test tag) in result order */
     protected function names(array $filters): array
     {
-        $result = app(PropertyService::class)->getFilteredProperties($filters + ['q' => $this->tag], 50);
+        $result = Property::filter($filters + ['q' => $this->tag])->sortedBy($filters['sort_by'] ?? null)->paginate(50);
 
         return collect($result->items())
             ->map(fn (Property $property) => trim(Str::after($property->name, $this->tag)))
@@ -87,38 +86,38 @@ class PropertyServiceTest extends DatabaseTestCase
         $this->assertSame([], $this->names(['q' => "{$this->tag}' OR 1=1 --"]));
     }
 
-    public function test_recommendations_prefer_searched_locations_and_fill_up_with_other_properties(): void
+    public function test_percent_and_underscore_in_search_are_literal(): void
     {
-        $user = User::factory()->create();
-        $match = $this->makeProperty('match', [], ['city' => 'Sevierville', 'state' => 'TN']);
-        $this->makeProperty('other', [], ['city' => 'Austin', 'state' => 'TX']);
+        $this->makeProperty('plain');
 
-        UserSearchLog::create([
-            'user_id' => $user->id,
-            'session_id' => 'test-session',
-            'location' => 'Sevierville',
-            'results_count' => 1,
-        ]);
-
-        $recommendations = app(PropertyRecommendationService::class)->recommend($user, 3);
-
-        $this->assertLessThanOrEqual(3, $recommendations->count());
-        $this->assertTrue($recommendations->contains('id', $match->id));
-        $this->assertSame($recommendations->count(), $recommendations->unique('id')->count());
+        $this->assertSame([], $this->names(['location' => '%']));
+        $this->assertSame([], $this->names(['location' => '_estvill_']));
+        $this->assertSame(['plain'], $this->names(['location' => 'estvill']));
     }
 
-    public function test_property_detail_cache_is_cleared_on_demand(): void
+    public function test_price_sort_pages_do_not_repeat_or_skip_tied_properties(): void
     {
-        $property = $this->makeProperty('cached');
-        $originalDescription = $property->description;
-        $service = app(PropertyService::class);
+        foreach (range(1, 6) as $n) {
+            $this->makeProperty("tie{$n}", ['value' => 400000]);
+        }
 
-        $this->assertSame($property->id, $service->getPropertyBySlug($property->slug)->id);
+        $seen = [];
+        foreach ([1, 2, 3] as $page) {
+            $result = Property::filter(['q' => $this->tag])->sortedBy('price_asc')->paginate(2, page: $page);
+            $seen = array_merge($seen, collect($result->items())->pluck('id')->all());
+        }
 
-        $property->update(['description' => 'Changed description']);
-        $this->assertSame($originalDescription, $service->getPropertyBySlug($property->slug)->description);
+        $this->assertCount(6, array_unique($seen));
+    }
 
-        $service->clearPropertiesCache($property->slug);
-        $this->assertSame('Changed description', $service->getPropertyBySlug($property->slug)->description);
+    public function test_filter_options_list_distinct_cities_and_types(): void
+    {
+        $this->makeProperty('one', ['type' => 'Zz Unique Type'], ['city' => 'Zz Unique City']);
+        $this->makeProperty('two', ['type' => 'Zz Unique Type'], ['city' => 'Zz Unique City']);
+
+        $options = Property::filterOptions();
+
+        $this->assertCount(1, array_keys($options['cities'], 'Zz Unique City'));
+        $this->assertCount(1, array_keys($options['types'], 'Zz Unique Type'));
     }
 }

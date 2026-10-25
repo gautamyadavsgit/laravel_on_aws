@@ -117,13 +117,8 @@ class UserController extends Controller
     public function show(User $user): View
     {
         $user->load([
-            'propertyInterests.property.address',
-            'propertyInterests.property.details',
-            'propertyFavorites.property.address',
-            'propertyFavorites.property.details',
-            'searchLogs' => function ($q) {
-                $q->latest()->take(10);
-            },
+            'propertyInterests.property',
+            'propertyFavorites.property',
             'accreditationStatus',
             'experienceLevel',
             'investingReason',
@@ -189,7 +184,6 @@ class UserController extends Controller
         // Clean up user's related activity if needed
         $user->propertyInterests()->delete();
         $user->propertyFavorites()->delete();
-        $user->searchLogs()->delete();
 
         $user->delete();
 

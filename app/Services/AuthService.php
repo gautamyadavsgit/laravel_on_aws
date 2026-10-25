@@ -11,14 +11,6 @@ use Illuminate\Support\Str;
 class AuthService
 {
     /**
-     * Attempt investor authentication with credentials
-     */
-    public function login(array $credentials, bool $remember = false): bool
-    {
-        return Auth::guard('web')->attempt($credentials, $remember);
-    }
-
-    /**
      * Sign out authenticated user and invalidate session if present
      */
     public function logout(): void
@@ -29,14 +21,6 @@ class AuthService
             request()->session()->invalidate();
             request()->session()->regenerateToken();
         }
-    }
-
-    /**
-     * Send password reset link to user
-     */
-    public function sendPasswordResetLink(string $email): string
-    {
-        return Password::sendResetLink(['email' => $email]);
     }
 
     /**
